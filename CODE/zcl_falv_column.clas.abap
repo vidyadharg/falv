@@ -443,8 +443,8 @@ class zcl_falv_column definition
     methods set_texts
       importing
         value(iv_text_s) type scrtext_s
-        value(iv_text_m) type scrtext_m
-        value(iv_text_l) type scrtext_l
+        value(iv_text_m) type scrtext_m optional
+        value(iv_text_l) type scrtext_l optional
         returning value(r_column) type ref to zcl_falv_column.
 
     methods get_editable
@@ -1185,13 +1185,18 @@ CLASS ZCL_FALV_COLUMN IMPLEMENTATION.
 
 
   method set_texts.
+    data(lv_text_l) = cond scrtext_l( when iv_text_l is not initial then iv_text_l
+                                      when iv_text_m is not initial then iv_text_m
+                                      else iv_text_s ).
+    data(lv_text_m) = cond scrtext_m( when iv_text_m is not initial then iv_text_m
+                                      else iv_text_s ).
     set_scrtext_s( iv_text_s ).
-    set_scrtext_m( iv_text_m ).
-    set_scrtext_l( iv_text_l ).
-    set_tooltip( iv_text_l ) .
-    set_coltext( iv_text_l ).
-    set_seltext( iv_text_l ).
-    set_reptext( iv_text_l && '' ).
+    set_scrtext_m( lv_text_m ).
+    set_scrtext_l( lv_text_l ).
+    set_tooltip( lv_text_l ) .
+    set_coltext( lv_text_l ).
+    set_seltext( lv_text_l ).
+    set_reptext( lv_text_l && '' ).
 
     r_column = me.
   endmethod.
