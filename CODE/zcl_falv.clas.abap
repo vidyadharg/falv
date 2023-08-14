@@ -409,6 +409,28 @@ class zcl_falv definition
     methods set_output_table
       changing
         !ct_table type standard table .
+    methods set_merge_horizontally
+      importing
+        !row           type i
+        !tab_col_merge type lvc_t_co01 .
+    methods set_merge_vertically
+      importing
+        !row           type i
+        !tab_col_merge type lvc_t_co01 .
+*  methods Z_DISPLAY .
+    methods set_cell_style
+      importing
+        !row    type i optional
+        !col    type i optional
+        !style  type lvc_style
+        !style2 type lvc_style optional .
+    methods set_fixed_col_row
+      importing
+        !col type i
+        !row type i .
+    methods init_cell_styles .
+
+    methods redraw_after_merging_change.
   protected section.
 
 
@@ -424,183 +446,187 @@ class zcl_falv definition
 
     events at_set_pf_status .
     events at_set_title .
+    "! Event called just after method <strong>SET_TABLE_FOR_FIRST_DISPLAY</strong> is called internally.
+    "! Can be used for example to setup merging of cells
+    events before_first_display.
 
+    methods evf_before_first_display for event before_first_display of zcl_falv.
     methods evf_btn_click
-          for event button_click of cl_gui_alv_grid
+      for event button_click of cl_gui_alv_grid
       importing
-          !es_col_id
-          !es_row_no ##NEEDED.
+        !es_col_id
+        !es_row_no ##NEEDED.
     methods evf_user_command
-          for event user_command of cl_gui_alv_grid
+      for event user_command of cl_gui_alv_grid
       importing
-          !e_ucomm ##NEEDED.
+        !e_ucomm ##NEEDED.
     methods evf_hotspot_click
-          for event hotspot_click of cl_gui_alv_grid
+      for event hotspot_click of cl_gui_alv_grid
       importing
-          !e_row_id
-          !e_column_id
-          !es_row_no ##NEEDED.
+        !e_row_id
+        !e_column_id
+        !es_row_no ##NEEDED.
     methods evf_data_changed
-          for event data_changed of cl_gui_alv_grid
+      for event data_changed of cl_gui_alv_grid
       importing
-          !er_data_changed
-          !e_onf4
-          !e_onf4_before
-          !e_onf4_after
-          !e_ucomm ##NEEDED.
+        !er_data_changed
+        !e_onf4
+        !e_onf4_before
+        !e_onf4_after
+        !e_ucomm ##NEEDED.
     methods evf_data_changed_finished
-          for event data_changed_finished of cl_gui_alv_grid
+      for event data_changed_finished of cl_gui_alv_grid
       importing
-          !e_modified
-          !et_good_cells ##NEEDED.
+        !e_modified
+        !et_good_cells ##NEEDED.
     methods evf_double_click
-          for event double_click of cl_gui_alv_grid
+      for event double_click of cl_gui_alv_grid
       importing
-          !e_row
-          !e_column
-          !es_row_no ##NEEDED.
+        !e_row
+        !e_column
+        !es_row_no ##NEEDED.
     methods evf_onf1
-          for event onf1 of cl_gui_alv_grid
+      for event onf1 of cl_gui_alv_grid
       importing
-          !e_fieldname
-          !es_row_no
-          !er_event_data ##NEEDED.
+        !e_fieldname
+        !es_row_no
+        !er_event_data ##NEEDED.
     methods evf_onf4
-          for event onf4 of cl_gui_alv_grid
+      for event onf4 of cl_gui_alv_grid
       importing
-          !e_fieldname
-          !e_fieldvalue
-          !es_row_no
-          !er_event_data
-          !et_bad_cells
-          !e_display ##NEEDED.
+        !e_fieldname
+        !e_fieldvalue
+        !es_row_no
+        !er_event_data
+        !et_bad_cells
+        !e_display ##NEEDED.
     methods evf_subtotal_text
-          for event subtotal_text of cl_gui_alv_grid
+      for event subtotal_text of cl_gui_alv_grid
       importing
-          !es_subtottxt_info
-          !ep_subtot_line
-          !e_event_data ##NEEDED.
+        !es_subtottxt_info
+        !ep_subtot_line
+        !e_event_data ##NEEDED.
     methods evf_before_user_command
-          for event before_user_command of cl_gui_alv_grid
+      for event before_user_command of cl_gui_alv_grid
       importing
-          !e_ucomm ##NEEDED.
+        !e_ucomm ##NEEDED.
     methods evf_after_user_command
-          for event after_user_command of cl_gui_alv_grid
+      for event after_user_command of cl_gui_alv_grid
       importing
-          !e_ucomm
-          !e_saved
-          !e_not_processed ##NEEDED.
+        !e_ucomm
+        !e_saved
+        !e_not_processed ##NEEDED.
     methods evf_menu_button
-          for event menu_button of cl_gui_alv_grid
+      for event menu_button of cl_gui_alv_grid
       importing
-          !e_object
-          !e_ucomm ##NEEDED.
+        !e_object
+        !e_ucomm ##NEEDED.
     methods evf_toolbar
-          for event toolbar of cl_gui_alv_grid
+      for event toolbar of cl_gui_alv_grid
       importing
-          !e_object
-          !e_interactive ##NEEDED.
+        !e_object
+        !e_interactive ##NEEDED.
     methods evf_after_refresh
         for event after_refresh of cl_gui_alv_grid .
     methods evf_top_of_page
-          for event top_of_page of cl_gui_alv_grid
+      for event top_of_page of cl_gui_alv_grid
       importing
-          !e_dyndoc_id
-          !table_index ##NEEDED.
+        !e_dyndoc_id
+        !table_index ##NEEDED.
     methods evf_delayed_callback
         for event delayed_callback of cl_gui_alv_grid .
     methods evf_delayed_changed_sel_call
         for event delayed_changed_sel_callback of cl_gui_alv_grid .
     methods evf_ondropgetflavor
-          for event ondropgetflavor of cl_gui_alv_grid
+      for event ondropgetflavor of cl_gui_alv_grid
       importing
-          !es_row_no
-          !e_column
-          !e_dragdropobj
-          !e_flavors
-          !e_row ##NEEDED.
+        !es_row_no
+        !e_column
+        !e_dragdropobj
+        !e_flavors
+        !e_row ##NEEDED.
     methods evf_ondrag
-          for event ondrag of cl_gui_alv_grid
+      for event ondrag of cl_gui_alv_grid
       importing
-          !es_row_no
-          !e_column
-          !e_dragdropobj
-          !e_row ##NEEDED.
+        !es_row_no
+        !e_column
+        !e_dragdropobj
+        !e_row ##NEEDED.
     methods evf_ondrop
-          for event ondrop of cl_gui_alv_grid
+      for event ondrop of cl_gui_alv_grid
       importing
-          !es_row_no
-          !e_column
-          !e_dragdropobj
-          !e_row ##NEEDED.
+        !es_row_no
+        !e_column
+        !e_dragdropobj
+        !e_row ##NEEDED.
     methods evf_ondropcomplete
-          for event ondropcomplete of cl_gui_alv_grid
+      for event ondropcomplete of cl_gui_alv_grid
       importing
-          !es_row_no
-          !e_column
-          !e_dragdropobj
-          !e_row ##NEEDED.
+        !es_row_no
+        !e_column
+        !e_dragdropobj
+        !e_row ##NEEDED.
     methods evf_drop_external_file
-          for event drop_external_files of cl_gui_alv_grid
+      for event drop_external_files of cl_gui_alv_grid
       importing
-          !files ##NEEDED.
+        !files ##NEEDED.
     methods evf_toolbar_menubutton_click
-          for event toolbar_menubutton_click of cl_gui_alv_grid
+      for event toolbar_menubutton_click of cl_gui_alv_grid
       importing
-          !fcode
-          !menu_pos_x
-          !menu_pos_y ##NEEDED.
+        !fcode
+        !menu_pos_x
+        !menu_pos_y ##NEEDED.
     methods evf_click_col_header
-          for event click_col_header of cl_gui_alv_grid
+      for event click_col_header of cl_gui_alv_grid
       importing
-          !col_id ##NEEDED.
+        !col_id ##NEEDED.
     methods evf_delayed_move_current_cell
         for event delayed_move_current_cell of cl_gui_alv_grid .
     methods evf_f1
         for event f1 of cl_gui_alv_grid .
     methods evf_dblclick_row_col
-          for event dblclick_row_col of cl_gui_alv_grid
+      for event dblclick_row_col of cl_gui_alv_grid
       importing
-          !col_id
-          !row_id ##NEEDED.
+        !col_id
+        !row_id ##NEEDED.
     methods evf_click_row_col
-          for event click_row_col of cl_gui_alv_grid
+      for event click_row_col of cl_gui_alv_grid
       importing
-          !col_id
-          !row_id ##NEEDED.
+        !col_id
+        !row_id ##NEEDED.
     methods evf_toolbar_button_click
-          for event toolbar_button_click of cl_gui_alv_grid
+      for event toolbar_button_click of cl_gui_alv_grid
       importing
-          !fcode ##NEEDED.
+        !fcode ##NEEDED.
     methods evf_double_click_col_separator
-          for event double_click_col_separator of cl_gui_alv_grid
+      for event double_click_col_separator of cl_gui_alv_grid
       importing
-          !col_id ##NEEDED.
+        !col_id ##NEEDED.
     methods evf_delayed_change_selection
         for event delayed_change_selection of cl_gui_alv_grid .
     methods evf_context_menu
         for event context_menu of cl_gui_alv_grid .
-    METHODS evf_context_menu_request
-          FOR EVENT context_menu_request OF cl_gui_alv_grid
-      IMPORTING
-          !e_object.
+    methods evf_context_menu_request
+      for event context_menu_request of cl_gui_alv_grid
+      importing
+        !e_object.
     methods evf_total_click_row_col
-          for event total_click_row_col of cl_gui_alv_grid
+      for event total_click_row_col of cl_gui_alv_grid
       importing
-          !col_id
-          !row_id ##NEEDED.
+        !col_id
+        !row_id ##NEEDED.
     methods evf_context_menu_selected
-          for event context_menu_selected of cl_gui_alv_grid
+      for event context_menu_selected of cl_gui_alv_grid
       importing
-          !fcode ##NEEDED.
+        !fcode ##NEEDED.
     methods evf_toolbar_menu_selected
-          for event toolbar_menu_selected of cl_gui_alv_grid
+      for event toolbar_menu_selected of cl_gui_alv_grid
       importing
-          !fcode ##NEEDED.
+        !fcode ##NEEDED.
     methods evf_request_data
-          for event _request_data of cl_gui_alv_grid
+      for event _request_data of cl_gui_alv_grid
       importing
-          !fragments ##NEEDED.
+        !fragments ##NEEDED.
     methods evf_at_set_pf_status
         for event at_set_pf_status of zcl_falv .
     methods evf_at_set_title
@@ -610,6 +636,7 @@ class zcl_falv definition
     class-data: created_from_factory type abap_bool.
     data top_of_page_doc type ref to cl_dd_document .
     data top_of_page_visible_at_start type abap_bool .
+    data call_redraw_after_merging type abap_bool.
 
     class-methods check_if_called_from_subclass
       returning
@@ -661,22 +688,22 @@ class zcl_falv definition
         value(r_split_container) type ref to cl_gui_splitter_container.
 
     methods evf_before_ucommand_internal
-          for event before_user_command of cl_gui_alv_grid
+      for event before_user_command of cl_gui_alv_grid
       importing
-          !e_ucomm ##NEEDED.
+        !e_ucomm ##NEEDED.
     methods evf_toolbar_internal
-          for event toolbar of cl_gui_alv_grid
+      for event toolbar of cl_gui_alv_grid
       importing
-          !e_object
-          !e_interactive ##NEEDED.
+        !e_object
+        !e_interactive ##NEEDED.
     methods evf_data_changed_internal
-          for event data_changed of cl_gui_alv_grid
+      for event data_changed of cl_gui_alv_grid
       importing
-          !er_data_changed
-          !e_onf4
-          !e_onf4_before
-          !e_onf4_after
-          !e_ucomm ##NEEDED.
+        !er_data_changed
+        !e_onf4
+        !e_onf4_before
+        !e_onf4_after
+        !e_ucomm ##NEEDED.
 
     methods set_parent
       importing
@@ -694,11 +721,12 @@ class zcl_falv definition
     methods create_ex_result_falv
       returning
         value(er_result_table) type ref to cl_salv_ex_result_data_table .
-ENDCLASS.
+    methods raise_before_first_display.
+endclass.
 
 
 
-CLASS ZCL_FALV IMPLEMENTATION.
+class zcl_falv implementation.
 
 
   method add_button.
@@ -744,7 +772,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
 
     compiler->get_single_ref(
       exporting
-        p_full_name       =  |\\TY:ZCL_FALV\\ME:{ callstack[ 2 ]-blockname CASE = UPPER }|
+        p_full_name       =  |\\TY:ZCL_FALV\\ME:{ callstack[ 2 ]-blockname case = upper }|
         p_grade           =  1   " Grade of Use
       importing
         p_result          =    data(falv_references) " Where-Used List
@@ -806,7 +834,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
 
   method constructor.
     if created_from_factory eq abap_false.
-       raise object_created_manually.
+      raise object_created_manually.
     endif.
 
     super->constructor(
@@ -903,7 +931,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
     rv_falv->variant-report = sy-cprog.
     rv_falv->variant-username = sy-uname.
     if i_handle is not initial.
-       rv_falv->variant-handle   = i_handle.
+      rv_falv->variant-handle   = i_handle.
     endif.
     rv_falv->grid = cast #(  rv_falv ).
   endmethod.
@@ -984,9 +1012,9 @@ CLASS ZCL_FALV IMPLEMENTATION.
                                                              i_applog_embedded = i_applog_embedded
                                                              i_main_parent     = main_parent ).
         e_split_container = crate_main_splitter( e_main_split_container ).
-        e_parent ?= e_split_container->get_container( row = 2 column    = 1 ).
-        e_applog ?= e_main_split_container->get_container( row = 2 column    = 1 ).
-        e_top_of_page_parent ?= e_split_container->get_container( row = 1 column    = 1 ).
+        e_parent ?= e_split_container->get_container( row = 2 column = 1 ).
+        e_applog ?= e_main_split_container->get_container( row = 2 column = 1 ).
+        e_top_of_page_parent ?= e_split_container->get_container( row = 1 column = 1 ).
       else.
 
         e_parent ?= main_parent.
@@ -1012,12 +1040,12 @@ CLASS ZCL_FALV IMPLEMENTATION.
         e_split_container = crate_main_splitter( e_main_split_container ).
 
         if e_applog is initial.
-          e_parent ?= e_split_container->get_container( row = 2 column    = 1 ).
-          e_applog ?= e_main_split_container->get_container( row = 2 column  = 1 ).
-          e_top_of_page_parent ?= e_split_container->get_container( row = 1 column    = 1 ).
+          e_parent ?= e_split_container->get_container( row = 2 column = 1 ).
+          e_applog ?= e_main_split_container->get_container( row = 2 column = 1 ).
+          e_top_of_page_parent ?= e_split_container->get_container( row = 1 column = 1 ).
         else.
-          e_parent ?= e_split_container->get_container( row = 2 column    = 1 ).
-          e_top_of_page_parent ?= e_split_container->get_container( row = 1 column    = 1 ).
+          e_parent ?= e_split_container->get_container( row = 2 column = 1 ).
+          e_top_of_page_parent ?= e_split_container->get_container( row = 1 column = 1 ).
           e_custom_container ?= i_parent.
         endif.
 
@@ -1040,18 +1068,18 @@ CLASS ZCL_FALV IMPLEMENTATION.
 
   method create_main_cont_for_full_scr.
 
-    IF i_popup EQ abap_true.
+    if i_popup eq abap_true.
 
-      CALL FUNCTION 'Z_FALV_CREATE_MAIN_CONTAINER'
-        IMPORTING
+      call function 'Z_FALV_CREATE_MAIN_CONTAINER'
+        importing
           main_container = r_custom_container.
-    ELSE.
-      r_custom_container  = CAST cl_gui_container( NEW cl_gui_custom_container(
+    else.
+      r_custom_container  = cast cl_gui_container( new cl_gui_custom_container(
            container_name = cc_name
            dynnr          = c_screen_full
            repid          = c_fscr_repid
            no_autodef_progid_dynnr =  abap_true  ) ).
-    ENDIF.
+    endif.
 
 
   endmethod.
@@ -1162,6 +1190,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
     set handler iv_falv->evf_context_menu_request for iv_falv.
     set handler iv_falv->evf_toolbar_menu_selected for iv_falv.
     set handler iv_falv->evf_request_data for iv_falv.
+    set handler iv_falv->evf_before_first_display for iv_falv.
 
     iv_falv->set_delay_change_selection(
       exporting
@@ -1276,6 +1305,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
           too_many_lines                = 3
           others                        = 4 ).
       if sy-subrc eq 0.
+        raise_before_first_display( ).
         if layout->delete_all_buttons eq abap_true.
           delete_all_buttons( toolbar_exceptions ).
         endif.
@@ -1312,6 +1342,16 @@ CLASS ZCL_FALV IMPLEMENTATION.
       endif.
     endif.
   endmethod.
+
+  method raise_before_first_display.
+
+    raise event before_first_display.
+    if call_redraw_after_merging eq abap_true.
+      redraw_after_merging_change( ).
+    endif.
+  endmethod.
+
+
 
 
   method enable_button.
@@ -1616,10 +1656,10 @@ CLASS ZCL_FALV IMPLEMENTATION.
         mass_replace( ).
       when fc_find.
         e_ucomm = '%SC'.
-        set_function_code( CHANGING c_ucomm = e_ucomm ).
+        set_function_code( changing c_ucomm = e_ucomm ).
       when fc_find_next.
         e_ucomm = '%SC+'.
-        set_function_code( CHANGING c_ucomm = e_ucomm ).
+        set_function_code( changing c_ucomm = e_ucomm ).
     endcase.
   endmethod.
 
@@ -1742,38 +1782,38 @@ CLASS ZCL_FALV IMPLEMENTATION.
                    <styles> type lvc_t_styl,
                    <field>  type any.
     check i_row is not initial and i_field is not initial.
-    get_frontend_layout( importing es_layout =  lvc_layout ).
+    get_frontend_layout( importing es_layout = lvc_layout ).
 
     " if sy-subrc eq 0. " The value of SY-SUBRC is always set to 0 by CALL METHOD GET_FRONTEND_LAYOUT.
-      if lvc_layout-stylefname is not initial.
-        assign outtab->* to <outtab>.
-        assign <outtab>[ i_row ] to field-symbol(<line>).
+    if lvc_layout-stylefname is not initial.
+      assign outtab->* to <outtab>.
+      assign <outtab>[ i_row ] to field-symbol(<line>).
+      if sy-subrc eq 0.
+        assign component lvc_layout-stylefname of structure <line> to <styles>.
         if sy-subrc eq 0.
-          assign component lvc_layout-stylefname of structure <line> to <styles>.
+          assign <styles>[ fieldname = i_field ] to field-symbol(<style>).
           if sy-subrc eq 0.
-            assign <styles>[ fieldname = i_field ] to field-symbol(<style>).
-            if sy-subrc eq 0.
-              if <style>-style = mc_style_enabled.
-                r_enabled = abap_true.
-                return.
-              elseif <style>-style = mc_style_disabled.
-                r_enabled = abap_false.
-                return.
-              endif.
+            if <style>-style = mc_style_enabled.
+              r_enabled = abap_true.
+              return.
+            elseif <style>-style = mc_style_disabled.
+              r_enabled = abap_false.
+              return.
             endif.
           endif.
         endif.
       endif.
-      "all cells editable
-      if lvc_layout-edit eq abap_true.
+    endif.
+    "all cells editable
+    if lvc_layout-edit eq abap_true.
+      r_enabled = abap_true.
+    else.
+      get_frontend_fieldcatalog( importing et_fieldcatalog = fcat ).
+      assign fcat[ fieldname = i_field ] to field-symbol(<fcat>).
+      if <fcat>-edit eq abap_true.
         r_enabled = abap_true.
-      else.
-        get_frontend_fieldcatalog( importing et_fieldcatalog = fcat ).
-        assign fcat[ fieldname = i_field ] to field-symbol(<fcat>).
-        if <fcat>-edit eq abap_true.
-          r_enabled = abap_true.
-        endif.
       endif.
+    endif.
     " endif.
   endmethod.
 
@@ -1999,7 +2039,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
 
       data(xstring) = me->export_to_excel( ).
       data(xstrsize) = xstrlen( xstring ).
-      data(solix) = cl_bcs_convert=>xstring_to_solix( xstring  ).
+      data(solix) = cl_bcs_convert=>xstring_to_solix( xstring ).
 
       cl_gui_frontend_services=>gui_download(
         exporting
@@ -2114,7 +2154,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
         endtry.
 
         try.
-            request->set_sender( i_sender = sender  ).
+            request->set_sender( i_sender = sender ).
           catch cx_send_req_bcs.
             raise add_sender_error.
         endtry.
@@ -2153,7 +2193,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
     r_falv = me.
     field-symbols: <outtab> type standard table,
                    <styles> type lvc_t_styl.
-    get_frontend_layout( importing es_layout =  lvc_layout ).
+    get_frontend_layout( importing es_layout = lvc_layout ).
     check lvc_layout-stylefname is not initial.
     assign outtab->* to <outtab>.
     if sy-subrc eq 0.
@@ -2176,7 +2216,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
     field-symbols: <outtab> type standard table,
                    <colors> type lvc_t_scol.
     r_falv = me.
-    get_frontend_layout( importing es_layout =  lvc_layout ).
+    get_frontend_layout( importing es_layout = lvc_layout ).
     check lvc_layout-ctab_fname is not initial.
     assign outtab->* to <outtab>.
     if sy-subrc eq 0.
@@ -2199,7 +2239,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
     field-symbols: <outtab> type standard table,
                    <styles> type lvc_t_styl.
     r_falv = me.
-    get_frontend_layout( importing es_layout =  lvc_layout ).
+    get_frontend_layout( importing es_layout = lvc_layout ).
     check lvc_layout-stylefname is not initial.
     assign outtab->* to <outtab>.
     if sy-subrc eq 0.
@@ -2222,7 +2262,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
     field-symbols: <outtab> type standard table,
                    <styles> type lvc_t_styl.
     r_falv = me.
-    get_frontend_layout( importing es_layout =  lvc_layout ).
+    get_frontend_layout( importing es_layout = lvc_layout ).
     check lvc_layout-stylefname is not initial.
     assign outtab->* to <outtab>.
     if sy-subrc eq 0.
@@ -2245,7 +2285,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
     field-symbols: <outtab> type standard table,
                    <styles> type lvc_t_styl.
     r_falv = me.
-    get_frontend_layout( importing es_layout =  lvc_layout ).
+    get_frontend_layout( importing es_layout = lvc_layout ).
     check lvc_layout-stylefname is not initial.
     assign outtab->* to <outtab>.
     if sy-subrc eq 0.
@@ -2334,7 +2374,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
     field-symbols: <outtab> type standard table,
                    <color>  type char04.
     r_falv = me.
-    get_frontend_layout( importing es_layout =  lvc_layout ).
+    get_frontend_layout( importing es_layout = lvc_layout ).
     check lvc_layout-info_fname is not initial.
     assign outtab->* to <outtab>.
     if sy-subrc eq 0.
@@ -2543,4 +2583,160 @@ CLASS ZCL_FALV IMPLEMENTATION.
         ct_table          = <table>
     ).
   endmethod.
-ENDCLASS.
+
+  method init_cell_styles.
+* https://tricktresor.de/blog/zellen-verbinden/
+    field-symbols <data> type lvc_s_data.
+* Nur Spalte setze komplette Spalte
+    loop at mt_data assigning <data>.
+      <data>-style = 0.
+    endloop.
+    call_redraw_after_merging = abap_true.
+  endmethod.
+
+
+  method set_cell_style.
+* https://tricktresor.de/blog/zellen-verbinden/
+    field-symbols <data> type lvc_s_data.
+    if row is initial.
+      if col is initial.
+* Beides leer -> nichts zu tun.
+        exit.
+      else.
+* Nur Spalte setze komplette Spalte
+        loop at mt_data assigning <data>
+              where col_pos = col.
+          <data>-style  = <data>-style + style.
+          <data>-style2 = <data>-style2 + style2.
+        endloop.
+        if sy-subrc eq 0.
+          call_redraw_after_merging = abap_true.
+        endif.
+      endif.
+    else.
+      if col is initial.
+* Nur Zeile eingegeben -> komplette Zeile setzen
+        loop at mt_data assigning <data>
+              where row_pos = row.
+          <data>-style  = <data>-style + style.
+          <data>-style2 = <data>-style2 + style2.
+        endloop.
+        if sy-subrc eq 0.
+          call_redraw_after_merging = abap_true.
+        endif.
+      else.
+        read table mt_data assigning <data>
+            with key row_pos = row
+                     col_pos = col.
+        if sy-subrc eq 0.
+          <data>-style  = <data>-style + style.
+          <data>-style2 = <data>-style2 + style2.
+          call_redraw_after_merging = abap_true.
+        else.
+          exit.
+        endif.
+      endif.
+    endif.
+
+  endmethod.
+
+
+  method set_fixed_col_row.
+* https://tricktresor.de/blog/zellen-verbinden/
+    me->set_fixed_cols( col ).
+    me->set_fixed_rows( row ).
+    call_redraw_after_merging = abap_true.
+  endmethod.
+
+
+  method set_merge_horizontally.
+* https://tricktresor.de/blog/zellen-verbinden/
+* ROW - Zeile deren Spalten zusammengeführt werden sollen
+* tab_col_merge - Spalten, die zusammengeführt werden sollen
+    field-symbols <data> type lvc_s_data.
+    data outputlen type i.
+
+    data(cols) = tab_col_merge.
+
+    sort cols.
+
+* Die Spalten, die zusammengeführt werden sollen
+    loop at cols into data(col) where col_id > 0.
+* ein paar Prüfungen
+      if col-outputlen <= col-col_id.
+        continue.
+      endif.
+      outputlen = col-outputlen - col-col_id.
+      loop at mt_data assigning <data>
+           where row_pos = row  and
+                 ( col_pos between col-col_id and
+                                   col-outputlen ).
+* Setze wie weit soll gemerged werden Von Spalte in Länge
+* und zwar wird bei der 1 Spalte angefangen
+        if <data>-col_pos = col-col_id.
+          <data>-mergehoriz = outputlen.
+* bei allen anderen, die zusammangehören
+* muss der Wert raus, da er aus der 1. Spalte kommt
+* und das mergekennzeichen muss auch weg !
+        else.
+          clear <data>-mergehoriz.
+          clear <data>-value.
+        endif.
+      endloop.
+
+    endloop.
+    call_redraw_after_merging = abap_true.
+  endmethod.
+
+
+  method set_merge_vertically.
+* https://tricktresor.de/blog/zellen-verbinden/
+
+* ROW - Zeile deren Spalten zusammengeführt werden sollen
+* tab_col_merge - Spalten, die zusammengeführt werden sollen
+    field-symbols <data> type lvc_s_data.
+    data outputlen type i.
+
+    data(cols) = tab_col_merge.
+    sort cols.
+
+* Die Spalten, die zusammengeführt werden sollen
+    loop at cols into data(col) where col_id > 0.
+* ein paar Prüfungen
+      if col-outputlen <= col-col_id.
+        continue.
+      endif.
+      outputlen = col-outputlen - col-col_id.
+      loop at mt_data assigning <data>
+           where row_pos = row  and
+                 ( col_pos between col-col_id and
+                                   col-outputlen ).
+* Setze wie weit soll gemerged werden Von Spalte in Länge
+* und zwar wird bei der 1 Spalte angefangen
+        if <data>-col_pos = col-col_id.
+          <data>-mergevert = outputlen.
+* bei allen anderen, die zusammangehören
+* muss der Wert raus, da er aus der 1. Spalte kommt
+* und das mergekennzeichen muss auch weg !
+        else.
+          clear <data>-mergevert.
+          clear <data>-value.
+        endif.
+      endloop.
+
+      call_redraw_after_merging = abap_true.
+    endloop.
+
+  endmethod.
+  method evf_before_first_display ##NEEDED.
+
+  endmethod.
+
+  method redraw_after_merging_change.
+* https://tricktresor.de/blog/zellen-verbinden/
+    me->set_data_table( changing data_table = mt_data[] ).
+    set_auto_redraw( enable = 1 ).
+
+  endmethod.
+
+endclass.
