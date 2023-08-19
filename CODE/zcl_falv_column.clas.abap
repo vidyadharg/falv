@@ -1,794 +1,908 @@
-class zcl_falv_column definition
+class ZCL_FALV_COLUMN definition
   public
   create public .
 
-  public section.
+public section.
 
-    data fieldname type lvc_s_fcat-fieldname read-only .
+  data FIELDNAME type LVC_S_FCAT-FIELDNAME read-only .
 
-    methods constructor
-      importing
-        value(iv_fieldname) type lvc_s_fcat-fieldname
-        !io_falv            type ref to zcl_falv .
-    methods set_editable returning value(r_column) type ref to zcl_falv_column.
-    methods set_readonly returning value(r_column) type ref to zcl_falv_column.
-    methods set_row_pos
-      importing
-                value(iv_value) type lvc_rowpos
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_col_pos
-      importing
-                value(iv_value) type lvc_colpos
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_fieldname
-      importing
-                value(iv_value) type lvc_fname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_tabname
-      importing
-                value(iv_value) type lvc_tname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_currency
-      importing
-                value(iv_value) type lvc_curr
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_cfieldname
-      importing
-                value(iv_value) type lvc_cfname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_quantity
-      importing
-                value(iv_value) type lvc_quan
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_qfieldname
-      importing
-                value(iv_value) type lvc_qfname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_ifieldname
-      importing
-                value(iv_value) type lvc_fname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_round
-      importing
-                value(iv_value) type lvc_round
-      returning value(r_column) type ref to zcl_falv_column..
-    methods set_exponent
-      importing
-                value(iv_value) type lvc_expont
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_key
-      importing
-                value(iv_value) type lvc_key
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_key_sel
-      importing
-                value(iv_value) type lvc_keysel
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_icon
-      importing
-                value(iv_value) type lvc_icon
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_symbol
-      importing
-                value(iv_value) type lvc_symbol
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_checkbox
-      importing
-                value(iv_value) type lvc_checkb
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_just
-      importing
-                value(iv_value) type lvc_just
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_lzero
-      importing
-                value(iv_value) type lvc_lzero
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_sign
-      importing
-                value(iv_value) type lvc_nosign
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_zero
-      importing
-                value(iv_value) type lvc_nozero
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_convext
-      importing
-                value(iv_value) type lvc_noconv
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_edit_mask
-      importing
-        value(iv_value) type lvc_edtmsk
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_emphasize
-      importing
-        value(iv_value) type lvc_emphsz
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_color
-      importing
-        value(iv_value) type lvc_emphsz
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_fix_column
-      importing
-        value(iv_value) type lvc_fixcol
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_do_sum
-      importing
-        value(iv_value) type lvc_dosum
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_sum
-      importing
-        value(iv_value) type lvc_nosum
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_out
-      importing
-        value(iv_value) type lvc_noout
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_tech
-      importing
-        value(iv_value) type lvc_tech
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_outputlen
-      importing
-        value(iv_value) type lvc_outlen
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_convexit
-      importing
-        value(iv_value) type convexit
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_seltext
-      importing
-        value(iv_value) type lvc_txt
-         returning value(r_column) type ref to zcl_falv_column.
-    methods set_tooltip
-      importing
-        value(iv_value) type lvc_tip
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_rollname
-      importing
-        value(iv_value) type lvc_roll
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_datatype
-      importing
-        value(iv_value) type datatype_d
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_inttype
-      importing
-        value(iv_value) type inttype
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_intlen
-      importing
-        value(iv_value) type intlen
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_lowercase
-      importing
-        value(iv_value) type lowercase
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_reptext
-      importing
-        value(iv_value) type reptext
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_hier_level
-      importing
-        value(iv_value) type lvc_hierl
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_reprep
-      importing
-        value(iv_value) type lvc_crprp
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_domname
-      importing
-        value(iv_value) type domname
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_sp_group
-      importing
-        value(iv_value) type lvc_spgrp
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_hotspot
-      importing
-        value(iv_value) type lvc_hotspt
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_dfieldname
-      importing
-        value(iv_value) type lvcdbgfn
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_col_id
-      importing
-        value(iv_value) type lvc_colid
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_f4availabl
-      importing
-        value(iv_value) type ddf4avail
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_auto_value
-      importing
-        value(iv_value) type lvc_auto
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_checktable
-      importing
-        value(iv_value) type tabname
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_valexi
-      importing
-        value(iv_value) type valexi
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_web_field
-      importing
-        value(iv_value) type lvc_fname
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_href_hndl
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_style
-      importing
-        value(iv_value) type lvc_style
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_style2
-      importing
-        value(iv_value) type lvc_style
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_style3
-      importing
-        value(iv_value) type lvc_style
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_style4
-      importing
-        value(iv_value) type lvc_style
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_drdn_hndl
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_drdn_field
-      importing
-        value(iv_value) type lvc_fname
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_merging
-      importing
-        value(iv_value) type char01
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_h_ftype
-      importing
-        value(iv_value) type lvc_ftype
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_col_opt
-      importing
-        value(iv_value) type lvc_colopt
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_init_ch
-      importing
-        value(iv_value) type char01
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_drdn_alias
-      importing
-        value(iv_value) type char01
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_decfloat_style
-      importing
-        value(iv_value) type outputstyle
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter0
-      importing
-        value(iv_value) type char30
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter1
-      importing
-        value(iv_value) type char30
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter2
-      importing
-        value(iv_value) type char30
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter3
-      importing
-        value(iv_value) type char30
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter4
-      importing
-        value(iv_value) type char30
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter5
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter6
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter7
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter8
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter9
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_ref_field
-      importing
-        value(iv_value) type lvc_rfname
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_ref_table
-      importing
-        value(iv_value) type lvc_rtname
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_txt_field
-      importing
-        value(iv_value) type lvc_fname
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_roundfield
-      importing
-        value(iv_value) type lvc_rndfn
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_decimals_o
-      importing
-        value(iv_value) type lvc_decmls
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_decmlfield
-      importing
-        value(iv_value) type lvc_dfname
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_dd_outlen
-      importing
-        value(iv_value) type lvc_ddlen
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_decimals
-      importing
-        value(iv_value) type decimals
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_coltext
-      importing
-        value(iv_value) type lvc_txtcol
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_scrtext_l
-      importing
-        value(iv_value) type scrtext_l
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_scrtext_m
-      importing
-        value(iv_value) type scrtext_m
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_scrtext_s
-      importing
-        value(iv_value) type scrtext_s
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_colddictxt
-      importing
-        value(iv_value) type lvc_ddict
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_selddictxt
-      importing
-        value(iv_value) type lvc_ddict
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_tipddictxt
-      importing
-        value(iv_value) type lvc_ddict
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_edit
-      importing
-        value(iv_value) type lvc_edit
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_tech_col
-      importing
-        value(iv_value) type lvc_tcol
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_tech_form
-      importing
-        value(iv_value) type lvc_tform
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_tech_comp
-      importing
-        value(iv_value) type lvc_tcomp
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_hier_cpos
-      importing
-        value(iv_value) type lvchcolpos
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_h_col_key
-      importing
-        value(iv_value) type tv_itmname
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_h_select
-      importing
-        value(iv_value) type lvc_select
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_dd_roll
-      importing
-        value(iv_value) type rollname
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_dragdropid
-      importing
-        value(iv_value) type lvc_ddid
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_mac
-      importing
-        value(iv_value) type char01
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_field
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_cfiel
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_qfiel
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_ifiel
-      importing
-        value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_round
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_decml
-      importing
-        value(iv_value) type int4
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_get_style
-      importing
-        value(iv_value) type char01
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_mark
-      importing
-        value(iv_value) type char01
-        returning value(r_column) type ref to zcl_falv_column.
-    methods set_texts
-      importing
-        value(iv_text_s) type scrtext_s
-        value(iv_text_m) type scrtext_m optional
-        value(iv_text_l) type scrtext_l optional
-        returning value(r_column) type ref to zcl_falv_column.
-
-    methods get_editable
-      returning value(rv_editable) type abap_bool.
-    methods get_readonly
-
-      returning value(rv_read_only) type abap_bool.
-    methods get_row_pos
-      returning
-        value(rv_value) type lvc_rowpos .
-    methods get_col_pos
-      returning
-        value(rv_value) type lvc_colpos .
-    methods get_fieldname
-      returning
-        value(rv_value) type lvc_fname .
-    methods get_tabname
-      returning
-        value(rv_value) type lvc_tname .
-    methods get_currency
-      returning
-        value(rv_value) type lvc_curr .
-    methods get_cfieldname
-      returning
-        value(rv_value) type lvc_cfname .
-    methods get_quantity
-      returning
-        value(rv_value) type lvc_quan .
-    methods get_qfieldname
-      returning
-        value(rv_value) type lvc_qfname .
-    methods get_ifieldname
-      returning
-        value(rv_value) type lvc_fname .
-    methods get_round
-      returning
-        value(rv_value) type lvc_round .
-    methods get_exponent
-      returning
-        value(rv_value) type lvc_expont .
-    methods get_key
-      returning
-        value(rv_value) type lvc_key .
-    methods get_key_sel
-      returning
-        value(rv_value) type lvc_keysel .
-    methods get_icon
-      returning
-        value(rv_value) type lvc_icon .
-    methods get_symbol
-      returning
-        value(rv_value) type lvc_symbol .
-    methods get_checkbox
-      returning
-        value(rv_value) type lvc_checkb .
-    methods get_just
-      returning
-        value(rv_value) type lvc_just .
-    methods get_lzero
-      returning
-        value(rv_value) type lvc_lzero .
-    methods get_no_sign
-      returning
-        value(rv_value) type lvc_nosign .
-    methods get_no_zero
-      returning
-        value(rv_value) type lvc_nozero .
-    methods get_no_convext
-      returning
-        value(rv_value) type lvc_noconv .
-    methods get_edit_mask
-      returning
-        value(rv_value) type lvc_edtmsk .
-    methods get_emphasize
-      returning
-        value(rv_value) type lvc_emphsz .
-    methods get_color
-      returning
-        value(rv_value) type lvc_emphsz .
-    methods get_fix_column
-      returning
-        value(rv_value) type lvc_fixcol .
-    methods get_do_sum
-      returning
-        value(rv_value) type lvc_dosum .
-    methods get_no_sum
-      returning
-        value(rv_value) type lvc_nosum .
-    methods get_no_out
-      returning
-        value(rv_value) type lvc_noout .
-    methods get_tech
-      returning
-        value(rv_value) type lvc_tech .
-    methods get_outputlen
-      returning
-        value(rv_value) type lvc_outlen .
-    methods get_convexit
-      returning
-        value(rv_value) type convexit .
-    methods get_seltext
-      returning
-        value(rv_value) type lvc_txt .
-    methods get_tooltip
-      returning
-        value(rv_value) type lvc_tip .
-    methods get_rollname
-      returning
-        value(rv_value) type lvc_roll .
-    methods get_datatype
-      returning
-        value(rv_value) type datatype_d .
-    methods get_inttype
-      returning
-        value(rv_value) type inttype .
-    methods get_intlen
-      returning
-        value(rv_value) type intlen .
-    methods get_lowercase
-      returning
-        value(rv_value) type lowercase .
-    methods get_reptext
-      returning
-        value(rv_value) type reptext .
-    methods get_hier_level
-      returning
-        value(rv_value) type lvc_hierl .
-    methods get_reprep
-      returning
-        value(rv_value) type lvc_crprp .
-    methods get_domname
-      returning
-        value(rv_value) type domname .
-    methods get_sp_group
-      returning
-        value(rv_value) type lvc_spgrp .
-    methods get_hotspot
-      returning
-        value(rv_value) type lvc_hotspt .
-    methods get_dfieldname
-      returning
-        value(rv_value) type lvcdbgfn .
-    methods get_col_id
-      returning
-        value(rv_value) type lvc_colid .
-    methods get_f4availabl
-      returning
-        value(rv_value) type ddf4avail .
-    methods get_auto_value
-      returning
-        value(rv_value) type lvc_auto .
-    methods get_checktable
-      returning
-        value(rv_value) type tabname .
-    methods get_valexi
-      returning
-        value(rv_value) type valexi .
-    methods get_web_field
-      returning
-        value(rv_value) type lvc_fname .
-    methods get_href_hndl
-      returning
-        value(rv_value) type int4 .
-    methods get_style
-      returning
-        value(rv_value) type lvc_style .
-    methods get_style2
-      returning
-        value(rv_value) type lvc_style .
-    methods get_style3
-      returning
-        value(rv_value) type lvc_style .
-    methods get_style4
-      returning
-        value(rv_value) type lvc_style .
-    methods get_drdn_hndl
-      returning
-        value(rv_value) type int4 .
-    methods get_drdn_field
-      returning
-        value(rv_value) type lvc_fname .
-    methods get_no_merging
-      returning
-        value(rv_value) type char01 .
-    methods get_h_ftype
-      returning
-        value(rv_value) type lvc_ftype .
-    methods get_col_opt
-      returning
-        value(rv_value) type lvc_colopt .
-    methods get_no_init_ch
-      returning
-        value(rv_value) type char01 .
-    methods get_drdn_alias
-      returning
-        value(rv_value) type char01 .
-    methods get_decfloat_style
-      returning
-        value(rv_value) type outputstyle .
-    methods get_parameter0
-      returning
-        value(rv_value) type char30 .
-    methods get_parameter1
-      returning
-        value(rv_value) type char30 .
-    methods get_parameter2
-      returning
-        value(rv_value) type char30 .
-    methods get_parameter3
-      returning
-        value(rv_value) type char30 .
-    methods get_parameter4
-      returning
-        value(rv_value) type char30 .
-    methods get_parameter5
-      returning
-        value(rv_value) type int4 .
-    methods get_parameter6
-      returning
-        value(rv_value) type int4 .
-    methods get_parameter7
-      returning
-        value(rv_value) type int4 .
-    methods get_parameter8
-      returning
-        value(rv_value) type int4 .
-    methods get_parameter9
-      returning
-        value(rv_value) type int4 .
-    methods get_ref_field
-      returning
-        value(rv_value) type lvc_rfname .
-    methods get_ref_table
-      returning
-        value(rv_value) type lvc_rtname .
-    methods get_txt_field
-      returning
-        value(rv_value) type lvc_fname .
-    methods get_roundfield
-      returning
-        value(rv_value) type lvc_rndfn .
-    methods get_decimals_o
-      returning
-        value(rv_value) type lvc_decmls .
-    methods get_decmlfield
-      returning
-        value(rv_value) type lvc_dfname .
-    methods get_dd_outlen
-      returning
-        value(rv_value) type lvc_ddlen .
-    methods get_decimals
-      returning
-        value(rv_value) type decimals .
-    methods get_coltext
-      returning
-        value(rv_value) type lvc_txtcol .
-    methods get_scrtext_l
-      returning
-        value(rv_value) type scrtext_l .
-    methods get_scrtext_m
-      returning
-        value(rv_value) type scrtext_m .
-    methods get_scrtext_s
-      returning
-        value(rv_value) type scrtext_s .
-    methods get_colddictxt
-      returning
-        value(rv_value) type lvc_ddict .
-    methods get_selddictxt
-      returning
-        value(rv_value) type lvc_ddict .
-    methods get_tipddictxt
-      returning
-        value(rv_value) type lvc_ddict .
-    methods get_edit
-      returning
-        value(rv_value) type lvc_edit .
-    methods get_tech_col
-      returning
-        value(rv_value) type lvc_tcol .
-    methods get_tech_form
-      returning
-        value(rv_value) type lvc_tform .
-    methods get_tech_comp
-      returning
-        value(rv_value) type lvc_tcomp .
-    methods get_hier_cpos
-      returning
-        value(rv_value) type lvchcolpos .
-    methods get_h_col_key
-      returning
-        value(rv_value) type tv_itmname .
-    methods get_h_select
-      returning
-        value(rv_value) type lvc_select .
-    methods get_dd_roll
-      returning
-        value(rv_value) type rollname .
-    methods get_dragdropid
-      returning
-        value(rv_value) type lvc_ddid .
-    methods get_mac
-      returning
-        value(rv_value) type char01 .
-    methods get_indx_field
-      returning
-        value(rv_value) type int4 .
-    methods get_indx_cfiel
-      returning
-        value(rv_value) type int4 .
-    methods get_indx_qfiel
-      returning
-        value(rv_value) type int4 .
-    methods get_indx_ifiel
-      returning
-        value(rv_value) type int4 .
-    methods get_indx_round
-      returning
-        value(rv_value) type int4 .
-    methods get_indx_decml
-      returning
-        value(rv_value) type int4 .
-    methods get_get_style
-      returning
-        value(rv_value) type char01 .
-    methods get_mark
-      returning
-        value(rv_value) type char01 .
-
+  methods CONSTRUCTOR
+    importing
+      value(IV_FIELDNAME) type LVC_S_FCAT-FIELDNAME
+      !IO_FALV type ref to ZCL_FALV .
+  methods GET_AUTO_VALUE
+    returning
+      value(RV_VALUE) type LVC_AUTO .
+  methods GET_CFIELDNAME
+    returning
+      value(RV_VALUE) type LVC_CFNAME .
+  methods GET_CHECKBOX
+    returning
+      value(RV_VALUE) type LVC_CHECKB .
+  methods GET_CHECKTABLE
+    returning
+      value(RV_VALUE) type TABNAME .
+  methods GET_COLDDICTXT
+    returning
+      value(RV_VALUE) type LVC_DDICT .
+  methods GET_COLOR
+    returning
+      value(RV_VALUE) type LVC_EMPHSZ .
+  methods GET_COLTEXT
+    returning
+      value(RV_VALUE) type LVC_TXTCOL .
+  methods GET_COL_ID
+    returning
+      value(RV_VALUE) type LVC_COLID .
+  methods GET_COL_OPT
+    returning
+      value(RV_VALUE) type LVC_COLOPT .
+  methods GET_COL_POS
+    returning
+      value(RV_VALUE) type LVC_COLPOS .
+  methods GET_CONVEXIT
+    returning
+      value(RV_VALUE) type CONVEXIT .
+  methods GET_CURRENCY
+    returning
+      value(RV_VALUE) type LVC_CURR .
+  methods GET_DATATYPE
+    returning
+      value(RV_VALUE) type DATATYPE_D .
+  methods GET_DD_OUTLEN
+    returning
+      value(RV_VALUE) type LVC_DDLEN .
+  methods GET_DD_ROLL
+    returning
+      value(RV_VALUE) type ROLLNAME .
+  methods GET_DECFLOAT_STYLE
+    returning
+      value(RV_VALUE) type OUTPUTSTYLE .
+  methods GET_DECIMALS
+    returning
+      value(RV_VALUE) type DECIMALS .
+  methods GET_DECIMALS_O
+    returning
+      value(RV_VALUE) type LVC_DECMLS .
+  methods GET_DECMLFIELD
+    returning
+      value(RV_VALUE) type LVC_DFNAME .
+  methods GET_DFIELDNAME
+    returning
+      value(RV_VALUE) type LVCDBGFN .
+  methods GET_DOMNAME
+    returning
+      value(RV_VALUE) type DOMNAME .
+  methods GET_DO_SUM
+    returning
+      value(RV_VALUE) type LVC_DOSUM .
+  methods GET_DRAGDROPID
+    returning
+      value(RV_VALUE) type LVC_DDID .
+  methods GET_DRDN_ALIAS
+    returning
+      value(RV_VALUE) type CHAR01 .
+  methods GET_DRDN_FIELD
+    returning
+      value(RV_VALUE) type LVC_FNAME .
+  methods GET_DRDN_HNDL
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_EDIT
+    returning
+      value(RV_VALUE) type LVC_EDIT .
+  methods GET_EDITABLE
+    returning
+      value(RV_EDITABLE) type ABAP_BOOL .
+  methods GET_EDIT_MASK
+    returning
+      value(RV_VALUE) type LVC_EDTMSK .
+  methods GET_EMPHASIZE
+    returning
+      value(RV_VALUE) type LVC_EMPHSZ .
+  methods GET_EXPONENT
+    returning
+      value(RV_VALUE) type LVC_EXPONT .
+  methods GET_F4AVAILABL
+    returning
+      value(RV_VALUE) type DDF4AVAIL .
+  methods GET_FIELDNAME
+    returning
+      value(RV_VALUE) type LVC_FNAME .
+  methods GET_FIX_COLUMN
+    returning
+      value(RV_VALUE) type LVC_FIXCOL .
+  methods GET_GET_STYLE
+    returning
+      value(RV_VALUE) type CHAR01 .
+  methods GET_HIER_CPOS
+    returning
+      value(RV_VALUE) type LVCHCOLPOS .
+  methods GET_HIER_LEVEL
+    returning
+      value(RV_VALUE) type LVC_HIERL .
+  methods GET_HOTSPOT
+    returning
+      value(RV_VALUE) type LVC_HOTSPT .
+  methods GET_HREF_HNDL
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_H_COL_KEY
+    returning
+      value(RV_VALUE) type TV_ITMNAME .
+  methods GET_H_FTYPE
+    returning
+      value(RV_VALUE) type LVC_FTYPE .
+  methods GET_H_SELECT
+    returning
+      value(RV_VALUE) type LVC_SELECT .
+  methods GET_ICON
+    returning
+      value(RV_VALUE) type LVC_ICON .
+  methods GET_IFIELDNAME
+    returning
+      value(RV_VALUE) type LVC_FNAME .
+  methods GET_INDX_CFIEL
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_INDX_DECML
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_INDX_FIELD
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_INDX_IFIEL
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_INDX_QFIEL
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_INDX_ROUND
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_INTLEN
+    returning
+      value(RV_VALUE) type INTLEN .
+  methods GET_INTTYPE
+    returning
+      value(RV_VALUE) type INTTYPE .
+  methods GET_JUST
+    returning
+      value(RV_VALUE) type LVC_JUST .
+  methods GET_KEY
+    returning
+      value(RV_VALUE) type LVC_KEY .
+  methods GET_KEY_SEL
+    returning
+      value(RV_VALUE) type LVC_KEYSEL .
+  methods GET_LOWERCASE
+    returning
+      value(RV_VALUE) type LOWERCASE .
+  methods GET_LZERO
+    returning
+      value(RV_VALUE) type LVC_LZERO .
+  methods GET_MAC
+    returning
+      value(RV_VALUE) type CHAR01 .
+  methods GET_MARK
+    returning
+      value(RV_VALUE) type CHAR01 .
+  methods GET_NO_CONVEXT
+    returning
+      value(RV_VALUE) type LVC_NOCONV .
+  methods GET_NO_INIT_CH
+    returning
+      value(RV_VALUE) type CHAR01 .
+  methods GET_NO_MERGING
+    returning
+      value(RV_VALUE) type CHAR01 .
+  methods GET_NO_OUT
+    returning
+      value(RV_VALUE) type LVC_NOOUT .
+  methods GET_NO_SIGN
+    returning
+      value(RV_VALUE) type LVC_NOSIGN .
+  methods GET_NO_SUM
+    returning
+      value(RV_VALUE) type LVC_NOSUM .
+  methods GET_NO_ZERO
+    returning
+      value(RV_VALUE) type LVC_NOZERO .
+  methods GET_OUTPUTLEN
+    returning
+      value(RV_VALUE) type LVC_OUTLEN .
+  methods GET_PARAMETER0
+    returning
+      value(RV_VALUE) type CHAR30 .
+  methods GET_PARAMETER1
+    returning
+      value(RV_VALUE) type CHAR30 .
+  methods GET_PARAMETER2
+    returning
+      value(RV_VALUE) type CHAR30 .
+  methods GET_PARAMETER3
+    returning
+      value(RV_VALUE) type CHAR30 .
+  methods GET_PARAMETER4
+    returning
+      value(RV_VALUE) type CHAR30 .
+  methods GET_PARAMETER5
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_PARAMETER6
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_PARAMETER7
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_PARAMETER8
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_PARAMETER9
+    returning
+      value(RV_VALUE) type INT4 .
+  methods GET_QFIELDNAME
+    returning
+      value(RV_VALUE) type LVC_QFNAME .
+  methods GET_QUANTITY
+    returning
+      value(RV_VALUE) type LVC_QUAN .
+  methods GET_READONLY
+    returning
+      value(RV_READ_ONLY) type ABAP_BOOL .
+  methods GET_REF_FIELD
+    returning
+      value(RV_VALUE) type LVC_RFNAME .
+  methods GET_REF_TABLE
+    returning
+      value(RV_VALUE) type LVC_RTNAME .
+  methods GET_REPREP
+    returning
+      value(RV_VALUE) type LVC_CRPRP .
+  methods GET_REPTEXT
+    returning
+      value(RV_VALUE) type REPTEXT .
+  methods GET_ROLLNAME
+    returning
+      value(RV_VALUE) type LVC_ROLL .
+  methods GET_ROUND
+    returning
+      value(RV_VALUE) type LVC_ROUND .
+  methods GET_ROUNDFIELD
+    returning
+      value(RV_VALUE) type LVC_RNDFN .
+  methods GET_ROW_POS
+    returning
+      value(RV_VALUE) type LVC_ROWPOS .
+  methods GET_SCRTEXT_L
+    returning
+      value(RV_VALUE) type SCRTEXT_L .
+  methods GET_SCRTEXT_M
+    returning
+      value(RV_VALUE) type SCRTEXT_M .
+  methods GET_SCRTEXT_S
+    returning
+      value(RV_VALUE) type SCRTEXT_S .
+  methods GET_SELDDICTXT
+    returning
+      value(RV_VALUE) type LVC_DDICT .
+  methods GET_SELTEXT
+    returning
+      value(RV_VALUE) type LVC_TXT .
+  methods GET_SP_GROUP
+    returning
+      value(RV_VALUE) type LVC_SPGRP .
+  methods GET_STYLE
+    returning
+      value(RV_VALUE) type LVC_STYLE .
+  methods GET_STYLE2
+    returning
+      value(RV_VALUE) type LVC_STYLE .
+  methods GET_STYLE3
+    returning
+      value(RV_VALUE) type LVC_STYLE .
+  methods GET_STYLE4
+    returning
+      value(RV_VALUE) type LVC_STYLE .
+  methods GET_SYMBOL
+    returning
+      value(RV_VALUE) type LVC_SYMBOL .
+  methods GET_TABNAME
+    returning
+      value(RV_VALUE) type LVC_TNAME .
+  methods GET_TECH
+    returning
+      value(RV_VALUE) type LVC_TECH .
+  methods GET_TECH_COL
+    returning
+      value(RV_VALUE) type LVC_TCOL .
+  methods GET_TECH_COMP
+    returning
+      value(RV_VALUE) type LVC_TCOMP .
+  methods GET_TECH_FORM
+    returning
+      value(RV_VALUE) type LVC_TFORM .
+  methods GET_TIPDDICTXT
+    returning
+      value(RV_VALUE) type LVC_DDICT .
+  methods GET_TOOLTIP
+    returning
+      value(RV_VALUE) type LVC_TIP .
+  methods GET_TXT_FIELD
+    returning
+      value(RV_VALUE) type LVC_FNAME .
+  methods GET_VALEXI
+    returning
+      value(RV_VALUE) type VALEXI .
+  methods GET_WEB_FIELD
+    returning
+      value(RV_VALUE) type LVC_FNAME .
+  methods SET_AUTO_VALUE
+    importing
+      value(IV_VALUE) type LVC_AUTO
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_CFIELDNAME
+    importing
+      value(IV_VALUE) type LVC_CFNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_CHECKBOX
+    importing
+      value(IV_VALUE) type LVC_CHECKB
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_CHECKTABLE
+    importing
+      value(IV_VALUE) type TABNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_COLDDICTXT
+    importing
+      value(IV_VALUE) type LVC_DDICT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_COLOR
+    importing
+      value(IV_VALUE) type LVC_EMPHSZ
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_COLTEXT
+    importing
+      value(IV_VALUE) type LVC_TXTCOL
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_COL_ID
+    importing
+      value(IV_VALUE) type LVC_COLID
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_COL_OPT
+    importing
+      value(IV_VALUE) type LVC_COLOPT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_COL_POS
+    importing
+      value(IV_VALUE) type LVC_COLPOS
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_CONVEXIT
+    importing
+      value(IV_VALUE) type CONVEXIT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_CURRENCY
+    importing
+      value(IV_VALUE) type LVC_CURR
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DATATYPE
+    importing
+      value(IV_VALUE) type DATATYPE_D
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DD_OUTLEN
+    importing
+      value(IV_VALUE) type LVC_DDLEN
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DD_ROLL
+    importing
+      value(IV_VALUE) type ROLLNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DECFLOAT_STYLE
+    importing
+      value(IV_VALUE) type OUTPUTSTYLE
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DECIMALS
+    importing
+      value(IV_VALUE) type DECIMALS
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DECIMALS_O
+    importing
+      value(IV_VALUE) type LVC_DECMLS
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DECMLFIELD
+    importing
+      value(IV_VALUE) type LVC_DFNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DFIELDNAME
+    importing
+      value(IV_VALUE) type LVCDBGFN
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DOMNAME
+    importing
+      value(IV_VALUE) type DOMNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DO_SUM
+    importing
+      value(IV_VALUE) type LVC_DOSUM
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DRAGDROPID
+    importing
+      value(IV_VALUE) type LVC_DDID
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DRDN_ALIAS
+    importing
+      value(IV_VALUE) type CHAR01
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DRDN_FIELD
+    importing
+      value(IV_VALUE) type LVC_FNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_DRDN_HNDL
+    importing
+      value(IV_VALUE) type INT4
+      value(IV_USE_DOMAIN_VALUES) type ABAP_BOOL default 'X'
+      value(IV_USE_ALIAS) type ABAP_BOOL default 'X'
+      value(IT_DROP_DOWN) type LVC_T_DROP optional
+      value(IT_DROP_DOWN_ALIAS) type LVC_T_DRAL optional
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_EDIT
+    importing
+      value(IV_VALUE) type LVC_EDIT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_EDITABLE
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_EDIT_MASK
+    importing
+      value(IV_VALUE) type LVC_EDTMSK
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_EMPHASIZE
+    importing
+      value(IV_VALUE) type LVC_EMPHSZ
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_EXPONENT
+    importing
+      value(IV_VALUE) type LVC_EXPONT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_F4AVAILABL
+    importing
+      value(IV_VALUE) type DDF4AVAIL
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_FIELDNAME
+    importing
+      value(IV_VALUE) type LVC_FNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_FIX_COLUMN
+    importing
+      value(IV_VALUE) type LVC_FIXCOL
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_GET_STYLE
+    importing
+      value(IV_VALUE) type CHAR01
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_HIER_CPOS
+    importing
+      value(IV_VALUE) type LVCHCOLPOS
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_HIER_LEVEL
+    importing
+      value(IV_VALUE) type LVC_HIERL
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_HOTSPOT
+    importing
+      value(IV_VALUE) type LVC_HOTSPT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_HREF_HNDL
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_H_COL_KEY
+    importing
+      value(IV_VALUE) type TV_ITMNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_H_FTYPE
+    importing
+      value(IV_VALUE) type LVC_FTYPE
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_H_SELECT
+    importing
+      value(IV_VALUE) type LVC_SELECT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_ICON
+    importing
+      value(IV_VALUE) type LVC_ICON
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_IFIELDNAME
+    importing
+      value(IV_VALUE) type LVC_FNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_INDX_CFIEL
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_INDX_DECML
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_INDX_FIELD
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_INDX_IFIEL
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_INDX_QFIEL
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_INDX_ROUND
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_INTLEN
+    importing
+      value(IV_VALUE) type INTLEN
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_INTTYPE
+    importing
+      value(IV_VALUE) type INTTYPE
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_JUST
+    importing
+      value(IV_VALUE) type LVC_JUST
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_KEY
+    importing
+      value(IV_VALUE) type LVC_KEY
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_KEY_SEL
+    importing
+      value(IV_VALUE) type LVC_KEYSEL
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_LOWERCASE
+    importing
+      value(IV_VALUE) type LOWERCASE
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_LZERO
+    importing
+      value(IV_VALUE) type LVC_LZERO
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_MAC
+    importing
+      value(IV_VALUE) type CHAR01
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_MARK
+    importing
+      value(IV_VALUE) type CHAR01
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_NO_CONVEXT
+    importing
+      value(IV_VALUE) type LVC_NOCONV
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_NO_INIT_CH
+    importing
+      value(IV_VALUE) type CHAR01
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_NO_MERGING
+    importing
+      value(IV_VALUE) type CHAR01
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_NO_OUT
+    importing
+      value(IV_VALUE) type LVC_NOOUT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_NO_SIGN
+    importing
+      value(IV_VALUE) type LVC_NOSIGN
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_NO_SUM
+    importing
+      value(IV_VALUE) type LVC_NOSUM
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_NO_ZERO
+    importing
+      value(IV_VALUE) type LVC_NOZERO
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_OUTPUTLEN
+    importing
+      value(IV_VALUE) type LVC_OUTLEN
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_PARAMETER0
+    importing
+      value(IV_VALUE) type CHAR30
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_PARAMETER1
+    importing
+      value(IV_VALUE) type CHAR30
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_PARAMETER2
+    importing
+      value(IV_VALUE) type CHAR30
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_PARAMETER3
+    importing
+      value(IV_VALUE) type CHAR30
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_PARAMETER4
+    importing
+      value(IV_VALUE) type CHAR30
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_PARAMETER5
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_PARAMETER6
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_PARAMETER7
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_PARAMETER8
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_PARAMETER9
+    importing
+      value(IV_VALUE) type INT4
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_QFIELDNAME
+    importing
+      value(IV_VALUE) type LVC_QFNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_QUANTITY
+    importing
+      value(IV_VALUE) type LVC_QUAN
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_READONLY
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_REF_FIELD
+    importing
+      value(IV_VALUE) type LVC_RFNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_REF_TABLE
+    importing
+      value(IV_VALUE) type LVC_RTNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_REPREP
+    importing
+      value(IV_VALUE) type LVC_CRPRP
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_REPTEXT
+    importing
+      value(IV_VALUE) type REPTEXT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_ROLLNAME
+    importing
+      value(IV_VALUE) type LVC_ROLL
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_ROUND
+    importing
+      value(IV_VALUE) type LVC_ROUND
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_ROUNDFIELD
+    importing
+      value(IV_VALUE) type LVC_RNDFN
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_ROW_POS
+    importing
+      value(IV_VALUE) type LVC_ROWPOS
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_SCRTEXT_L
+    importing
+      value(IV_VALUE) type SCRTEXT_L
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_SCRTEXT_M
+    importing
+      value(IV_VALUE) type SCRTEXT_M
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_SCRTEXT_S
+    importing
+      value(IV_VALUE) type SCRTEXT_S
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_SELDDICTXT
+    importing
+      value(IV_VALUE) type LVC_DDICT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_SELTEXT
+    importing
+      value(IV_VALUE) type LVC_TXT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_SP_GROUP
+    importing
+      value(IV_VALUE) type LVC_SPGRP
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_STYLE
+    importing
+      value(IV_VALUE) type LVC_STYLE
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_STYLE2
+    importing
+      value(IV_VALUE) type LVC_STYLE
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_STYLE3
+    importing
+      value(IV_VALUE) type LVC_STYLE
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_STYLE4
+    importing
+      value(IV_VALUE) type LVC_STYLE
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_SYMBOL
+    importing
+      value(IV_VALUE) type LVC_SYMBOL
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_TABNAME
+    importing
+      value(IV_VALUE) type LVC_TNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_TECH
+    importing
+      value(IV_VALUE) type LVC_TECH
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_TECH_COL
+    importing
+      value(IV_VALUE) type LVC_TCOL
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_TECH_COMP
+    importing
+      value(IV_VALUE) type LVC_TCOMP
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_TECH_FORM
+    importing
+      value(IV_VALUE) type LVC_TFORM
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_TEXTS
+    importing
+      value(IV_TEXT_S) type SCRTEXT_S
+      value(IV_TEXT_M) type SCRTEXT_M optional
+      value(IV_TEXT_L) type SCRTEXT_L optional
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_TIPDDICTXT
+    importing
+      value(IV_VALUE) type LVC_DDICT
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_TOOLTIP
+    importing
+      value(IV_VALUE) type LVC_TIP
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_TXT_FIELD
+    importing
+      value(IV_VALUE) type LVC_FNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_VALEXI
+    importing
+      value(IV_VALUE) type VALEXI
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SET_WEB_FIELD
+    importing
+      value(IV_VALUE) type LVC_FNAME
+    returning
+      value(R_COLUMN) type ref to ZCL_FALV_COLUMN .
   protected section.
-  private section.
+private section.
 
-    data falv type ref to zcl_falv .
+  data FALV type ref to ZCL_FALV .
 
-    methods change_setting
-      importing
-        value(iv_value)   type any
-        value(iv_setting) type string .
-
-    methods get_setting
-      importing
-        value(iv_setting) type string
-      exporting
-        value(e_value)    type any.
+  methods CHANGE_SETTING
+    importing
+      value(IV_VALUE) type ANY
+      value(IV_SETTING) type STRING .
+  methods GET_SETTING
+    importing
+      value(IV_SETTING) type STRING
+    exporting
+      value(E_VALUE) type ANY .
 ENDCLASS.
 
 
@@ -980,10 +1094,124 @@ CLASS ZCL_FALV_COLUMN IMPLEMENTATION.
   endmethod.
 
 
-  method set_drdn_hndl.
-    change_setting( iv_value = iv_value iv_setting = 'DRDN_HNDL' ).
+  METHOD set_drdn_hndl.
+
+    DATA:
+           lt_drop_down        TYPE  lvc_t_drop
+          ,ls_drop_down        LIKE LINE OF lt_drop_down
+          ,lt_drop_down_alias  TYPE	lvc_t_dral
+          ,ls_drop_down_alias  LIKE LINE OF lt_drop_down_alias
+          ,lo_typedescr        TYPE REF TO cl_abap_typedescr
+          ,lo_elemdescr        TYPE REF TO cl_abap_elemdescr
+          ,lv_domname          TYPE domname
+          ,lt_fixed_values     TYPE cl_abap_elemdescr=>fixvalues
+          ,ls_fixed_value      LIKE LINE OF lt_fixed_values
+          .
+
+
+    IF ( ( it_drop_down       IS NOT INITIAL ) OR
+         ( it_drop_down_alias IS NOT INITIAL ) ).
+
+      APPEND LINES OF it_drop_down       TO lt_drop_down.
+      APPEND LINES OF it_drop_down_alias TO lt_drop_down_alias.
+
+    ELSE.
+      IF ( iv_use_domain_values EQ abap_true ).
+        lv_domname = me->get_domname( ).
+
+        CALL METHOD cl_abap_elemdescr=>describe_by_name
+          EXPORTING
+            p_name         = lv_domname
+          RECEIVING
+            p_descr_ref    = lo_typedescr
+          EXCEPTIONS
+            type_not_found = 1
+            OTHERS         = 2.
+        IF sy-subrc EQ 0.
+          lo_elemdescr ?= lo_typedescr.
+
+*        get_ddic_fixed_values
+          CALL METHOD lo_elemdescr->get_ddic_fixed_values
+*  EXPORTING
+*    p_langu        = SY-LANGU
+            RECEIVING
+              p_fixed_values = lt_fixed_values
+*  EXCEPTIONS
+*             not_found      = 1
+*             no_ddic_type   = 2
+*             others         = 3
+            .
+          IF sy-subrc EQ 0.
+
+            LOOP AT lt_fixed_values INTO ls_fixed_value.
+
+
+              IF ( iv_use_alias EQ abap_true ).
+                CLEAR: ls_drop_down_alias.
+
+                ls_drop_down_alias-handle = iv_value.
+*              ls_drop_down_alias-value = ls_fixed_value-ddtext.
+                CONCATENATE ls_fixed_value-ddtext '['
+                  INTO ls_drop_down_alias-value SEPARATED BY space.
+
+                CONCATENATE ls_drop_down_alias-value
+                             ls_fixed_value-low ']'
+                  INTO ls_drop_down_alias-value.
+
+                ls_drop_down_alias-int_value = ls_fixed_value-low.
+
+                APPEND ls_drop_down_alias TO lt_drop_down_alias.
+              ELSE.
+                CLEAR: ls_drop_down.
+
+                ls_drop_down-handle = iv_value.
+                ls_drop_down-value = ls_fixed_value-low.
+
+                APPEND ls_drop_down TO lt_drop_down.
+              ENDIF.
+
+            ENDLOOP.
+
+
+
+          ELSE.
+* Implement suitable error handling here
+          ENDIF.
+
+        ENDIF.
+      ELSE.
+*                Implement suitable error handling here
+      ENDIF.
+
+    ENDIF.
+
+
+
+
+    IF ( ( lt_drop_down       IS NOT INITIAL ) OR
+         ( lt_drop_down_alias IS NOT INITIAL ) ).
+
+
+      change_setting( iv_value = iv_value iv_setting = 'DRDN_HNDL' ).
+
+      IF ( iv_use_alias EQ abap_true ).
+        falv->set_drop_down_table(
+          it_drop_down_alias = lt_drop_down_alias ).
+*      me->set_drdn_alias( 'X' ).
+        change_setting( iv_value = 'X' iv_setting = 'DRDN_ALIAS' ).
+      ELSE.
+        falv->set_drop_down_table(
+          it_drop_down       = lt_drop_down
+           ).
+      ENDIF.
+
+
+    ENDIF.
+
+
     r_column = me.
-  endmethod.
+
+  ENDMETHOD.
 
 
   method set_edit.
