@@ -1101,8 +1101,11 @@ CLASS ZCL_FALV_COLUMN IMPLEMENTATION.
           ,ls_drop_down        LIKE LINE OF lt_drop_down
           ,lt_drop_down_alias  TYPE	lvc_t_dral
           ,ls_drop_down_alias  LIKE LINE OF lt_drop_down_alias
-          ,lo_typedescr        TYPE REF TO cl_abap_typedescr
-          ,lo_elemdescr        TYPE REF TO cl_abap_elemdescr
+*          ,lo_typedescr        TYPE REF TO cl_abap_typedescr
+*          ,lo_elemdescr        TYPE REF TO cl_abap_elemdescr
+          ,lo_domadescr        TYPE REF TO cl_abap_cc_domain
+          ,lt_obj_values       TYPE if_abap_cc_properties=>ty_values_seq
+          ,ls_obj_value        LIKE LINE OF lt_obj_values
           ,lv_domname          TYPE domname
           ,lt_fixed_values     TYPE cl_abap_elemdescr=>fixvalues
           ,ls_fixed_value      LIKE LINE OF lt_fixed_values
@@ -1119,66 +1122,80 @@ CLASS ZCL_FALV_COLUMN IMPLEMENTATION.
       IF ( iv_use_domain_values EQ abap_true ).
         lv_domname = me->get_domname( ).
 
-        CALL METHOD cl_abap_elemdescr=>describe_by_name
+
+        CREATE OBJECT lo_domadescr
           EXPORTING
-            p_name         = lv_domname
-          RECEIVING
-            p_descr_ref    = lo_typedescr
-          EXCEPTIONS
-            type_not_found = 1
-            OTHERS         = 2.
-        IF sy-subrc EQ 0.
-          lo_elemdescr ?= lo_typedescr.
+            domname = lv_domname.
+
+
+*        CALL METHOD cl_abap_elemdescr=>describe_by_name
+*          EXPORTING
+*            p_name         = lv_data_element_name
+*          RECEIVING
+*            p_descr_ref    = lo_typedescr
+*          EXCEPTIONS
+*            type_not_found = 1
+*            OTHERS         = 2.
+*        IF sy-subrc EQ 0.
+*          lo_elemdescr ?= lo_typedescr.
 
 *        get_ddic_fixed_values
-          CALL METHOD lo_elemdescr->get_ddic_fixed_values
-*  EXPORTING
-*    p_langu        = SY-LANGU
-            RECEIVING
-              p_fixed_values = lt_fixed_values
-*  EXCEPTIONS
-*             not_found      = 1
-*             no_ddic_type   = 2
-*             others         = 3
-            .
-          IF sy-subrc EQ 0.
-
-            LOOP AT lt_fixed_values INTO ls_fixed_value.
+*        CALL METHOD lo_elemdescr->get_ddic_fixed_values
+**  EXPORTING
+**    p_langu        = SY-LANGU
+*          RECEIVING
+*            p_fixed_values = lt_fixed_values
+**  EXCEPTIONS
+**           not_found      = 1
+**           no_ddic_type   = 2
+**           others         = 3
+*          .
+        IF sy-subrc EQ 0.
 
 
-              IF ( iv_use_alias EQ abap_true ).
-                CLEAR: ls_drop_down_alias.
+          lt_obj_values = lo_domadescr->values.
 
-                ls_drop_down_alias-handle = iv_value.
+*          LOOP AT lt_fixed_values INTO ls_fixed_value.
+          LOOP AT lt_obj_values INTO ls_obj_value.
+
+
+            IF ( iv_use_alias EQ abap_true ).
+              CLEAR: ls_drop_down_alias.
+
+              ls_drop_down_alias-handle = iv_value.
 *              ls_drop_down_alias-value = ls_fixed_value-ddtext.
-                CONCATENATE ls_fixed_value-ddtext '['
-                  INTO ls_drop_down_alias-value SEPARATED BY space.
+*              CONCATENATE ls_fixed_value-ddtext '['
+              CONCATENATE ls_obj_value->sourcetext '['
+                INTO ls_drop_down_alias-value SEPARATED BY space.
 
-                CONCATENATE ls_drop_down_alias-value
-                             ls_fixed_value-low ']'
-                  INTO ls_drop_down_alias-value.
+              CONCATENATE ls_drop_down_alias-value
+*                           ls_fixed_value-low ']'
+                           ls_obj_value->value ']'
+                INTO ls_drop_down_alias-value.
 
-                ls_drop_down_alias-int_value = ls_fixed_value-low.
+*              ls_drop_down_alias-int_value = ls_fixed_value-low.
+              ls_drop_down_alias-int_value = ls_obj_value->value.
 
-                APPEND ls_drop_down_alias TO lt_drop_down_alias.
-              ELSE.
-                CLEAR: ls_drop_down.
+              APPEND ls_drop_down_alias TO lt_drop_down_alias.
+            ELSE.
+              CLEAR: ls_drop_down.
 
-                ls_drop_down-handle = iv_value.
-                ls_drop_down-value = ls_fixed_value-low.
+              ls_drop_down-handle = iv_value.
+*              ls_drop_down-value = ls_fixed_value-low.
+              ls_drop_down-value = ls_obj_value->value.
 
-                APPEND ls_drop_down TO lt_drop_down.
-              ENDIF.
+              APPEND ls_drop_down TO lt_drop_down.
+            ENDIF.
 
-            ENDLOOP.
+          ENDLOOP.
 
 
 
-          ELSE.
+        ELSE.
 * Implement suitable error handling here
-          ENDIF.
-
         ENDIF.
+
+*      ENDIF.
       ELSE.
 *                Implement suitable error handling here
       ENDIF.
