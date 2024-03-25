@@ -1,868 +1,856 @@
-class ZCL_FALV definition
-  public
-  inheriting from CL_GUI_ALV_GRID
-  create public
+CLASS zcl_falv DEFINITION
+  PUBLIC
+  INHERITING FROM cl_gui_alv_grid
+  CREATE PUBLIC
 
-  global friends ZCL_FALV_LAYOUT .
+  GLOBAL FRIENDS zcl_falv_layout .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces IF_ALV_RM_GRID_FRIEND .
+    INTERFACES if_alv_rm_grid_friend .
 
-  types:
-    begin of t_subcl_call,
-        progname type progname,
-        line     type i,
-        column   type i,
-        class    type string,
-      end of t_subcl_call .
-  types:
-    tt_subcl_call type sorted table of t_subcl_call with unique key progname line column .
-  types:
-    begin of t_email,
-        smtp_addr  type ad_smtpadr,
-        express    type os_boolean,
-        copy       type os_boolean,
-        blind_copy type os_boolean,
-      end of t_email .
-  types:
-    tt_email type table of t_email .
-  types T_COLUMN type ref to ZCL_FALV_COLUMN .
-  types:
-    t_columns type sorted table of t_column with unique key table_line .
+    TYPES:
+      BEGIN OF t_subcl_call,
+        progname TYPE progname,
+        line     TYPE i,
+        column   TYPE i,
+        class    TYPE string,
+      END OF t_subcl_call .
+    TYPES:
+      tt_subcl_call TYPE SORTED TABLE OF t_subcl_call WITH UNIQUE KEY progname line column .
+    TYPES:
+      BEGIN OF t_email,
+        smtp_addr  TYPE ad_smtpadr,
+        express    TYPE os_boolean,
+        copy       TYPE os_boolean,
+        blind_copy TYPE os_boolean,
+      END OF t_email .
+    TYPES:
+      tt_email TYPE TABLE OF t_email .
+    TYPES t_column TYPE REF TO zcl_falv_column .
+    TYPES t_columns TYPE SORTED TABLE OF t_column WITH UNIQUE KEY table_line .
+    CONSTANTS: BEGIN OF color,
+                 blue                         TYPE char4 VALUE 'C100',
+                 blue_intensified             TYPE char4 VALUE 'C110',
+                 blue_intensified_inversed    TYPE char4 VALUE 'C111',
+                 blue_inversed                TYPE char4 VALUE 'C101',
+                 gray                         TYPE char4 VALUE 'C200',
+                 gray_itensified              TYPE char4 VALUE 'C210',
+                 gray_intesified_invers       TYPE char4 VALUE 'C211',
+                 gray_inversed                TYPE char4 VALUE 'C201',
+                 yellow                       TYPE char4 VALUE 'C300',
+                 yellow_intensified           TYPE char4 VALUE 'C310',
+                 yellow_intensified_inversed  TYPE char4 VALUE 'C311',
+                 yellow_inversed              TYPE char4 VALUE 'C301',
+                 light_blue                   TYPE char4 VALUE 'C400',
+                 light_blue_itensified        TYPE char4 VALUE 'C410',
+                 light_blue_intesified_invers TYPE char4 VALUE 'C411',
+                 light_blue_inversed          TYPE char4 VALUE 'C401',
+                 green                        TYPE char4 VALUE 'C500',
+                 green_intensified            TYPE char4 VALUE 'C510',
+                 green_intensified_inversed   TYPE char4 VALUE 'C511',
+                 green_inversed               TYPE char4 VALUE 'C501',
+                 red                          TYPE char4 VALUE 'C600',
+                 red_intensified              TYPE char4 VALUE 'C610',
+                 red_intensified_inversed     TYPE char4 VALUE 'C611',
+                 red_inversed                 TYPE char4 VALUE 'C601',
+                 orange                       TYPE char4 VALUE 'C700',
+                 orange_intensified           TYPE char4 VALUE 'C710',
+                 orange_intensified_inversed  TYPE char4 VALUE 'C711',
+                 orange_inversed              TYPE char4 VALUE 'C701',
+               END OF color ##NEEDED.
+    CONSTANTS version TYPE string VALUE '740.1.0.19' ##NO_TEXT.
+    CONSTANTS cc_name TYPE char30 VALUE 'CC_GRID' ##NO_TEXT.
+    CONSTANTS c_screen_popup TYPE sy-dynnr VALUE '0200' ##NO_TEXT.
+    CONSTANTS c_screen_full TYPE sy-dynnr VALUE '0100' ##NO_TEXT.
+    CONSTANTS c_fscr_repid TYPE sy-repid VALUE 'SAPLZFALV' ##NO_TEXT.
+    DATA result TYPE i READ-ONLY .
+    DATA splitter_row_1_height TYPE i READ-ONLY .
+    DATA splitter_row_2_height TYPE i READ-ONLY .
+    DATA splitter_row_3_height TYPE i READ-ONLY .
+    CONSTANTS fc_back TYPE sy-ucomm VALUE 'BACK' ##NO_TEXT.
+    CONSTANTS fc_up TYPE sy-ucomm VALUE 'UP' ##NO_TEXT.
+    CONSTANTS fc_exit TYPE sy-ucomm VALUE 'EXIT' ##NO_TEXT.
+    CONSTANTS fc_cancel TYPE sy-ucomm VALUE 'CANCEL' ##NO_TEXT.
+    CONSTANTS fc_mass_replace TYPE sy-ucomm VALUE 'MASS_REPL' ##NO_TEXT.
+    CONSTANTS fc_save TYPE sy-ucomm VALUE '&DATA_SAVE' ##NO_TEXT.
+    CONSTANTS fc_print TYPE sy-ucomm VALUE 'PRINT' ##NO_TEXT.
+    CONSTANTS fc_find TYPE sy-ucomm VALUE 'FIND' ##NO_TEXT.
+    CONSTANTS fc_find_next TYPE sy-ucomm VALUE 'FINDNEXT' ##NO_TEXT.
+    CONSTANTS fc_first_page TYPE sy-ucomm VALUE 'PGHOME' ##NO_TEXT.
+    CONSTANTS fc_last_page TYPE sy-ucomm VALUE 'PGEND' ##NO_TEXT.
+    CONSTANTS fc_previous_page TYPE sy-ucomm VALUE 'PGUP' ##NO_TEXT.
+    CONSTANTS fc_next_page TYPE sy-ucomm VALUE 'PGDOWN' ##NO_TEXT.
+    CONSTANTS button_normal TYPE tb_btype VALUE '0' ##NO_TEXT.
+    CONSTANTS button_menu_default TYPE tb_btype VALUE '1' ##NO_TEXT.
+    CONSTANTS button_menu TYPE tb_btype VALUE '2' ##NO_TEXT.
+    CONSTANTS button_separator TYPE tb_btype VALUE '3' ##NO_TEXT.
+    CONSTANTS button_radiobutton TYPE tb_btype VALUE '4' ##NO_TEXT.
+    CONSTANTS button_checkbox TYPE tb_btype VALUE '5' ##NO_TEXT.
+    CONSTANTS button_menu_entry TYPE tb_btype VALUE '6' ##NO_TEXT.
+    CONSTANTS: BEGIN OF symbol,
+                 empty_space        TYPE char01 VALUE ' ',
+                 plus_box           TYPE char01 VALUE '!',
+                 minus_box          TYPE char01 VALUE '"',
+                 plus_circle        TYPE char01 VALUE '#',
+                 minus_circle       TYPE char01 VALUE '$',
+                 filled_square      TYPE char01 VALUE '%',
+                 half_filled_square TYPE char01 VALUE '&',
+                 square             TYPE char01 VALUE `'`,
+                 filled_circle      TYPE char01 VALUE '(',
+                 half_filled_circle TYPE char01 VALUE ')',
+                 circle             TYPE char01 VALUE '*',
+                 filled_diamond     TYPE char01 VALUE '+',
+                 diamond            TYPE char01 VALUE ',',
+                 bold_x             TYPE char01 VALUE '.',
+                 note               TYPE char01 VALUE '/',
+                 document           TYPE char01 VALUE '0',
+                 checked_document   TYPE char01 VALUE '1',
+                 documents          TYPE char01 VALUE '2',
+                 folder             TYPE char01 VALUE '3',
+                 plus_folder        TYPE char01 VALUE '4',
+                 minus_folder       TYPE char01 VALUE '5',
+                 open_folder        TYPE char01 VALUE '6',
+                 bold_minus         TYPE char01 VALUE '7',
+                 bold_plus          TYPE char01 VALUE '8',
+                 checkbox           TYPE char01 VALUE '9',
+                 radiobutton        TYPE char01 VALUE  ':',
+                 left_triangle      TYPE char01 VALUE  ';',
+                 right_triangle     TYPE char01 VALUE  '<',
+                 up_triangle        TYPE char01 VALUE  '=',
+                 down_triangle      TYPE char01 VALUE  '>',
+                 left_hand          TYPE char01 VALUE  '?',
+                 left_arrow         TYPE char01 VALUE  'A',
+                 right_arrow        TYPE char01 VALUE  'B',
+                 up_arrow           TYPE char01 VALUE  'C',
+                 down_arrow         TYPE char01 VALUE  'D',
+                 check_mark         TYPE char01 VALUE  'E',
+                 pencil             TYPE char01 VALUE  'F',
+                 glasses            TYPE char01 VALUE  'G',
+                 locked             TYPE char01 VALUE  'H',
+                 unlocked           TYPE char01 VALUE  'I',
+                 phone              TYPE char01 VALUE  'J',
+                 printer            TYPE char01 VALUE  'K',
+                 fax                TYPE char01 VALUE  'L',
+                 asterisk           TYPE char01 VALUE  'M',
+                 right_hand         TYPE char01 VALUE  'N',
+                 sorted_up          TYPE char01 VALUE  'O',
+                 sorted_down        TYPE char01 VALUE  'P',
+                 cumulated          TYPE char01 VALUE  'Q',
+                 delete             TYPE char01 VALUE  'R',
+                 executable         TYPE char01 VALUE  'S',
+                 workflow_item      TYPE char01 VALUE  'T',
+                 caution            TYPE char01 VALUE  'U',
+                 flash              TYPE char01 VALUE  'V',
+                 large_square       TYPE char01 VALUE  'W',
+                 ellipsis           TYPE char01 VALUE  'X',
+               END OF symbol.
+    DATA main_container TYPE REF TO cl_gui_container READ-ONLY .
+    DATA split_container TYPE REF TO cl_gui_splitter_container .
+    DATA main_split_container TYPE REF TO cl_gui_splitter_container .
+    DATA top_of_page_container TYPE REF TO cl_gui_container .
+    DATA variant TYPE disvariant .
+    DATA layout_save TYPE char01 .
+    DATA exclude_functions TYPE ui_functions .
+    DATA fcat TYPE lvc_t_fcat .
+    DATA sort TYPE lvc_t_sort .
+    DATA filter TYPE lvc_t_filt .
+    DATA lvc_layout TYPE lvc_s_layo READ-ONLY .
+    DATA layout TYPE REF TO zcl_falv_layout .
+    DATA gui_status TYPE REF TO zcl_falv_dynamic_status .
+    DATA screen TYPE sy-dynnr READ-ONLY .
+    DATA outtab TYPE REF TO data .
+    DATA title_v1 TYPE string .
+    DATA title_v2 TYPE string .
+    DATA title_v3 TYPE string .
+    DATA title_v4 TYPE string .
+    DATA title_v5 TYPE string .
+    DATA delay_move_current_cell TYPE i READ-ONLY VALUE 20 ##NO_TEXT.
+    DATA delay_change_selection TYPE i READ-ONLY VALUE 20 ##NO_TEXT.
+    DATA top_of_page_height TYPE i VALUE 150 ##NO_TEXT.
+    DATA error_log_height TYPE i VALUE 100 ##NO_TEXT.
+    DATA grid TYPE REF TO cl_gui_alv_grid .
+    DATA built_in_screen TYPE abap_bool  READ-ONLY.
+    DATA: buffering_active TYPE abap_bool VALUE abap_true,
+          bypassing_buffer TYPE abap_bool VALUE abap_false.
 
-  constants:
-    begin of color,
-                 blue                         type char4 value 'C100',
-                 blue_intensified             type char4 value 'C110',
-                 blue_intensified_inversed    type char4 value 'C111',
-                 blue_inversed                type char4 value 'C101',
-                 gray                         type char4 value 'C200',
-                 gray_itensified              type char4 value 'C210',
-                 gray_intesified_invers       type char4 value 'C211',
-                 gray_inversed                type char4 value 'C201',
-                 yellow                       type char4 value 'C300',
-                 yellow_intensified           type char4 value 'C310',
-                 yellow_intensified_inversed  type char4 value 'C311',
-                 yellow_inversed              type char4 value 'C301',
-                 light_blue                   type char4 value 'C400',
-                 light_blue_itensified        type char4 value 'C410',
-                 light_blue_intesified_invers type char4 value 'C411',
-                 light_blue_inversed          type char4 value 'C401',
-                 green                        type char4 value 'C500',
-                 green_intensified            type char4 value 'C510',
-                 green_intensified_inversed   type char4 value 'C511',
-                 green_inversed               type char4 value 'C501',
-                 red                          type char4 value 'C600',
-                 red_intensified              type char4 value 'C610',
-                 red_intensified_inversed     type char4 value 'C611',
-                 red_inversed                 type char4 value 'C601',
-                 orange                       type char4 value 'C700',
-                 orange_intensified           type char4 value 'C710',
-                 orange_intensified_inversed  type char4 value 'C711',
-                 orange_inversed              type char4 value 'C701',
-               end of color .
-  constants VERSION type STRING value '740.1.0.19' ##NO_TEXT.
-  constants CC_NAME type CHAR30 value 'CC_GRID' ##NO_TEXT.
-  constants C_SCREEN_POPUP type SY-DYNNR value '0200' ##NO_TEXT.
-  constants C_SCREEN_FULL type SY-DYNNR value '0100' ##NO_TEXT.
-  constants C_FSCR_REPID type SY-REPID value 'SAPLZFALV' ##NO_TEXT.
-  data RESULT type I read-only .
-  data SPLITTER_ROW_1_HEIGHT type I read-only .
-  data SPLITTER_ROW_2_HEIGHT type I read-only .
-  data SPLITTER_ROW_3_HEIGHT type I read-only .
-  constants FC_BACK type SY-UCOMM value 'BACK' ##NO_TEXT.
-  constants FC_UP type SY-UCOMM value 'UP' ##NO_TEXT.
-  constants FC_EXIT type SY-UCOMM value 'EXIT' ##NO_TEXT.
-  constants FC_CANCEL type SY-UCOMM value 'CANCEL' ##NO_TEXT.
-  constants FC_MASS_REPLACE type SY-UCOMM value 'MASS_REPL' ##NO_TEXT.
-  constants FC_SAVE type SY-UCOMM value '&DATA_SAVE' ##NO_TEXT.
-  constants FC_PRINT type SY-UCOMM value 'PRINT' ##NO_TEXT.
-  constants FC_FIND type SY-UCOMM value 'FIND' ##NO_TEXT.
-  constants FC_FIND_NEXT type SY-UCOMM value 'FINDNEXT' ##NO_TEXT.
-  constants FC_FIRST_PAGE type SY-UCOMM value 'PGHOME' ##NO_TEXT.
-  constants FC_LAST_PAGE type SY-UCOMM value 'PGEND' ##NO_TEXT.
-  constants FC_PREVIOUS_PAGE type SY-UCOMM value 'PGUP' ##NO_TEXT.
-  constants FC_NEXT_PAGE type SY-UCOMM value 'PGDOWN' ##NO_TEXT.
-  constants BUTTON_NORMAL type TB_BTYPE value '0' ##NO_TEXT.
-  constants BUTTON_MENU_DEFAULT type TB_BTYPE value '1' ##NO_TEXT.
-  constants BUTTON_MENU type TB_BTYPE value '2' ##NO_TEXT.
-  constants BUTTON_SEPARATOR type TB_BTYPE value '3' ##NO_TEXT.
-  constants BUTTON_RADIOBUTTON type TB_BTYPE value '4' ##NO_TEXT.
-  constants BUTTON_CHECKBOX type TB_BTYPE value '5' ##NO_TEXT.
-  constants BUTTON_MENU_ENTRY type TB_BTYPE value '6' ##NO_TEXT.
-  constants:
-    begin of symbol,
-                 empty_space        type char01 value ' ',
-                 plus_box           type char01 value '!',
-                 minus_box          type char01 value '"',
-                 plus_circle        type char01 value '#',
-                 minus_circle       type char01 value '$',
-                 filled_square      type char01 value '%',
-                 half_filled_square type char01 value '&',
-                 square             type char01 value `'`,
-                 filled_circle      type char01 value '(',
-                 half_filled_circle type char01 value ')',
-                 circle             type char01 value '*',
-                 filled_diamond     type char01 value '+',
-                 diamond            type char01 value ',',
-                 bold_x             type char01 value '.',
-                 note               type char01 value '/',
-                 document           type char01 value '0',
-                 checked_document   type char01 value '1',
-                 documents          type char01 value '2',
-                 folder             type char01 value '3',
-                 plus_folder        type char01 value '4',
-                 minus_folder       type char01 value '5',
-                 open_folder        type char01 value '6',
-                 bold_minus         type char01 value '7',
-                 bold_plus          type char01 value '8',
-                 checkbox           type char01 value '9',
-                 radiobutton        type char01 value  ':',
-                 left_triangle      type char01 value  ';',
-                 right_triangle     type char01 value  '<',
-                 up_triangle        type char01 value  '=',
-                 down_triangle      type char01 value  '>',
-                 left_hand          type char01 value  '?',
-                 left_arrow         type char01 value  'A',
-                 right_arrow        type char01 value  'B',
-                 up_arrow           type char01 value  'C',
-                 down_arrow         type char01 value  'D',
-                 check_mark         type char01 value  'E',
-                 pencil             type char01 value  'F',
-                 glasses            type char01 value  'G',
-                 locked             type char01 value  'H',
-                 unlocked           type char01 value  'I',
-                 phone              type char01 value  'J',
-                 printer            type char01 value  'K',
-                 fax                type char01 value  'L',
-                 asterisk           type char01 value  'M',
-                 right_hand         type char01 value  'N',
-                 sorted_up          type char01 value  'O',
-                 sorted_down        type char01 value  'P',
-                 cumulated          type char01 value  'Q',
-                 delete             type char01 value  'R',
-                 executable         type char01 value  'S',
-                 workflow_item      type char01 value  'T',
-                 caution            type char01 value  'U',
-                 flash              type char01 value  'V',
-                 large_square       type char01 value  'W',
-                 ellipsis           type char01 value  'X',
-               end of symbol .
-  data MAIN_CONTAINER type ref to CL_GUI_CONTAINER read-only .
-  data SPLIT_CONTAINER type ref to CL_GUI_SPLITTER_CONTAINER .
-  data MAIN_SPLIT_CONTAINER type ref to CL_GUI_SPLITTER_CONTAINER .
-  data TOP_OF_PAGE_CONTAINER type ref to CL_GUI_CONTAINER .
-  data VARIANT type DISVARIANT .
-  data LAYOUT_SAVE type CHAR01 .
-  data EXCLUDE_FUNCTIONS type UI_FUNCTIONS .
-  data FCAT type LVC_T_FCAT .
-  data SORT type LVC_T_SORT .
-  data FILTER type LVC_T_FILT .
-  data LVC_LAYOUT type LVC_S_LAYO read-only .
-  data LAYOUT type ref to ZCL_FALV_LAYOUT .
-  data GUI_STATUS type ref to ZCL_FALV_DYNAMIC_STATUS .
-  data SCREEN type SY-DYNNR read-only .
-  data OUTTAB type ref to DATA .
-  data TITLE_V1 type STRING .
-  data TITLE_V2 type STRING .
-  data TITLE_V3 type STRING .
-  data TITLE_V4 type STRING .
-  data TITLE_V5 type STRING .
-  data DELAY_MOVE_CURRENT_CELL type I read-only value 20 ##NO_TEXT.
-  data DELAY_CHANGE_SELECTION type I read-only value 20 ##NO_TEXT.
-  data TOP_OF_PAGE_HEIGHT type I value 150 ##NO_TEXT.
-  data ERROR_LOG_HEIGHT type I value 100 ##NO_TEXT.
-  data GRID type ref to CL_GUI_ALV_GRID .
-  data BUILT_IN_SCREEN type ABAP_BOOL read-only .
-  data BUFFERING_ACTIVE type ABAP_BOOL value ABAP_TRUE ##NO_TEXT.
-  data BYPASSING_BUFFER type ABAP_BOOL value ABAP_FALSE ##NO_TEXT.
-
-  class-methods CREATE
-    importing
-      value(I_PARENT) type ref to CL_GUI_CONTAINER optional
-      value(I_APPLOGPARENT) type ref to CL_GUI_CONTAINER optional
-      value(I_POPUP) type ABAP_BOOL default ABAP_FALSE
-      value(I_APPLOG_EMBEDDED) type ABAP_BOOL default ABAP_FALSE
-      value(I_SUBCLASS) type ref to CL_ABAP_TYPEDESCR optional
-      value(I_HANDLE) type SLIS_HANDL optional
-    changing
-      !CT_TABLE type STANDARD TABLE
-    returning
-      value(RV_FALV) type ref to ZCL_FALV .
-  class-methods CREATE_BY_TYPE
-    importing
-      value(I_PARENT) type ref to CL_GUI_CONTAINER optional
-      value(I_APPLOGPARENT) type ref to CL_GUI_CONTAINER optional
-      value(I_POPUP) type ABAP_BOOL default ABAP_FALSE
-      value(I_APPLOG_EMBEDDED) type ABAP_BOOL default ABAP_FALSE
-      value(I_SUBCLASS) type ref to CL_ABAP_TYPEDESCR optional
-      !I_TYPE type ref to CL_ABAP_TYPEDESCR
-    returning
-      value(RV_FALV) type ref to ZCL_FALV .
-  class-methods LVC_FCAT_FROM_ITAB
-    importing
-      !IT_TABLE type STANDARD TABLE
-    returning
-      value(RT_FCAT) type LVC_T_FCAT .
-  methods ADD_BUTTON
-    importing
-      value(IV_FUNCTION) type UI_FUNC
-      value(IV_ICON) type ICON_D optional
-      value(IV_QUICKINFO) type ICONQUICK optional
-      value(IV_BUTN_TYPE) type TB_BTYPE optional
-      value(IV_DISABLED) type ABAP_BOOL optional
-      value(IV_TEXT) type TEXT40 optional
-      value(IV_CHECKED) type ABAP_BOOL optional
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods COLUMN
-    importing
-      value(IV_FIELDNAME) type LVC_S_FCAT-FIELDNAME
-    returning
-      value(RV_COLUMN) type ref to ZCL_FALV_COLUMN .
-  methods CONSTRUCTOR
-    importing
-      value(I_SHELLSTYLE) type I default 0
-      value(I_LIFETIME) type I optional
-      value(I_PARENT) type ref to CL_GUI_CONTAINER optional
-      value(I_APPL_EVENTS) type CHAR01 default SPACE
-      !I_PARENTDBG type ref to CL_GUI_CONTAINER optional
-      !I_APPLOGPARENT type ref to CL_GUI_CONTAINER optional
-      !I_GRAPHICSPARENT type ref to CL_GUI_CONTAINER optional
-      value(I_NAME) type STRING optional
-      !I_FCAT_COMPLETE type SAP_BOOL default SPACE
-    exceptions
-      ERROR_CNTL_CREATE
-      ERROR_CNTL_INIT
-      ERROR_CNTL_LINK
-      ERROR_DP_CREATE
-      OBJECT_CREATED_MANUALLY .
-  methods CREATE_BY_COPY
-    importing
-      value(I_PARENT) type ref to CL_GUI_CONTAINER optional
-      value(I_APPLOGPARENT) type ref to CL_GUI_CONTAINER optional
-      value(I_POPUP) type ABAP_BOOL default ABAP_FALSE
-    returning
-      value(RV_FALV) type ref to ZCL_FALV .
+    CLASS-METHODS create
+      IMPORTING
+        VALUE(i_parent)          TYPE REF TO cl_gui_container OPTIONAL
+        VALUE(i_applogparent)    TYPE REF TO cl_gui_container OPTIONAL
+        VALUE(i_popup)           TYPE abap_bool DEFAULT abap_false
+        VALUE(i_applog_embedded) TYPE abap_bool DEFAULT abap_false
+        VALUE(i_subclass)        TYPE REF TO cl_abap_typedescr OPTIONAL
+        VALUE(i_handle)          TYPE slis_handl OPTIONAL
+      CHANGING
+        !ct_table                TYPE STANDARD TABLE
+      RETURNING
+        VALUE(rv_falv)           TYPE REF TO zcl_falv .
+    METHODS create_by_copy
+      IMPORTING
+        VALUE(i_parent)       TYPE REF TO cl_gui_container OPTIONAL
+        VALUE(i_applogparent) TYPE REF TO cl_gui_container OPTIONAL
+        VALUE(i_popup)        TYPE abap_bool DEFAULT abap_false
+      RETURNING
+        VALUE(rv_falv)        TYPE REF TO zcl_falv .
+    CLASS-METHODS create_by_type
+      IMPORTING
+        VALUE(i_parent)          TYPE REF TO cl_gui_container OPTIONAL
+        VALUE(i_applogparent)    TYPE REF TO cl_gui_container OPTIONAL
+        VALUE(i_popup)           TYPE abap_bool DEFAULT abap_false
+        VALUE(i_applog_embedded) TYPE abap_bool DEFAULT abap_false
+        VALUE(i_subclass)        TYPE REF TO cl_abap_typedescr OPTIONAL
+        !i_type                  TYPE REF TO cl_abap_typedescr
+      RETURNING
+        VALUE(rv_falv)           TYPE REF TO zcl_falv .
+    CLASS-METHODS lvc_fcat_from_itab
+      IMPORTING
+        !it_table      TYPE STANDARD TABLE
+      RETURNING
+        VALUE(rt_fcat) TYPE lvc_t_fcat .
+    METHODS constructor
+      IMPORTING
+        VALUE(i_shellstyle)  TYPE i DEFAULT 0
+        VALUE(i_lifetime)    TYPE i OPTIONAL
+        VALUE(i_parent)      TYPE REF TO cl_gui_container OPTIONAL
+        VALUE(i_appl_events) TYPE char01 DEFAULT space
+        !i_parentdbg         TYPE REF TO cl_gui_container OPTIONAL
+        !i_applogparent      TYPE REF TO cl_gui_container OPTIONAL
+        !i_graphicsparent    TYPE REF TO cl_gui_container OPTIONAL
+        VALUE(i_name)        TYPE string OPTIONAL
+        !i_fcat_complete     TYPE sap_bool DEFAULT space
+      EXCEPTIONS
+        error_cntl_create
+        error_cntl_init
+        error_cntl_link
+        error_dp_create
+        object_created_manually.
+    METHODS pbo
+      IMPORTING
+        VALUE(iv_dynnr) TYPE sy-dynnr DEFAULT sy-dynnr .
+    METHODS pai
+      IMPORTING
+        VALUE(iv_dynnr) TYPE sy-dynnr DEFAULT sy-dynnr
+      CHANGING
+        !c_ucomm        TYPE sy-ucomm DEFAULT sy-ucomm .
+    METHODS display FINAL
+      IMPORTING
+                VALUE(iv_force_grid)   TYPE abap_bool DEFAULT space
+                VALUE(iv_start_row)    TYPE i OPTIONAL
+                VALUE(iv_start_column) TYPE i OPTIONAL
+                VALUE(iv_end_row)      TYPE i OPTIONAL
+                VALUE(iv_end_column)   TYPE i OPTIONAL
+      RETURNING VALUE(r_falv)          TYPE REF TO zcl_falv.
+    METHODS exclude_function
+      IMPORTING
+                VALUE(iv_ucomm) TYPE sy-ucomm
+      RETURNING VALUE(r_falv)   TYPE REF TO zcl_falv .
+    METHODS column
+      IMPORTING
+        VALUE(iv_fieldname) TYPE lvc_s_fcat-fieldname
+      RETURNING
+        VALUE(rv_column)    TYPE REF TO zcl_falv_column .
+    METHODS soft_refresh
+      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv .
+    METHODS set_mark_field
+      IMPORTING
+                VALUE(iv_fieldname) TYPE lvc_s_fcat-fieldname
+      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv .
+    METHODS set_editable
+      IMPORTING
+                VALUE(iv_modify) TYPE abap_bool DEFAULT abap_false
+      RETURNING VALUE(r_falv)    TYPE REF TO zcl_falv .
+    METHODS set_readonly
+      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv .
+    METHODS add_button
+      IMPORTING
+                VALUE(iv_function)  TYPE ui_func
+                VALUE(iv_icon)      TYPE icon_d OPTIONAL
+                VALUE(iv_quickinfo) TYPE iconquick OPTIONAL
+                VALUE(iv_butn_type) TYPE tb_btype OPTIONAL
+                VALUE(iv_disabled)  TYPE abap_bool OPTIONAL
+                VALUE(iv_text)      TYPE text40 OPTIONAL
+                VALUE(iv_checked)   TYPE abap_bool OPTIONAL
+      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv .
     "! Don't call it from Toolbar event handler
     "! as it will cause endless loop
-  methods DELETE_ALL_BUTTONS
-    importing
-      value(IV_EXCEPTIONS) type TTB_BUTTON optional
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
+    METHODS disable_button
+      IMPORTING
+                VALUE(iv_function) TYPE ui_func
+      RETURNING VALUE(r_falv)      TYPE REF TO zcl_falv .
     "! Don't call it from Toolbar event handler
     "! as it will cause endless loop
-  methods DELETE_BUTTON
-    importing
-      value(IV_FUNCTION) type UI_FUNC
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
+    METHODS enable_button
+      IMPORTING
+                VALUE(iv_function) TYPE ui_func
+      RETURNING VALUE(r_falv)      TYPE REF TO zcl_falv .
     "! Don't call it from Toolbar event handler
     "! as it will cause endless loop
-  methods DISABLE_BUTTON
-    importing
-      value(IV_FUNCTION) type UI_FUNC
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods DISPLAY
-  final
-    importing
-      value(IV_FORCE_GRID) type ABAP_BOOL default SPACE
-      value(IV_START_ROW) type I optional
-      value(IV_START_COLUMN) type I optional
-      value(IV_END_ROW) type I optional
-      value(IV_END_COLUMN) type I optional
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
+    METHODS delete_button
+      IMPORTING
+                VALUE(iv_function) TYPE ui_func
+      RETURNING VALUE(r_falv)      TYPE REF TO zcl_falv .
     "! Don't call it from Toolbar event handler
     "! as it will cause endless loop
-  methods ENABLE_BUTTON
-    importing
-      value(IV_FUNCTION) type UI_FUNC
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods ENCODE_PICTURE_BASE64
-    importing
-      value(IV_XSTRING) type XSTRING
-      value(IV_MIME_TYPE) type CSEQUENCE
-    returning
-      value(RV_IMAGE) type STRING .
-  methods EXCLUDE_FUNCTION
-    importing
-      value(IV_UCOMM) type SY-UCOMM
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods EXPORT_TO_EXCEL
-    returning
-      value(RV_XSTRING) type XSTRING .
+    METHODS delete_all_buttons
+      IMPORTING
+                VALUE(iv_exceptions) TYPE ttb_button OPTIONAL
+      RETURNING VALUE(r_falv)        TYPE REF TO zcl_falv .
+    METHODS set_cell_disabled
+      IMPORTING
+                VALUE(iv_fieldname) TYPE fieldname
+                VALUE(iv_row)       TYPE lvc_s_roid-row_id
+      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv .
+    METHODS set_cell_enabled
+      IMPORTING
+                VALUE(iv_fieldname) TYPE fieldname
+                VALUE(iv_row)       TYPE lvc_s_roid-row_id
+      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv .
+    METHODS set_cell_button
+      IMPORTING
+                VALUE(iv_fieldname) TYPE fieldname
+                VALUE(iv_row)       TYPE lvc_s_roid-row_id
+      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv .
+    METHODS set_cell_hotspot
+      IMPORTING
+                VALUE(iv_fieldname) TYPE fieldname
+                VALUE(iv_row)       TYPE lvc_s_roid-row_id
+      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv .
+    METHODS set_row_color
+      IMPORTING
+                VALUE(iv_color) TYPE char04
+                VALUE(iv_row)   TYPE lvc_s_roid-row_id
+      RETURNING VALUE(r_falv)   TYPE REF TO zcl_falv .
+    METHODS set_cell_color
+      IMPORTING
+                VALUE(iv_fieldname) TYPE fieldname
+                VALUE(iv_color)     TYPE lvc_s_colo
+                VALUE(iv_row)       TYPE lvc_s_roid-row_id
+      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv .
+    METHODS mass_replace .
+    METHODS export_to_excel
+      RETURNING
+        VALUE(rv_xstring) TYPE xstring .
+    METHODS save_excel_localy
+      IMPORTING
+        VALUE(iv_path)  TYPE string OPTIONAL
+      RETURNING
+        VALUE(rv_saved) TYPE abap_bool .
+    METHODS hide_top_of_page
+      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv .
+    METHODS show_top_of_page
+      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv .
+    METHODS set_list_view
+      RETURNING
+        VALUE(r_falv) TYPE REF TO zcl_falv .
+    METHODS encode_picture_base64
+      IMPORTING
+        VALUE(iv_xstring)   TYPE xstring
+        VALUE(iv_mime_type) TYPE csequence
+      RETURNING
+        VALUE(rv_image)     TYPE string .
+    METHODS get_file_from_mime
+      IMPORTING
+        VALUE(iv_path)      TYPE string
+      EXPORTING
+        VALUE(ev_xstring)   TYPE xstring
+        VALUE(ev_mime_type) TYPE string .
+    METHODS get_picture_from_se78
+      IMPORTING
+        VALUE(iv_name)    TYPE stxbitmaps-tdname
+        VALUE(iv_type)    TYPE stxbitmaps-tdbtype DEFAULT 'BCOL'
+        VALUE(iv_id)      TYPE stxbitmaps-tdid DEFAULT 'BMAP'
+      RETURNING
+        VALUE(rv_xstring) TYPE xstring .
+    METHODS send
+      IMPORTING
+                 VALUE(iv_subject)     TYPE csequence OPTIONAL
+                 VALUE(iv_sender)      TYPE ad_smtpadr OPTIONAL
+                 VALUE(iv_sender_name) TYPE ad_smtpadr OPTIONAL
+                 VALUE(iv_filename)    TYPE csequence OPTIONAL
+                 VALUE(it_recipients)  TYPE tt_email
+                 VALUE(iv_body)        TYPE string OPTIONAL
+                 VALUE(iv_importance)  TYPE bcs_docimp OPTIONAL
+                 VALUE(iv_sensitivity) TYPE so_obj_sns OPTIONAL
+                 VALUE(iv_immediately) TYPE abap_bool OPTIONAL
+                 VALUE(iv_commit)      TYPE abap_bool DEFAULT abap_true
+      RETURNING  VALUE(r_falv)         TYPE REF TO zcl_falv
+      EXCEPTIONS
+                 create_request_error
+                 create_document_error
+                 add_attachment_error
+                 add_document_error
+                 add_recipient_error
+                 add_sender_error
+                 send_error
+                 send_immediately_error .
+    METHODS hide_applog .
+    METHODS show_applog
+      RETURNING
+        VALUE(r_falv) TYPE REF TO zcl_falv .
     "! Cell can be editable by layout, by field-catalog or by cell styles
-  methods GET_CELL_ENABLED
-    importing
-      value(I_ROW) type I
-      value(I_FIELD) type LVC_FNAME
-    returning
-      value(R_ENABLED) type ABAP_BOOL .
-  methods GET_COLUMNS
-    returning
-      value(RT_COLUMNS) type T_COLUMNS .
-  methods GET_FILE_FROM_MIME
-    importing
-      value(IV_PATH) type STRING
-    exporting
-      value(EV_XSTRING) type XSTRING
-      value(EV_MIME_TYPE) type STRING .
-  methods GET_PICTURE_FROM_SE78
-    importing
-      value(IV_NAME) type STXBITMAPS-TDNAME
-      value(IV_TYPE) type STXBITMAPS-TDBTYPE default 'BCOL'
-      value(IV_ID) type STXBITMAPS-TDID default 'BMAP'
-    returning
-      value(RV_XSTRING) type XSTRING .
-  methods HIDE_APPLOG .
-  methods HIDE_TOP_OF_PAGE
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods INIT_CELL_STYLES .
-  methods MASS_REPLACE .
-  methods PAI
-    importing
-      value(IV_DYNNR) type SY-DYNNR default SY-DYNNR
-    changing
-      !C_UCOMM type SY-UCOMM default SY-UCOMM .
-  methods PBO
-    importing
-      value(IV_DYNNR) type SY-DYNNR default SY-DYNNR .
-  methods REDRAW_AFTER_MERGING_CHANGE .
-  methods REFRESH_TOOLBAR
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SAVE_EXCEL_LOCALY
-    importing
-      value(IV_PATH) type STRING optional
-    returning
-      value(RV_SAVED) type ABAP_BOOL .
-  methods SEND
-    importing
-      value(IV_SUBJECT) type CSEQUENCE optional
-      value(IV_SENDER) type AD_SMTPADR optional
-      value(IV_SENDER_NAME) type AD_SMTPADR optional
-      value(IV_FILENAME) type CSEQUENCE optional
-      value(IT_RECIPIENTS) type TT_EMAIL
-      value(IV_BODY) type STRING optional
-      value(IV_IMPORTANCE) type BCS_DOCIMP optional
-      value(IV_SENSITIVITY) type SO_OBJ_SNS optional
-      value(IV_IMMEDIATELY) type ABAP_BOOL optional
-      value(IV_COMMIT) type ABAP_BOOL default ABAP_TRUE
-    returning
-      value(R_FALV) type ref to ZCL_FALV
-    exceptions
-      CREATE_REQUEST_ERROR
-      CREATE_DOCUMENT_ERROR
-      ADD_ATTACHMENT_ERROR
-      ADD_DOCUMENT_ERROR
-      ADD_RECIPIENT_ERROR
-      ADD_SENDER_ERROR
-      SEND_ERROR
-      SEND_IMMEDIATELY_ERROR .
-  methods SET_CELL_BUTTON
-    importing
-      value(IV_FIELDNAME) type FIELDNAME
-      value(IV_ROW) type LVC_S_ROID-ROW_ID
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SET_CELL_COLOR
-    importing
-      value(IV_FIELDNAME) type FIELDNAME
-      value(IV_COLOR) type LVC_S_COLO
-      value(IV_ROW) type LVC_S_ROID-ROW_ID
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SET_CELL_DISABLED
-    importing
-      value(IV_FIELDNAME) type FIELDNAME
-      value(IV_ROW) type LVC_S_ROID-ROW_ID
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SET_CELL_ENABLED
-    importing
-      value(IV_FIELDNAME) type FIELDNAME
-      value(IV_ROW) type LVC_S_ROID-ROW_ID
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SET_CELL_HOTSPOT
-    importing
-      value(IV_FIELDNAME) type FIELDNAME
-      value(IV_ROW) type LVC_S_ROID-ROW_ID
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
+    METHODS get_cell_enabled
+      IMPORTING
+        VALUE(i_row)     TYPE i
+        VALUE(i_field)   TYPE lvc_fname
+      RETURNING
+        VALUE(r_enabled) TYPE abap_bool.
+    METHODS refresh_toolbar
+      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv .
+    METHODS set_dummy_function_code
+      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv .
+
+    METHODS set_frontend_fieldcatalog
+        REDEFINITION .
+    METHODS set_frontend_layout
+        REDEFINITION .
+    METHODS get_columns
+      RETURNING VALUE(rt_columns) TYPE t_columns .
+    METHODS set_output_table
+      CHANGING
+        !ct_table TYPE STANDARD TABLE .
+    METHODS set_merge_horizontally
+      IMPORTING
+        !row           TYPE i
+        !tab_col_merge TYPE lvc_t_co01 .
+    METHODS set_merge_vertically
+      IMPORTING
+        !row           TYPE i
+        !tab_col_merge TYPE lvc_t_co01 .
 *  methods Z_DISPLAY .
-  methods SET_CELL_STYLE
-    importing
-      !ROW type I optional
-      !COL type I optional
-      !STYLE type LVC_STYLE
-      !STYLE2 type LVC_STYLE optional .
-  methods SET_DUMMY_FUNCTION_CODE
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SET_EDITABLE
-    importing
-      value(IV_MODIFY) type ABAP_BOOL default ABAP_FALSE
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SET_FIXED_COL_ROW
-    importing
-      !COL type I
-      !ROW type I .
-  methods SET_LIST_VIEW
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SET_MARK_FIELD
-    importing
-      value(IV_FIELDNAME) type LVC_S_FCAT-FIELDNAME
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SET_MERGE_HORIZONTALLY
-    importing
-      !ROW type I
-      !TAB_COL_MERGE type LVC_T_CO01 .
-  methods SET_MERGE_VERTICALLY
-    importing
-      !ROW type I
-      !TAB_COL_MERGE type LVC_T_CO01 .
-  methods SET_OUTPUT_TABLE
-    changing
-      !CT_TABLE type STANDARD TABLE .
-  methods SET_READONLY
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SET_ROW_COLOR
-    importing
-      value(IV_COLOR) type CHAR04
-      value(IV_ROW) type LVC_S_ROID-ROW_ID
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SHOW_APPLOG
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SHOW_TOP_OF_PAGE
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
-  methods SOFT_REFRESH
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
+    METHODS set_cell_style
+      IMPORTING
+        !row    TYPE i OPTIONAL
+        !col    TYPE i OPTIONAL
+        !style  TYPE lvc_style
+        !style2 TYPE lvc_style OPTIONAL .
+    METHODS set_fixed_col_row
+      IMPORTING
+        !col TYPE i
+        !row TYPE i .
+    METHODS init_cell_styles .
 
-  methods SET_FRONTEND_FIELDCATALOG
-    redefinition .
-  methods SET_FRONTEND_LAYOUT
-    redefinition .
-protected section.
+    METHODS redraw_after_merging_change.
 
-  data TOOLBAR_ADDED type TTB_BUTTON .
-  data TOOLBAR_DELETED type TTB_BUTTON .
-  data TOOLBAR_DISABLED type TTB_BUTTON .
-  data TOOLBAR_EXCEPTIONS type TTB_BUTTON .
-  data:
-    columns type sorted table of t_column with unique key table_line .
-  data APPLICATION_LOG_EMBEDDED type ABAP_BOOL .
-  data SUBCLASS_TYPE type ref to CL_ABAP_TYPEDESCR .
+    METHODS get_registered_f4_for_fields RETURNING VALUE(f4) TYPE lvc_t_f4.
+  PROTECTED SECTION.
 
-  events AT_SET_PF_STATUS .
-  events AT_SET_TITLE .
+
+    DATA: toolbar_added      TYPE ttb_button,
+          toolbar_deleted    TYPE ttb_button,
+          toolbar_disabled   TYPE ttb_button,
+          toolbar_exceptions TYPE ttb_button.
+    DATA:
+      columns TYPE SORTED TABLE OF t_column WITH UNIQUE KEY table_line .
+
+    DATA application_log_embedded TYPE abap_bool .
+    DATA subclass_type TYPE REF TO cl_abap_typedescr .
+
+    EVENTS at_set_pf_status .
+    EVENTS at_set_title .
     "! Event called just after method <strong>SET_TABLE_FOR_FIRST_DISPLAY</strong> is called internally.
     "! Can be used for example to setup merging of cells
-  events BEFORE_FIRST_DISPLAY .
+    EVENTS before_first_display.
 
-  methods EVF_AFTER_REFRESH
-    for event AFTER_REFRESH of CL_GUI_ALV_GRID .
-  methods EVF_AFTER_USER_COMMAND
-    for event AFTER_USER_COMMAND of CL_GUI_ALV_GRID
-    importing
-      !E_UCOMM
-      !E_SAVED
-      !E_NOT_PROCESSED  ##NEEDED.
-  methods EVF_AT_SET_PF_STATUS
-    for event AT_SET_PF_STATUS of ZCL_FALV .
-  methods EVF_AT_SET_TITLE
-    for event AT_SET_TITLE of ZCL_FALV .
-  methods EVF_BEFORE_FIRST_DISPLAY
-    for event BEFORE_FIRST_DISPLAY of ZCL_FALV .
-  methods EVF_BEFORE_USER_COMMAND
-    for event BEFORE_USER_COMMAND of CL_GUI_ALV_GRID
-    importing
-      !E_UCOMM  ##NEEDED.
-  methods EVF_BTN_CLICK
-    for event BUTTON_CLICK of CL_GUI_ALV_GRID
-    importing
-      !ES_COL_ID
-      !ES_ROW_NO  ##NEEDED.
-  methods EVF_CLICK_COL_HEADER
-    for event CLICK_COL_HEADER of CL_GUI_ALV_GRID
-    importing
-      !COL_ID  ##NEEDED.
-  methods EVF_CLICK_ROW_COL
-    for event CLICK_ROW_COL of CL_GUI_ALV_GRID
-    importing
-      !COL_ID
-      !ROW_ID  ##NEEDED.
-  methods EVF_CONTEXT_MENU
-    for event CONTEXT_MENU of CL_GUI_ALV_GRID .
-  methods EVF_CONTEXT_MENU_REQUEST
-    for event CONTEXT_MENU_REQUEST of CL_GUI_ALV_GRID
-    importing
-      !E_OBJECT .
-  methods EVF_CONTEXT_MENU_SELECTED
-    for event CONTEXT_MENU_SELECTED of CL_GUI_ALV_GRID
-    importing
-      !FCODE  ##NEEDED.
-  methods EVF_DATA_CHANGED
-    for event DATA_CHANGED of CL_GUI_ALV_GRID
-    importing
-      !ER_DATA_CHANGED
-      !E_ONF4
-      !E_ONF4_BEFORE
-      !E_ONF4_AFTER
-      !E_UCOMM  ##NEEDED.
-  methods EVF_DATA_CHANGED_FINISHED
-    for event DATA_CHANGED_FINISHED of CL_GUI_ALV_GRID
-    importing
-      !E_MODIFIED
-      !ET_GOOD_CELLS  ##NEEDED.
-  methods EVF_DBLCLICK_ROW_COL
-    for event DBLCLICK_ROW_COL of CL_GUI_ALV_GRID
-    importing
-      !COL_ID
-      !ROW_ID  ##NEEDED.
-  methods EVF_DELAYED_CALLBACK
-    for event DELAYED_CALLBACK of CL_GUI_ALV_GRID .
-  methods EVF_DELAYED_CHANGED_SEL_CALL
-    for event DELAYED_CHANGED_SEL_CALLBACK of CL_GUI_ALV_GRID .
-  methods EVF_DELAYED_CHANGE_SELECTION
-    for event DELAYED_CHANGE_SELECTION of CL_GUI_ALV_GRID .
-  methods EVF_DELAYED_MOVE_CURRENT_CELL
-    for event DELAYED_MOVE_CURRENT_CELL of CL_GUI_ALV_GRID .
-  methods EVF_DOUBLE_CLICK
-    for event DOUBLE_CLICK of CL_GUI_ALV_GRID
-    importing
-      !E_ROW
-      !E_COLUMN
-      !ES_ROW_NO  ##NEEDED.
-  methods EVF_DOUBLE_CLICK_COL_SEPARATOR
-    for event DOUBLE_CLICK_COL_SEPARATOR of CL_GUI_ALV_GRID
-    importing
-      !COL_ID  ##NEEDED.
-  methods EVF_DROP_EXTERNAL_FILE
-    for event DROP_EXTERNAL_FILES of CL_GUI_ALV_GRID
-    importing
-      !FILES  ##NEEDED.
-  methods EVF_F1
-    for event F1 of CL_GUI_ALV_GRID .
-  methods EVF_HOTSPOT_CLICK
-    for event HOTSPOT_CLICK of CL_GUI_ALV_GRID
-    importing
-      !E_ROW_ID
-      !E_COLUMN_ID
-      !ES_ROW_NO  ##NEEDED.
-  methods EVF_MENU_BUTTON
-    for event MENU_BUTTON of CL_GUI_ALV_GRID
-    importing
-      !E_OBJECT
-      !E_UCOMM  ##NEEDED.
-  methods EVF_ONDRAG
-    for event ONDRAG of CL_GUI_ALV_GRID
-    importing
-      !ES_ROW_NO
-      !E_COLUMN
-      !E_DRAGDROPOBJ
-      !E_ROW  ##NEEDED.
-  methods EVF_ONDROP
-    for event ONDROP of CL_GUI_ALV_GRID
-    importing
-      !ES_ROW_NO
-      !E_COLUMN
-      !E_DRAGDROPOBJ
-      !E_ROW  ##NEEDED.
-  methods EVF_ONDROPCOMPLETE
-    for event ONDROPCOMPLETE of CL_GUI_ALV_GRID
-    importing
-      !ES_ROW_NO
-      !E_COLUMN
-      !E_DRAGDROPOBJ
-      !E_ROW  ##NEEDED.
-  methods EVF_ONDROPGETFLAVOR
-    for event ONDROPGETFLAVOR of CL_GUI_ALV_GRID
-    importing
-      !ES_ROW_NO
-      !E_COLUMN
-      !E_DRAGDROPOBJ
-      !E_FLAVORS
-      !E_ROW  ##NEEDED.
-  methods EVF_ONF1
-    for event ONF1 of CL_GUI_ALV_GRID
-    importing
-      !E_FIELDNAME
-      !ES_ROW_NO
-      !ER_EVENT_DATA  ##NEEDED.
-  methods EVF_ONF4
-    for event ONF4 of CL_GUI_ALV_GRID
-    importing
-      !E_FIELDNAME
-      !E_FIELDVALUE
-      !ES_ROW_NO
-      !ER_EVENT_DATA
-      !ET_BAD_CELLS
-      !E_DISPLAY  ##NEEDED.
-  methods EVF_REQUEST_DATA
-    for event _REQUEST_DATA of CL_GUI_ALV_GRID
-    importing
-      !FRAGMENTS  ##NEEDED.
-  methods EVF_SUBTOTAL_TEXT
-    for event SUBTOTAL_TEXT of CL_GUI_ALV_GRID
-    importing
-      !ES_SUBTOTTXT_INFO
-      !EP_SUBTOT_LINE
-      !E_EVENT_DATA  ##NEEDED.
-  methods EVF_TOOLBAR
-    for event TOOLBAR of CL_GUI_ALV_GRID
-    importing
-      !E_OBJECT
-      !E_INTERACTIVE  ##NEEDED.
-  methods EVF_TOOLBAR_BUTTON_CLICK
-    for event TOOLBAR_BUTTON_CLICK of CL_GUI_ALV_GRID
-    importing
-      !FCODE  ##NEEDED.
-  methods EVF_TOOLBAR_MENUBUTTON_CLICK
-    for event TOOLBAR_MENUBUTTON_CLICK of CL_GUI_ALV_GRID
-    importing
-      !FCODE
-      !MENU_POS_X
-      !MENU_POS_Y  ##NEEDED.
-  methods EVF_TOOLBAR_MENU_SELECTED
-    for event TOOLBAR_MENU_SELECTED of CL_GUI_ALV_GRID
-    importing
-      !FCODE  ##NEEDED.
-  methods EVF_TOP_OF_PAGE
-    for event TOP_OF_PAGE of CL_GUI_ALV_GRID
-    importing
-      !E_DYNDOC_ID
-      !TABLE_INDEX  ##NEEDED.
-  methods EVF_TOTAL_CLICK_ROW_COL
-    for event TOTAL_CLICK_ROW_COL of CL_GUI_ALV_GRID
-    importing
-      !COL_ID
-      !ROW_ID  ##NEEDED.
-  methods EVF_USER_COMMAND
-    for event USER_COMMAND of CL_GUI_ALV_GRID
-    importing
-      !E_UCOMM  ##NEEDED.
-private section.
+    METHODS evf_before_first_display FOR EVENT before_first_display OF zcl_falv.
+    METHODS evf_btn_click
+      FOR EVENT button_click OF cl_gui_alv_grid
+      IMPORTING
+        !es_col_id
+        !es_row_no ##NEEDED.
+    METHODS evf_user_command
+      FOR EVENT user_command OF cl_gui_alv_grid
+      IMPORTING
+        !e_ucomm ##NEEDED.
+    METHODS evf_hotspot_click
+      FOR EVENT hotspot_click OF cl_gui_alv_grid
+      IMPORTING
+        !e_row_id
+        !e_column_id
+        !es_row_no ##NEEDED.
+    METHODS evf_data_changed
+      FOR EVENT data_changed OF cl_gui_alv_grid
+      IMPORTING
+        !er_data_changed
+        !e_onf4
+        !e_onf4_before
+        !e_onf4_after
+        !e_ucomm ##NEEDED.
+    METHODS evf_data_changed_finished
+      FOR EVENT data_changed_finished OF cl_gui_alv_grid
+      IMPORTING
+        !e_modified
+        !et_good_cells ##NEEDED.
+    METHODS evf_double_click
+      FOR EVENT double_click OF cl_gui_alv_grid
+      IMPORTING
+        !e_row
+        !e_column
+        !es_row_no ##NEEDED.
+    METHODS evf_onf1
+      FOR EVENT onf1 OF cl_gui_alv_grid
+      IMPORTING
+        !e_fieldname
+        !es_row_no
+        !er_event_data ##NEEDED.
+    METHODS evf_onf4
+      FOR EVENT onf4 OF cl_gui_alv_grid
+      IMPORTING
+        !e_fieldname
+        !e_fieldvalue
+        !es_row_no
+        !er_event_data
+        !et_bad_cells
+        !e_display ##NEEDED.
+    METHODS evf_subtotal_text
+      FOR EVENT subtotal_text OF cl_gui_alv_grid
+      IMPORTING
+        !es_subtottxt_info
+        !ep_subtot_line
+        !e_event_data ##NEEDED.
+    METHODS evf_before_user_command
+      FOR EVENT before_user_command OF cl_gui_alv_grid
+      IMPORTING
+        !e_ucomm ##NEEDED.
+    METHODS evf_after_user_command
+      FOR EVENT after_user_command OF cl_gui_alv_grid
+      IMPORTING
+        !e_ucomm
+        !e_saved
+        !e_not_processed ##NEEDED.
+    METHODS evf_menu_button
+      FOR EVENT menu_button OF cl_gui_alv_grid
+      IMPORTING
+        !e_object
+        !e_ucomm ##NEEDED.
+    METHODS evf_toolbar
+      FOR EVENT toolbar OF cl_gui_alv_grid
+      IMPORTING
+        !e_object
+        !e_interactive ##NEEDED.
+    METHODS evf_after_refresh
+        FOR EVENT after_refresh OF cl_gui_alv_grid .
+    METHODS evf_top_of_page
+      FOR EVENT top_of_page OF cl_gui_alv_grid
+      IMPORTING
+        !e_dyndoc_id
+        !table_index ##NEEDED.
+    METHODS evf_delayed_callback
+        FOR EVENT delayed_callback OF cl_gui_alv_grid .
+    METHODS evf_delayed_changed_sel_call
+        FOR EVENT delayed_changed_sel_callback OF cl_gui_alv_grid .
+    METHODS evf_ondropgetflavor
+      FOR EVENT ondropgetflavor OF cl_gui_alv_grid
+      IMPORTING
+        !es_row_no
+        !e_column
+        !e_dragdropobj
+        !e_flavors
+        !e_row ##NEEDED.
+    METHODS evf_ondrag
+      FOR EVENT ondrag OF cl_gui_alv_grid
+      IMPORTING
+        !es_row_no
+        !e_column
+        !e_dragdropobj
+        !e_row ##NEEDED.
+    METHODS evf_ondrop
+      FOR EVENT ondrop OF cl_gui_alv_grid
+      IMPORTING
+        !es_row_no
+        !e_column
+        !e_dragdropobj
+        !e_row ##NEEDED.
+    METHODS evf_ondropcomplete
+      FOR EVENT ondropcomplete OF cl_gui_alv_grid
+      IMPORTING
+        !es_row_no
+        !e_column
+        !e_dragdropobj
+        !e_row ##NEEDED.
+    METHODS evf_drop_external_file
+      FOR EVENT drop_external_files OF cl_gui_alv_grid
+      IMPORTING
+        !files ##NEEDED.
+    METHODS evf_toolbar_menubutton_click
+      FOR EVENT toolbar_menubutton_click OF cl_gui_alv_grid
+      IMPORTING
+        !fcode
+        !menu_pos_x
+        !menu_pos_y ##NEEDED.
+    METHODS evf_click_col_header
+      FOR EVENT click_col_header OF cl_gui_alv_grid
+      IMPORTING
+        !col_id ##NEEDED.
+    METHODS evf_delayed_move_current_cell
+        FOR EVENT delayed_move_current_cell OF cl_gui_alv_grid .
+    METHODS evf_f1
+        FOR EVENT f1 OF cl_gui_alv_grid .
+    METHODS evf_dblclick_row_col
+      FOR EVENT dblclick_row_col OF cl_gui_alv_grid
+      IMPORTING
+        !col_id
+        !row_id ##NEEDED.
+    METHODS evf_click_row_col
+      FOR EVENT click_row_col OF cl_gui_alv_grid
+      IMPORTING
+        !col_id
+        !row_id ##NEEDED.
+    METHODS evf_toolbar_button_click
+      FOR EVENT toolbar_button_click OF cl_gui_alv_grid
+      IMPORTING
+        !fcode ##NEEDED.
+    METHODS evf_double_click_col_separator
+      FOR EVENT double_click_col_separator OF cl_gui_alv_grid
+      IMPORTING
+        !col_id ##NEEDED.
+    METHODS evf_delayed_change_selection
+        FOR EVENT delayed_change_selection OF cl_gui_alv_grid .
+    METHODS evf_context_menu
+        FOR EVENT context_menu OF cl_gui_alv_grid .
+    METHODS evf_context_menu_request
+      FOR EVENT context_menu_request OF cl_gui_alv_grid
+      IMPORTING
+        !e_object.
+    METHODS evf_total_click_row_col
+      FOR EVENT total_click_row_col OF cl_gui_alv_grid
+      IMPORTING
+        !col_id
+        !row_id ##NEEDED.
+    METHODS evf_context_menu_selected
+      FOR EVENT context_menu_selected OF cl_gui_alv_grid
+      IMPORTING
+        !fcode ##NEEDED.
+    METHODS evf_toolbar_menu_selected
+      FOR EVENT toolbar_menu_selected OF cl_gui_alv_grid
+      IMPORTING
+        !fcode ##NEEDED.
+    METHODS evf_request_data
+      FOR EVENT _request_data OF cl_gui_alv_grid
+      IMPORTING
+        !fragments ##NEEDED.
+    METHODS evf_at_set_pf_status
+        FOR EVENT at_set_pf_status OF zcl_falv .
+    METHODS evf_at_set_title
+        FOR EVENT at_set_title OF zcl_falv .
+  PRIVATE SECTION.
 
-  class-data CREATED_FROM_FACTORY type ABAP_BOOL .
-  data TOP_OF_PAGE_DOC type ref to CL_DD_DOCUMENT .
-  data TOP_OF_PAGE_VISIBLE_AT_START type ABAP_BOOL .
-  data CALL_REDRAW_AFTER_MERGING type ABAP_BOOL .
+    CLASS-DATA: created_from_factory TYPE abap_bool.
+    DATA top_of_page_doc TYPE REF TO cl_dd_document .
+    DATA top_of_page_visible_at_start TYPE abap_bool .
+    DATA call_redraw_after_merging TYPE abap_bool.
+    DATA onf4_internal TYPE REF TO zcl_falv_onf4_internal.
+    CLASS-METHODS check_if_called_from_subclass
+      RETURNING
+        VALUE(ro_subclass) TYPE REF TO object .
+    CLASS-METHODS create_containters
+      IMPORTING
+        i_parent               TYPE REF TO cl_gui_container
+        i_applogparent         TYPE REF TO cl_gui_container
+        i_popup                TYPE abap_bool
+        i_applog_embedded      TYPE abap_bool
+      EXPORTING
+        e_built_in_screen      TYPE abap_bool
+        e_parent               TYPE REF TO cl_gui_container
+        e_applog               TYPE REF TO cl_gui_container
+        e_top_of_page_parent   TYPE REF TO cl_gui_container
+        e_custom_container     TYPE REF TO cl_gui_container
+        e_main_split_container TYPE REF TO cl_gui_splitter_container
+        e_split_container      TYPE REF TO cl_gui_splitter_container.
+    CLASS-METHODS create_falv_object
+      IMPORTING
+        i_subclass     TYPE REF TO cl_abap_typedescr
+        i_parent       TYPE REF TO cl_gui_container
+        i_applog       TYPE REF TO cl_gui_container
+      RETURNING
+        VALUE(rv_falv) TYPE REF TO zcl_falv.
+    CLASS-METHODS link_containers
+      IMPORTING
+        iv_falv                TYPE REF TO zcl_falv
+        i_top_of_page_parent   TYPE REF TO cl_gui_container
+        i_custom_container     TYPE REF TO cl_gui_container
+        i_main_split_container TYPE REF TO cl_gui_splitter_container
+        i_split_container      TYPE REF TO cl_gui_splitter_container.
+    CLASS-METHODS create_main_split_cotainer
+      IMPORTING
+        i_popup                       TYPE abap_bool
+        i_applog_embedded             TYPE abap_bool
+        i_main_parent                 TYPE REF TO cl_gui_container
+      RETURNING
+        VALUE(r_main_split_container) TYPE REF TO cl_gui_splitter_container.
+    CLASS-METHODS create_main_cont_for_full_scr
+      IMPORTING
+        i_popup                   TYPE abap_bool
+      RETURNING
+        VALUE(r_custom_container) TYPE REF TO cl_gui_container.
+    CLASS-METHODS crate_main_splitter
+      IMPORTING
+        i_main_split_container   TYPE REF TO cl_gui_splitter_container
+      RETURNING
+        VALUE(r_split_container) TYPE REF TO cl_gui_splitter_container.
 
-  class-methods CHECK_IF_CALLED_FROM_SUBCLASS
-    returning
-      value(RO_SUBCLASS) type ref to OBJECT .
-  class-methods CRATE_MAIN_SPLITTER
-    importing
-      !I_MAIN_SPLIT_CONTAINER type ref to CL_GUI_SPLITTER_CONTAINER
-    returning
-      value(R_SPLIT_CONTAINER) type ref to CL_GUI_SPLITTER_CONTAINER .
-  class-methods CREATE_CONTAINTERS
-    importing
-      !I_PARENT type ref to CL_GUI_CONTAINER
-      !I_APPLOGPARENT type ref to CL_GUI_CONTAINER
-      !I_POPUP type ABAP_BOOL
-      !I_APPLOG_EMBEDDED type ABAP_BOOL
-    exporting
-      !E_BUILT_IN_SCREEN type ABAP_BOOL
-      !E_PARENT type ref to CL_GUI_CONTAINER
-      !E_APPLOG type ref to CL_GUI_CONTAINER
-      !E_TOP_OF_PAGE_PARENT type ref to CL_GUI_CONTAINER
-      !E_CUSTOM_CONTAINER type ref to CL_GUI_CONTAINER
-      !E_MAIN_SPLIT_CONTAINER type ref to CL_GUI_SPLITTER_CONTAINER
-      !E_SPLIT_CONTAINER type ref to CL_GUI_SPLITTER_CONTAINER .
-  class-methods CREATE_FALV_OBJECT
-    importing
-      !I_SUBCLASS type ref to CL_ABAP_TYPEDESCR
-      !I_PARENT type ref to CL_GUI_CONTAINER
-      !I_APPLOG type ref to CL_GUI_CONTAINER
-    returning
-      value(RV_FALV) type ref to ZCL_FALV .
-  class-methods CREATE_MAIN_CONT_FOR_FULL_SCR
-    importing
-      !I_POPUP type ABAP_BOOL
-    returning
-      value(R_CUSTOM_CONTAINER) type ref to CL_GUI_CONTAINER .
-  class-methods CREATE_MAIN_SPLIT_COTAINER
-    importing
-      !I_POPUP type ABAP_BOOL
-      !I_APPLOG_EMBEDDED type ABAP_BOOL
-      !I_MAIN_PARENT type ref to CL_GUI_CONTAINER
-    returning
-      value(R_MAIN_SPLIT_CONTAINER) type ref to CL_GUI_SPLITTER_CONTAINER .
-  class-methods LINK_CONTAINERS
-    importing
-      !IV_FALV type ref to ZCL_FALV
-      !I_TOP_OF_PAGE_PARENT type ref to CL_GUI_CONTAINER
-      !I_CUSTOM_CONTAINER type ref to CL_GUI_CONTAINER
-      !I_MAIN_SPLIT_CONTAINER type ref to CL_GUI_SPLITTER_CONTAINER
-      !I_SPLIT_CONTAINER type ref to CL_GUI_SPLITTER_CONTAINER .
-  methods BUILD_COLUMNS .
-  methods COPY_ATTRIBUTES
-    importing
-      !I_FALV type ref to ZCL_FALV .
-  methods CREATE_EX_RESULT_FALV
-    returning
-      value(ER_RESULT_TABLE) type ref to CL_SALV_EX_RESULT_DATA_TABLE .
-  methods EVF_BEFORE_UCOMMAND_INTERNAL
-    for event BEFORE_USER_COMMAND of CL_GUI_ALV_GRID
-    importing
-      !E_UCOMM  ##NEEDED.
-  methods EVF_DATA_CHANGED_INTERNAL
-    for event DATA_CHANGED of CL_GUI_ALV_GRID
-    importing
-      !ER_DATA_CHANGED
-      !E_ONF4
-      !E_ONF4_BEFORE
-      !E_ONF4_AFTER
-      !E_UCOMM  ##NEEDED.
-  methods EVF_TOOLBAR_INTERNAL
-    for event TOOLBAR of CL_GUI_ALV_GRID
-    importing
-      !E_OBJECT
-      !E_INTERACTIVE  ##NEEDED.
-  methods RAISE_BEFORE_FIRST_DISPLAY .
-  methods RAISE_TOP_OF_PAGE .
-  methods SET_HANDLERS
-    importing
-      !IV_FALV type ref to ZCL_FALV .
-  methods SET_PARENT
-    importing
-      !IO_PARENT type ref to OBJECT
-    returning
-      value(R_FALV) type ref to ZCL_FALV .
+    METHODS evf_before_ucommand_internal
+      FOR EVENT before_user_command OF cl_gui_alv_grid
+      IMPORTING
+        !e_ucomm ##NEEDED.
+    METHODS evf_toolbar_internal
+      FOR EVENT toolbar OF cl_gui_alv_grid
+      IMPORTING
+        !e_object
+        !e_interactive ##NEEDED.
+    METHODS evf_data_changed_internal
+      FOR EVENT data_changed OF cl_gui_alv_grid
+      IMPORTING
+        !er_data_changed
+        !e_onf4
+        !e_onf4_before
+        !e_onf4_after
+        !e_ucomm ##NEEDED.
+
+    METHODS set_parent
+      IMPORTING
+        !io_parent    TYPE REF TO object
+      RETURNING
+        VALUE(r_falv) TYPE REF TO zcl_falv .
+    METHODS build_columns .
+    METHODS raise_top_of_page .
+    METHODS set_handlers
+      IMPORTING
+        iv_falv TYPE REF TO zcl_falv.
+    METHODS copy_attributes
+      IMPORTING
+        i_falv TYPE REF TO zcl_falv.
+    METHODS create_ex_result_falv
+      RETURNING
+        VALUE(er_result_table) TYPE REF TO cl_salv_ex_result_data_table .
+    METHODS raise_before_first_display.
+
+    METHODS evf_onf4_internal FOR EVENT onf4 OF cl_gui_alv_grid
+      IMPORTING
+        !e_fieldname
+        !e_fieldvalue
+        !es_row_no
+        !er_event_data
+        !et_bad_cells
+        !e_display
+        ##NEEDED.
 ENDCLASS.
 
 
 
-CLASS ZCL_FALV IMPLEMENTATION.
+CLASS zcl_falv IMPLEMENTATION.
 
 
-  method add_button.
-    if not line_exists( toolbar_added[ function = iv_function ] ).
-      insert value #( function = iv_function
-                      icon = conv #( iv_icon )
+  METHOD add_button.
+    IF NOT line_exists( toolbar_added[ function = iv_function ] ).
+      INSERT VALUE #( function = iv_function
+                      icon = CONV #( iv_icon )
                       quickinfo = iv_quickinfo
                       butn_type = iv_butn_type
                       disabled = iv_disabled
                       text = iv_text
                       checked = iv_checked
-                        ) into table toolbar_added .
+                        ) INTO TABLE toolbar_added .
 
-      delete toolbar_deleted where function = iv_function.
+      DELETE toolbar_deleted WHERE function = iv_function.
       me->refresh_toolbar( ).
-    endif.
+    ENDIF.
     r_falv = me.
-  endmethod.
+  ENDMETHOD.
 
 
-  method build_columns.
-    loop at fcat assigning field-symbol(<fcat>).
-      data(column) = new zcl_falv_column( iv_fieldname = <fcat>-fieldname io_falv = me ).
-      insert column into table columns.
-    endloop.
-  endmethod.
+  METHOD build_columns.
+    LOOP AT fcat ASSIGNING FIELD-SYMBOL(<fcat>).
+      DATA(column) = NEW zcl_falv_column( iv_fieldname = <fcat>-fieldname io_falv = me ).
+      INSERT column INTO TABLE columns.
+    ENDLOOP.
+  ENDMETHOD.
 
 
-  method check_if_called_from_subclass.
-    data: callstack type abap_callstack,
-          src       type table of string.
+  METHOD check_if_called_from_subclass.
+    DATA: callstack TYPE abap_callstack,
+          src       TYPE TABLE OF string.
 
-    call function 'SYSTEM_CALLSTACK'
-      importing
+    CALL FUNCTION 'SYSTEM_CALLSTACK'
+      IMPORTING
         callstack = callstack.
 
-    assign callstack[ 3 ] to field-symbol(<stack>).
-    check sy-subrc eq 0.
-    data(compiler) = cl_abap_compiler=>create(
-                    p_name             =  <stack>-mainprogram
-                    p_include          =  <stack>-include
-                    p_no_package_check = abap_true ).
+    ASSIGN callstack[ 3 ] TO FIELD-SYMBOL(<stack>).
+    CHECK sy-subrc EQ 0.
+    DATA(compiler) = cl_abap_compiler=>create(
+      p_name             = <stack>-mainprogram
+      p_include          = <stack>-include
+      p_no_package_check = abap_true ).
 
     compiler->get_single_ref(
-      exporting
-        p_full_name       =  |\\TY:ZCL_FALV\\ME:{ callstack[ 2 ]-blockname case = upper }|
-        p_grade           =  1   " Grade of Use
-      importing
-        p_result          =    data(falv_references) " Where-Used List
-      exceptions
-        others            = 5 ).
-    if sy-subrc eq 0.
-      read report <stack>-include into src.
-      if sy-subrc ne 0.
-        return.
-      endif.
+      EXPORTING
+        p_full_name = |\\TY:ZCL_FALV\\ME:{ callstack[ 2 ]-blockname CASE = UPPER }|
+        p_grade     = 1   " Grade of Use
+      IMPORTING
+        p_result    = DATA(falv_references) " Where-Used List
+      EXCEPTIONS
+        OTHERS      = 5 ).
+    IF sy-subrc EQ 0.
+      READ REPORT <stack>-include INTO src.
+      IF sy-subrc NE 0.
+        RETURN.
+      ENDIF.
 
-      assign src[ <stack>-line ] to field-symbol(<line>).
-      if <line> is assigned.
-        assign falv_references[ line = <stack>-line ] to field-symbol(<reference>).
-        if sy-subrc eq 0.
-          data: subclass_name type string.
-          do.
-            data(offset) = <reference>-column - sy-index - 2. "-2 because of =>
-            if offset lt 0 or <line>+offset(1) eq ` `.
-              exit.
-            endif.
+      ASSIGN src[ <stack>-line ] TO FIELD-SYMBOL(<line>).
+      IF <line> IS ASSIGNED.
+        ASSIGN falv_references[ line = <stack>-line ] TO FIELD-SYMBOL(<reference>).
+        IF sy-subrc EQ 0.
+          DATA: subclass_name TYPE string.
+          DO.
+            DATA(offset) = <reference>-column - sy-index - 2. "-2 because of =>
+            IF offset LT 0 OR <line>+offset(1) EQ ` `.
+              EXIT.
+            ENDIF.
             subclass_name =  <line>+offset(1) && subclass_name.
-          enddo.
-          if subclass_name is initial or to_upper( subclass_name ) eq 'ZCL_FALV'.
-            return.
-          endif.
+          ENDDO.
+          IF subclass_name IS INITIAL OR to_upper( subclass_name ) EQ 'ZCL_FALV'.
+            RETURN.
+          ENDIF.
 
           "global class
-          cl_abap_classdescr=>describe_by_name( exporting p_name = to_upper( subclass_name )
-                                                receiving p_descr_ref = ro_subclass
-                                                        exceptions type_not_found = 1 ).
-          if sy-subrc eq 0.
-            return.
-          else.
+          cl_abap_classdescr=>describe_by_name( EXPORTING  p_name         = to_upper( subclass_name )
+                                                RECEIVING  p_descr_ref    = ro_subclass
+                                                EXCEPTIONS type_not_found = 1 ).
+          IF sy-subrc EQ 0.
+            RETURN.
+          ELSE.
             "local class
             subclass_name = |\\PROGRAM={ <stack>-mainprogram }\\CLASS={ subclass_name }|.
-            cl_abap_classdescr=>describe_by_name( exporting p_name = to_upper( subclass_name )
-                                                  receiving p_descr_ref = ro_subclass
-                                                          exceptions type_not_found = 1 ).
-            if sy-subrc eq 0.
-              return.
-            endif.
-          endif.
-        endif.
-      endif.
-    endif.
+            cl_abap_classdescr=>describe_by_name( EXPORTING  p_name         = to_upper( subclass_name )
+                                                  RECEIVING  p_descr_ref    = ro_subclass
+                                                  EXCEPTIONS type_not_found = 1 ).
+            IF sy-subrc EQ 0.
+              RETURN.
+            ENDIF.
+          ENDIF.
+        ENDIF.
+      ENDIF.
+    ENDIF.
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method column.
-    try.
+  METHOD column.
+    TRY.
         rv_column = columns[  table_line->fieldname = iv_fieldname ].
-      catch cx_sy_itab_line_not_found.
+      CATCH cx_sy_itab_line_not_found.
 
-    endtry.
-  endmethod.
+    ENDTRY.
+  ENDMETHOD.
 
 
-  method constructor.
-    if created_from_factory eq abap_false.
-      raise object_created_manually.
-    endif.
+  METHOD constructor.
+    IF created_from_factory EQ abap_false.
+      RAISE object_created_manually.
+    ENDIF.
 
     super->constructor(
-      exporting
+      EXPORTING
         i_shellstyle      = i_shellstyle    " Control Style
         i_lifetime        = i_lifetime    " Lifetime
         i_parent          = i_parent    " Parent Container
@@ -872,48 +860,48 @@ CLASS ZCL_FALV IMPLEMENTATION.
         i_graphicsparent  = i_graphicsparent    " Container for Graphics
         i_name            = i_name    " Name
         i_fcat_complete   = i_fcat_complete  " Boolean Variable (X=True, Space=False)
-      exceptions
+      EXCEPTIONS
         error_cntl_create = 1
         error_cntl_init   = 2
         error_cntl_link   = 3
         error_dp_create   = 4
-        others            = 5 ).
-    if sy-subrc <> 0.
-      case sy-subrc.
-        when 1.
-          raise error_cntl_create.
-        when 2.
-          raise error_cntl_init.
-        when 3.
-          raise error_cntl_link.
-        when 4.
-          raise error_dp_create.
-      endcase.
-    endif.
-  endmethod.
+        OTHERS            = 5 ).
+    IF sy-subrc <> 0.
+      CASE sy-subrc.
+        WHEN 1.
+          RAISE error_cntl_create.
+        WHEN 2.
+          RAISE error_cntl_init.
+        WHEN 3.
+          RAISE error_cntl_link.
+        WHEN 4.
+          RAISE error_dp_create.
+      ENDCASE.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method create.
+  METHOD create.
 
-    if i_subclass is initial.
+    IF i_subclass IS INITIAL.
       i_subclass ?= check_if_called_from_subclass( ).
-    endif.
+    ENDIF.
 
 
     create_containters(
-          exporting
-            i_parent          = i_parent
-            i_applogparent    = i_applogparent
-            i_popup           = i_popup
-            i_applog_embedded = i_applog_embedded
-          importing
-            e_built_in_screen      = data(built_in_screen)
-            e_parent               = data(parent)
-            e_applog               = data(applog)
-            e_top_of_page_parent   = data(top_of_page_parent)
-            e_custom_container     = data(custom_container)
-            e_main_split_container = data(main_split_container)
-            e_split_container      = data(split_container) ).
+      EXPORTING
+        i_parent               = i_parent
+        i_applogparent         = i_applogparent
+        i_popup                = i_popup
+        i_applog_embedded      = i_applog_embedded
+      IMPORTING
+        e_built_in_screen      = DATA(built_in_screen)
+        e_parent               = DATA(parent)
+        e_applog               = DATA(applog)
+        e_top_of_page_parent   = DATA(top_of_page_parent)
+        e_custom_container     = DATA(custom_container)
+        e_main_split_container = DATA(main_split_container)
+        e_split_container      = DATA(split_container) ).
 
 
     rv_falv = create_falv_object(
@@ -923,25 +911,25 @@ CLASS ZCL_FALV IMPLEMENTATION.
 
     rv_falv->set_handlers( rv_falv ).
 
-    rv_falv->set_output_table( changing ct_table = ct_table ).
+    rv_falv->set_output_table( CHANGING ct_table = ct_table ).
     rv_falv->fcat = rv_falv->lvc_fcat_from_itab( it_table = ct_table ).
     rv_falv->set_frontend_fieldcatalog( it_fieldcatalog = rv_falv->fcat ).
     rv_falv->application_log_embedded = i_applog_embedded.
     rv_falv->built_in_screen = built_in_screen.
     rv_falv->build_columns( ).
-    rv_falv->layout = new zcl_falv_layout( rv_falv ).
+    rv_falv->layout = NEW zcl_falv_layout( rv_falv ).
 
-    rv_falv->gui_status = new zcl_falv_dynamic_status( ).
+    rv_falv->gui_status = NEW zcl_falv_dynamic_status( ).
 
-    rv_falv->screen = switch #( i_popup when abap_true then c_screen_popup
-                                        when abap_false then c_screen_full ).
-    if built_in_screen eq abap_true and rv_falv->screen eq c_screen_full.
+    rv_falv->screen = SWITCH #( i_popup WHEN abap_true THEN c_screen_popup
+                                        WHEN abap_false THEN c_screen_full ).
+    IF built_in_screen EQ abap_true AND rv_falv->screen EQ c_screen_full.
       "default in full screen
       rv_falv->layout->set_no_toolbar( abap_true ).
-      call function 'Z_FALV_ADD_FALV_TO_STACK'
-        exporting
+      CALL FUNCTION 'Z_FALV_ADD_FALV_TO_STACK'
+        EXPORTING
           io_falv = rv_falv.
-    endif.
+    ENDIF.
 
 
     link_containers(
@@ -954,82 +942,82 @@ CLASS ZCL_FALV IMPLEMENTATION.
     rv_falv->layout_save = 'A'.
     rv_falv->variant-report = sy-cprog.
     rv_falv->variant-username = sy-uname.
-    if i_handle is not initial.
+    IF i_handle IS NOT INITIAL.
       rv_falv->variant-handle   = i_handle.
-    endif.
-    rv_falv->grid = cast #(  rv_falv ).
-  endmethod.
+    ENDIF.
+    rv_falv->grid = CAST #(  rv_falv ).
+  ENDMETHOD.
 
 
-  method link_containers.
+  METHOD link_containers.
 
     iv_falv->main_container ?= i_custom_container.
     iv_falv->split_container = i_split_container.
     iv_falv->main_split_container = i_main_split_container.
     iv_falv->top_of_page_container = i_top_of_page_parent.
-    if i_main_split_container is not initial.
+    IF i_main_split_container IS NOT INITIAL.
       i_main_split_container->set_row_mode(
-        exporting
-          mode              =  i_split_container->mode_absolute
-        exceptions
+        EXPORTING
+          mode              = i_split_container->mode_absolute
+        EXCEPTIONS
           cntl_error        = 0
           cntl_system_error = 0
-          others            = 0 ).
+          OTHERS            = 0 ).
       iv_falv->hide_applog( ).
-    endif.
-    if i_split_container is not initial.
+    ENDIF.
+    IF i_split_container IS NOT INITIAL.
       i_split_container->set_row_mode(
-        exporting
-          mode              =  i_split_container->mode_absolute
-        exceptions
+        EXPORTING
+          mode              = i_split_container->mode_absolute
+        EXCEPTIONS
           cntl_error        = 0
           cntl_system_error = 0
-          others            = 0 ).
+          OTHERS            = 0 ).
       iv_falv->hide_top_of_page( ).
-    endif.
+    ENDIF.
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method create_falv_object.
+  METHOD create_falv_object.
 
     created_from_factory = abap_true.
 
-    if i_subclass is not initial.
-      data: subclass type ref to object.
-      data(sublcass_abs_name) = i_subclass->absolute_name.
-      create object subclass type (sublcass_abs_name)
-       exporting
+    IF i_subclass IS NOT INITIAL.
+      DATA: subclass TYPE REF TO object.
+      DATA(sublcass_abs_name) = i_subclass->absolute_name.
+      CREATE OBJECT subclass TYPE (sublcass_abs_name)
+       EXPORTING
         i_parent       = i_parent
         i_applogparent = i_applog.
       rv_falv ?= subclass.
       rv_falv->subclass_type = i_subclass.
 
-    else.
-      create object rv_falv
-        exporting
+    ELSE.
+      CREATE OBJECT rv_falv
+        EXPORTING
           i_parent       = i_parent
           i_applogparent = i_applog.
 
-    endif.
+    ENDIF.
 
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method create_containters.
+  METHOD create_containters.
 
-    data main_parent type ref to cl_gui_container.
-    data docking_parent type ref to cl_gui_docking_container.
+    DATA main_parent TYPE REF TO cl_gui_container.
+    DATA docking_parent TYPE REF TO cl_gui_docking_container.
 
-    if cl_gui_alv_grid=>offline( ) is not initial.
+    IF cl_gui_alv_grid=>offline( ) IS NOT INITIAL.
       main_parent ?= docking_parent.
-    endif.
+    ENDIF.
     "We need to call full screen ALV as container was not passed
-    if i_parent is initial.
+    IF i_parent IS INITIAL.
       e_built_in_screen = abap_true.
 
-      if cl_gui_alv_grid=>offline( ) is initial.
+      IF cl_gui_alv_grid=>offline( ) IS INITIAL.
         e_custom_container = create_main_cont_for_full_scr( i_popup ).
         main_parent ?= e_custom_container.
         e_main_split_container = create_main_split_cotainer( i_popup           = i_popup
@@ -1039,20 +1027,20 @@ CLASS ZCL_FALV IMPLEMENTATION.
         e_parent ?= e_split_container->get_container( row = 2 column = 1 ).
         e_applog ?= e_main_split_container->get_container( row = 2 column = 1 ).
         e_top_of_page_parent ?= e_split_container->get_container( row = 1 column = 1 ).
-      else.
+      ELSE.
 
         e_parent ?= main_parent.
         e_custom_container ?= e_parent.
 
-      endif.
+      ENDIF.
 
-    else.
-      if cl_gui_alv_grid=>offline( ) is not initial.
+    ELSE.
+      IF cl_gui_alv_grid=>offline( ) IS NOT INITIAL.
 
         e_parent ?= main_parent.
         e_custom_container ?= e_parent.
 
-      else.
+      ELSE.
 
         e_applog ?= i_applogparent.
         e_custom_container ?= i_parent.
@@ -1063,448 +1051,445 @@ CLASS ZCL_FALV IMPLEMENTATION.
 
         e_split_container = crate_main_splitter( e_main_split_container ).
 
-        if e_applog is initial.
+        IF e_applog IS INITIAL.
           e_parent ?= e_split_container->get_container( row = 2 column = 1 ).
           e_applog ?= e_main_split_container->get_container( row = 2 column = 1 ).
           e_top_of_page_parent ?= e_split_container->get_container( row = 1 column = 1 ).
-        else.
+        ELSE.
           e_parent ?= e_split_container->get_container( row = 2 column = 1 ).
           e_top_of_page_parent ?= e_split_container->get_container( row = 1 column = 1 ).
           e_custom_container ?= i_parent.
-        endif.
+        ENDIF.
 
-      endif.
+      ENDIF.
 
-    endif.
+    ENDIF.
 
-  endmethod.
-
-
-  method crate_main_splitter.
-
-    r_split_container  = new cl_gui_splitter_container(
-                                                 parent                  = i_main_split_container->get_container( row = 1 column    = 1 )
-                                                 rows                    = 2
-                                                 columns                 = 1 ).
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method create_main_cont_for_full_scr.
+  METHOD crate_main_splitter.
 
-    if i_popup eq abap_true.
+    r_split_container = NEW cl_gui_splitter_container(
+      parent  = i_main_split_container->get_container( row = 1 column = 1 )
+      rows    = 2
+      columns = 1 ).
 
-      call function 'Z_FALV_CREATE_MAIN_CONTAINER'
-        importing
+  ENDMETHOD.
+
+
+  METHOD create_main_cont_for_full_scr.
+
+    IF i_popup EQ abap_true.
+
+      CALL FUNCTION 'Z_FALV_CREATE_MAIN_CONTAINER'
+        IMPORTING
           main_container = r_custom_container.
-    else.
-      r_custom_container  = cast cl_gui_container( new cl_gui_custom_container(
+    ELSE.
+      r_custom_container  = CAST cl_gui_container( NEW cl_gui_custom_container(
            container_name = cc_name
            dynnr          = c_screen_full
            repid          = c_fscr_repid
            no_autodef_progid_dynnr =  abap_true  ) ).
-    endif.
+    ENDIF.
 
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method create_main_split_cotainer.
+  METHOD create_main_split_cotainer.
 
     " Create split container, log at bottom, grid at top.
     "Log hidden as default, will appear when error will be thrown.
-    r_main_split_container  = new cl_gui_splitter_container(
-                                     link_dynnr              = switch #( i_popup when abap_true then c_screen_popup
-                                                                                 when abap_false then c_screen_full )
+    r_main_split_container  = NEW cl_gui_splitter_container(
+                                     link_dynnr              = SWITCH #( i_popup WHEN abap_true THEN c_screen_popup
+                                                                                 WHEN abap_false THEN c_screen_full )
                                      link_repid              = c_fscr_repid
                                      parent                  = i_main_parent
-                                     rows                    = cond #( when  i_applog_embedded eq abap_true then 2
-                                                                        else 1 )
+                                     rows                    = COND #( WHEN  i_applog_embedded EQ abap_true THEN 2
+                                                                        ELSE 1 )
                                      columns                 = 1 ).
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method create_by_copy.
+  METHOD create_by_copy.
 
     create_containters(
-          exporting
-            i_parent          = i_parent
-            i_applogparent    = i_applogparent
-            i_popup           = i_popup
-            i_applog_embedded = application_log_embedded
-          importing
-*            e_built_in_screen      = data(built_in_screen)
-            e_parent               = data(parent)
-            e_applog               = data(applog)
-            e_top_of_page_parent   = data(top_of_page_parent)
-            e_custom_container     = data(custom_container)
-            e_main_split_container = data(main_split_container)
-            e_split_container      = data(split_container) ).
+      EXPORTING
+        i_parent               = i_parent
+        i_applogparent         = i_applogparent
+        i_popup                = i_popup
+        i_applog_embedded      = application_log_embedded
+      IMPORTING
+*       e_built_in_screen      = data(built_in_screen)
+        e_parent               = DATA(parent)
+        e_applog               = DATA(applog)
+        e_top_of_page_parent   = DATA(top_of_page_parent)
+        e_custom_container     = DATA(custom_container)
+        e_main_split_container = DATA(main_split_container)
+        e_split_container      = DATA(split_container) ).
 
 
     rv_falv = create_falv_object(
-                  i_subclass = subclass_type
-                  i_parent   = parent
-                  i_applog   = applog ).
+      i_subclass = subclass_type
+      i_parent   = parent
+      i_applog   = applog ).
 
     copy_attributes( rv_falv ).
     set_handlers( rv_falv ).
 
 
-    rv_falv->screen = switch #( i_popup when abap_true then c_screen_popup
-                                        when abap_false then c_screen_full ).
+    rv_falv->screen = SWITCH #( i_popup WHEN abap_true THEN c_screen_popup
+                                        WHEN abap_false THEN c_screen_full ).
     link_containers(
-         iv_falv                = rv_falv
-         i_top_of_page_parent   = top_of_page_parent
-         i_custom_container     = custom_container
-         i_main_split_container = main_split_container
-         i_split_container      = split_container ).
+      iv_falv                = rv_falv
+      i_top_of_page_parent   = top_of_page_parent
+      i_custom_container     = custom_container
+      i_main_split_container = main_split_container
+      i_split_container      = split_container ).
 
-    if rv_falv->built_in_screen eq abap_true.
-      call function 'Z_FALV_ADD_FALV_TO_STACK'
-        exporting
+    IF rv_falv->built_in_screen EQ abap_true.
+      CALL FUNCTION 'Z_FALV_ADD_FALV_TO_STACK'
+        EXPORTING
           io_falv = rv_falv.
-    endif.
-    rv_falv->grid = cast #( rv_falv ).
-  endmethod.
+    ENDIF.
+    rv_falv->grid = CAST #( rv_falv ).
+  ENDMETHOD.
 
 
-  method set_handlers.
+  METHOD set_handlers.
 
-    set handler iv_falv->evf_after_refresh for iv_falv.
-    set handler iv_falv->evf_after_user_command for iv_falv.
-    set handler iv_falv->evf_before_ucommand_internal for iv_falv.
-    set handler iv_falv->evf_before_user_command for iv_falv.
-    set handler iv_falv->evf_btn_click for iv_falv.
-    set handler iv_falv->evf_data_changed for iv_falv.
-    set handler iv_falv->evf_data_changed_internal for iv_falv.
-    set handler iv_falv->evf_data_changed_finished for iv_falv.
-    set handler iv_falv->evf_double_click for iv_falv.
-    set handler iv_falv->evf_hotspot_click for iv_falv.
-    set handler iv_falv->evf_menu_button for iv_falv.
-    set handler iv_falv->evf_onf1 for iv_falv.
-    set handler iv_falv->evf_onf4 for iv_falv.
-    set handler iv_falv->evf_subtotal_text for iv_falv.
-    set handler iv_falv->evf_toolbar_internal for iv_falv.
-    set handler iv_falv->evf_toolbar for iv_falv.
-    set handler iv_falv->evf_user_command for iv_falv.
-    set handler iv_falv->evf_at_set_pf_status for iv_falv.
-    set handler iv_falv->evf_at_set_title for iv_falv.
-    set handler iv_falv->evf_top_of_page for iv_falv.
-    set handler iv_falv->evf_delayed_callback for iv_falv.
-    set handler iv_falv->evf_delayed_changed_sel_call for iv_falv.
-    set handler iv_falv->evf_ondrag for iv_falv.
-    set handler iv_falv->evf_ondrop for iv_falv.
-    set handler iv_falv->evf_ondropcomplete for iv_falv.
-    set handler iv_falv->evf_ondropgetflavor for iv_falv.
-    set handler iv_falv->evf_drop_external_file for iv_falv.
-    set handler iv_falv->evf_toolbar_menubutton_click for iv_falv.
-    set handler iv_falv->evf_click_col_header for iv_falv.
-    set handler iv_falv->evf_delayed_move_current_cell for iv_falv.
-    set handler iv_falv->evf_f1 for iv_falv.
-    set handler iv_falv->evf_dblclick_row_col for iv_falv.
-    set handler iv_falv->evf_click_row_col for iv_falv.
-    set handler iv_falv->evf_toolbar_button_click for iv_falv.
-    set handler iv_falv->evf_double_click_col_separator for iv_falv.
-    set handler iv_falv->evf_delayed_change_selection for iv_falv.
-    set handler iv_falv->evf_context_menu for iv_falv.
-    set handler iv_falv->evf_total_click_row_col for iv_falv.
-    set handler iv_falv->evf_context_menu_selected for iv_falv.
-    set handler iv_falv->evf_context_menu_request for iv_falv.
-    set handler iv_falv->evf_toolbar_menu_selected for iv_falv.
-    set handler iv_falv->evf_request_data for iv_falv.
-    set handler iv_falv->evf_before_first_display for iv_falv.
+    SET HANDLER iv_falv->evf_after_refresh FOR iv_falv.
+    SET HANDLER iv_falv->evf_after_user_command FOR iv_falv.
+    SET HANDLER iv_falv->evf_before_ucommand_internal FOR iv_falv.
+    SET HANDLER iv_falv->evf_before_user_command FOR iv_falv.
+    SET HANDLER iv_falv->evf_btn_click FOR iv_falv.
+    SET HANDLER iv_falv->evf_data_changed FOR iv_falv.
+    SET HANDLER iv_falv->evf_data_changed_internal FOR iv_falv.
+    SET HANDLER iv_falv->evf_data_changed_finished FOR iv_falv.
+    SET HANDLER iv_falv->evf_double_click FOR iv_falv.
+    SET HANDLER iv_falv->evf_hotspot_click FOR iv_falv.
+    SET HANDLER iv_falv->evf_menu_button FOR iv_falv.
+    SET HANDLER iv_falv->evf_onf1 FOR iv_falv.
+    SET HANDLER iv_falv->evf_onf4_internal FOR iv_falv.
+    SET HANDLER iv_falv->evf_onf4 FOR iv_falv.
+    SET HANDLER iv_falv->evf_subtotal_text FOR iv_falv.
+    SET HANDLER iv_falv->evf_toolbar_internal FOR iv_falv.
+    SET HANDLER iv_falv->evf_toolbar FOR iv_falv.
+    SET HANDLER iv_falv->evf_user_command FOR iv_falv.
+    SET HANDLER iv_falv->evf_at_set_pf_status FOR iv_falv.
+    SET HANDLER iv_falv->evf_at_set_title FOR iv_falv.
+    SET HANDLER iv_falv->evf_top_of_page FOR iv_falv.
+    SET HANDLER iv_falv->evf_delayed_callback FOR iv_falv.
+    SET HANDLER iv_falv->evf_delayed_changed_sel_call FOR iv_falv.
+    SET HANDLER iv_falv->evf_ondrag FOR iv_falv.
+    SET HANDLER iv_falv->evf_ondrop FOR iv_falv.
+    SET HANDLER iv_falv->evf_ondropcomplete FOR iv_falv.
+    SET HANDLER iv_falv->evf_ondropgetflavor FOR iv_falv.
+    SET HANDLER iv_falv->evf_drop_external_file FOR iv_falv.
+    SET HANDLER iv_falv->evf_toolbar_menubutton_click FOR iv_falv.
+    SET HANDLER iv_falv->evf_click_col_header FOR iv_falv.
+    SET HANDLER iv_falv->evf_delayed_move_current_cell FOR iv_falv.
+    SET HANDLER iv_falv->evf_f1 FOR iv_falv.
+    SET HANDLER iv_falv->evf_dblclick_row_col FOR iv_falv.
+    SET HANDLER iv_falv->evf_click_row_col FOR iv_falv.
+    SET HANDLER iv_falv->evf_toolbar_button_click FOR iv_falv.
+    SET HANDLER iv_falv->evf_double_click_col_separator FOR iv_falv.
+    SET HANDLER iv_falv->evf_delayed_change_selection FOR iv_falv.
+    SET HANDLER iv_falv->evf_context_menu FOR iv_falv.
+    SET HANDLER iv_falv->evf_total_click_row_col FOR iv_falv.
+    SET HANDLER iv_falv->evf_context_menu_selected FOR iv_falv.
+    SET HANDLER iv_falv->evf_context_menu_request FOR iv_falv.
+    SET HANDLER iv_falv->evf_toolbar_menu_selected FOR iv_falv.
+    SET HANDLER iv_falv->evf_request_data FOR iv_falv.
+    SET HANDLER iv_falv->evf_before_first_display FOR iv_falv.
 
     iv_falv->set_delay_change_selection(
-      exporting
-        time   =  iv_falv->delay_change_selection
-      exceptions
+      EXPORTING
+        time   = iv_falv->delay_change_selection
+      EXCEPTIONS
         error  = 0
-        others = 0 ).
+        OTHERS = 0 ).
 
     iv_falv->set_delay_move_current_cell(
-      exporting
-       time   = iv_falv->delay_move_current_cell
-      exceptions
+      EXPORTING
+        time   = iv_falv->delay_move_current_cell
+      EXCEPTIONS
         error  = 0
-        others = 0 ).
+        OTHERS = 0 ).
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method delete_all_buttons.
+  METHOD delete_all_buttons.
     layout->delete_all_buttons = abap_true.
-    if iv_exceptions is initial.
-      append lines of mt_toolbar to toolbar_deleted.
-      refresh toolbar_added.
-    else.
+    IF iv_exceptions IS INITIAL.
+      APPEND LINES OF mt_toolbar TO toolbar_deleted.
+      REFRESH toolbar_added.
+    ELSE.
       toolbar_exceptions = iv_exceptions.
-      loop at mt_toolbar assigning field-symbol(<tlb>).
-        if not line_exists( iv_exceptions[ function = <tlb>-function ] ).
-          append <tlb> to toolbar_deleted.
-          delete toolbar_added where function eq <tlb>-function.
-        endif.
-      endloop.
-    endif.
-    append lines of toolbar_deleted to exclude_functions.
+      LOOP AT mt_toolbar ASSIGNING FIELD-SYMBOL(<tlb>).
+        IF NOT line_exists( iv_exceptions[ function = <tlb>-function ] ).
+          APPEND <tlb> TO toolbar_deleted.
+          DELETE toolbar_added WHERE function EQ <tlb>-function.
+        ENDIF.
+      ENDLOOP.
+    ENDIF.
+    APPEND LINES OF toolbar_deleted TO exclude_functions.
     me->refresh_toolbar( ).
     r_falv = me.
-  endmethod.
+  ENDMETHOD.
 
 
-  method delete_button.
-    delete toolbar_added where function = iv_function.
-    if sy-subrc ne 0.
-      insert value #( function = iv_function ) into table toolbar_deleted.
-    endif.
+  METHOD delete_button.
+    DELETE toolbar_added WHERE function = iv_function.
+    IF sy-subrc NE 0.
+      INSERT VALUE #( function = iv_function ) INTO TABLE toolbar_deleted.
+    ENDIF.
     me->refresh_toolbar( ).
     r_falv = me.
-  endmethod.
+  ENDMETHOD.
 
 
-  method disable_button.
-    try.
+  METHOD disable_button.
+    TRY.
         toolbar_added[ function = iv_function ]-disabled = abap_true.
-      catch cx_sy_itab_line_not_found.
-        clear sy-subrc.
-    endtry.
-    insert value #( function = iv_function ) into table toolbar_disabled.
+      CATCH cx_sy_itab_line_not_found.
+        CLEAR sy-subrc.
+    ENDTRY.
+    INSERT VALUE #( function = iv_function ) INTO TABLE toolbar_disabled.
     me->refresh_toolbar( ).
     r_falv = me.
-  endmethod.
+  ENDMETHOD.
 
 
-  method display.
-    field-symbols: <outtab> type standard table.
+  METHOD display.
+    FIELD-SYMBOLS: <outtab> TYPE STANDARD TABLE.
     r_falv = me.
-    if me->title_v1 is initial.
+    IF me->title_v1 IS INITIAL.
       me->title_v1 = sy-title. " for lazy people who wants to have alv title to be equal one from report.
-    endif.
-    if built_in_screen eq abap_true and iv_force_grid eq abap_false.
-      if screen eq c_screen_popup and iv_start_row is initial
-                                  and iv_start_column is initial
-                                  and iv_end_row is initial
-                                  and iv_end_column is initial.
+    ENDIF.
+    IF built_in_screen EQ abap_true AND iv_force_grid EQ abap_false.
+      IF screen EQ c_screen_popup AND iv_start_row IS INITIAL
+                                  AND iv_start_column IS INITIAL
+                                  AND iv_end_row IS INITIAL
+                                  AND iv_end_column IS INITIAL.
         iv_start_row = 1.
         iv_start_column = 1.
         iv_end_row = 20.
         iv_end_column = 150.
-      endif.
-      call function 'Z_FALV_DISPLAY'
-        exporting
+      ENDIF.
+      CALL FUNCTION 'Z_FALV_DISPLAY'
+        EXPORTING
           io_falv         = me
           iv_start_row    = iv_start_row
           iv_start_column = iv_start_column
           iv_end_row      = iv_end_row
           iv_end_column   = iv_end_column.
       .
-    else.
-      assign outtab->* to <outtab>.
+    ELSE.
+      ASSIGN outtab->* TO <outtab>.
+
+      onf4_internal = NEW #( me ).
+      onf4_internal->build_automatic_f4( ).
+
       me->set_table_for_first_display(
-        exporting
-             i_buffer_active               =  buffering_active   " Buffering Active
-             i_bypassing_buffer            =  bypassing_buffer   " Switch Off Buffer
-*            i_consistency_check           =     " Starting Consistency Check for Interface Error Recognition
-*            i_structure_name              =     " Internal Output Table Structure Name
-          is_variant                     =     variant
-          i_save                        =      layout_save
-*            i_default                     = 'X'    " Default Display Variant
-          is_layout                     =      lvc_layout
-*            is_print                      =     " Print Control
-*            it_special_groups            =     " Field Groups
-          it_toolbar_excluding          =     exclude_functions
-*            it_hyperlink                  =     " Hyperlinks
-*            it_alv_graphics               =     " Table of Structure DTC_S_TC
-*            it_except_qinfo               =     " Table for Exception Quickinfo
-*            ir_salv_adapter               =     " Interface ALV Adapter
-        changing
-          it_outtab                     =    <outtab> " Output Table
-          it_fieldcatalog               =     fcat
-          it_sort                       =     sort " Sort Criteria
-          it_filter                     =     filter " Filter Criteria
-        exceptions
+        EXPORTING
+          i_buffer_active               = buffering_active   " Buffering Active
+          i_bypassing_buffer            = bypassing_buffer   " Switch Off Buffer
+          is_variant                    = variant
+          i_save                        = layout_save
+          is_layout                     = lvc_layout
+          it_toolbar_excluding          = exclude_functions
+        CHANGING
+          it_outtab                     = <outtab> " Output Table
+          it_fieldcatalog               = fcat
+          it_sort                       = sort " Sort Criteria
+          it_filter                     = filter " Filter Criteria
+        EXCEPTIONS
           invalid_parameter_combination = 1
           program_error                 = 2
           too_many_lines                = 3
-          others                        = 4 ).
-      if sy-subrc eq 0.
+          OTHERS                        = 4 ).
+      IF sy-subrc EQ 0.
         raise_before_first_display( ).
-        if layout->delete_all_buttons eq abap_true.
+        IF layout->delete_all_buttons EQ abap_true.
           delete_all_buttons( toolbar_exceptions ).
-        endif.
-        if split_container is not initial.
+        ENDIF.
+        IF split_container IS NOT INITIAL.
           split_container->set_focus(
-            exporting
-              control           =     me
-            exceptions
+            EXPORTING
+              control           = me
+            EXCEPTIONS
               cntl_error        = 0
               cntl_system_error = 0
-              others            = 0 ).
+              OTHERS            = 0 ).
           me->hide_applog( ).
-        else.
+        ELSE.
           me->parent->set_focus(
-            exporting
-              control           =  me
-            exceptions
+            EXPORTING
+              control           = me
+            EXCEPTIONS
               cntl_error        = 0
               cntl_system_error = 0
-              others            = 0  ).
-        endif.
+              OTHERS            = 0 ).
+        ENDIF.
         cl_gui_cfw=>flush(
-          exceptions
+          EXCEPTIONS
             cntl_system_error = 0
             cntl_error        = 0
-            others            = 0 ).
+            OTHERS            = 0 ).
         me->set_visible( abap_true ).
         me->parent->set_visible( abap_true ).
         me->main_container->set_visible( abap_true ).
-        if me->split_container is not initial.
+        IF me->split_container IS NOT INITIAL.
           me->split_container->set_visible( abap_true ).
-        endif.
+        ENDIF.
         me->raise_top_of_page( ).
-      endif.
-    endif.
-  endmethod.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
 
+  METHOD raise_before_first_display.
 
-  method raise_before_first_display.
-
-    raise event before_first_display.
-    if call_redraw_after_merging eq abap_true.
+    RAISE EVENT before_first_display.
+    IF call_redraw_after_merging EQ abap_true.
       redraw_after_merging_change( ).
-    endif.
-  endmethod.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method enable_button.
-    try.
+
+
+  METHOD enable_button.
+    TRY.
         toolbar_added[ function = iv_function ]-disabled = abap_false.
-      catch cx_sy_itab_line_not_found.
-        clear sy-subrc.
-    endtry.
-    delete toolbar_disabled where function = iv_function.
+      CATCH cx_sy_itab_line_not_found.
+        CLEAR sy-subrc.
+    ENDTRY.
+    DELETE toolbar_disabled WHERE function = iv_function.
     me->refresh_toolbar( ).
     r_falv = me.
-  endmethod.
+  ENDMETHOD.
 
 
-  method encode_picture_base64.
+  METHOD encode_picture_base64.
 
     rv_image = |<img src="data:{ iv_mime_type };base64,{ cl_http_utility=>encode_x_base64( unencoded = iv_xstring ) }">|.
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_after_refresh.
-  endmethod.
+  METHOD evf_after_refresh.
+  ENDMETHOD.
 
 
-  method evf_after_user_command.
-  endmethod.
+  METHOD evf_after_user_command.
+  ENDMETHOD.
 
 
-  method evf_at_set_pf_status.
-  endmethod.
+  METHOD evf_at_set_pf_status.
+  ENDMETHOD.
 
 
-  method evf_at_set_title.
-  endmethod.
+  METHOD evf_at_set_title.
+  ENDMETHOD.
 
 
-  method set_dummy_function_code.
-    call function 'SAPGUI_SET_FUNCTIONCODE'
-      exporting
+  METHOD set_dummy_function_code.
+    CALL FUNCTION 'SAPGUI_SET_FUNCTIONCODE'
+      EXPORTING
         functioncode           = 'DUMMY'
-      exceptions
+      EXCEPTIONS
         function_not_supported = 0
-        others                 = 0.
+        OTHERS                 = 0.
     r_falv = me.
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_before_ucommand_internal.
-    field-symbols: <outtab> type standard table.
-    case e_ucomm.
-      when me->mc_fc_select_all.
-        if layout->mark_field is not initial and
+  METHOD evf_before_ucommand_internal.
+    FIELD-SYMBOLS: <outtab> TYPE STANDARD TABLE.
+    CASE e_ucomm.
+      WHEN me->mc_fc_select_all.
+        IF layout->mark_field IS NOT INITIAL AND
            line_exists( fcat[ fieldname = layout->mark_field checkbox = abap_true ] ).
-          assign outtab->* to <outtab>.
-          loop at <outtab> assigning field-symbol(<line>).
-            assign component layout->mark_field of structure <line> to field-symbol(<mark>).
-            if sy-subrc eq 0 and me->get_cell_enabled( i_row = sy-tabix i_field = layout->mark_field ) eq abap_true.
+          ASSIGN outtab->* TO <outtab>.
+          LOOP AT <outtab> ASSIGNING FIELD-SYMBOL(<line>).
+            ASSIGN COMPONENT layout->mark_field OF STRUCTURE <line> TO FIELD-SYMBOL(<mark>).
+            IF sy-subrc EQ 0 AND me->get_cell_enabled( i_row = sy-tabix i_field = layout->mark_field ) EQ abap_true.
               <mark> = abap_true.
-            endif.
-          endloop.
+            ENDIF.
+          ENDLOOP.
           me->soft_refresh( ).
           set_user_command( i_ucomm = space ).
-        endif.
-      when me->mc_fc_deselect_all.
-        if layout->mark_field is not initial and
+        ENDIF.
+      WHEN me->mc_fc_deselect_all.
+        IF layout->mark_field IS NOT INITIAL AND
           line_exists( fcat[ fieldname = layout->mark_field checkbox = abap_true ] ).
-          assign outtab->* to <outtab>.
-          loop at <outtab> assigning <line>.
-            assign component layout->mark_field of structure <line> to <mark>.
-            if sy-subrc eq 0 and me->get_cell_enabled( i_row = sy-tabix i_field = layout->mark_field ) eq abap_true.
+          ASSIGN outtab->* TO <outtab>.
+          LOOP AT <outtab> ASSIGNING <line>.
+            ASSIGN COMPONENT layout->mark_field OF STRUCTURE <line> TO <mark>.
+            IF sy-subrc EQ 0 AND me->get_cell_enabled( i_row = sy-tabix i_field = layout->mark_field ) EQ abap_true.
               <mark> = abap_false.
-            endif.
-          endloop.
+            ENDIF.
+          ENDLOOP.
           me->soft_refresh( ).
           set_user_command( i_ucomm = space ).
-        endif.
-    endcase.
-  endmethod.
+        ENDIF.
+    ENDCASE.
+  ENDMETHOD.
 
 
-  method evf_before_user_command.
-  endmethod.
+  METHOD evf_before_user_command.
+  ENDMETHOD.
 
 
-  method evf_btn_click.
-  endmethod.
+  METHOD evf_btn_click.
+  ENDMETHOD.
 
 
-  method evf_click_col_header.
+  METHOD evf_click_col_header.
 
-  endmethod.
-
-
-  method evf_click_row_col.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_context_menu.
+  METHOD evf_click_row_col.
 
-  endmethod.
-
-
-  method evf_context_menu_selected.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_context_menu_request.
+  METHOD evf_context_menu.
 
-  endmethod.
-
-
-  method evf_data_changed.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_data_changed_finished.
-  endmethod.
+  METHOD evf_context_menu_selected.
+
+  ENDMETHOD.
 
 
-  method evf_data_changed_internal.
+  METHOD evf_context_menu_request.
 
-    if er_data_changed->mt_protocol is not initial.
+  ENDMETHOD.
+
+
+  METHOD evf_data_changed.
+
+  ENDMETHOD.
+
+
+  METHOD evf_data_changed_finished.
+  ENDMETHOD.
+
+
+  METHOD evf_data_changed_internal.
+
+    IF er_data_changed->mt_protocol IS NOT INITIAL.
       show_applog( ).
-    else.
+    ELSE.
       hide_applog( ).
-    endif.
+    ENDIF.
 
     "This lines makes that focus stays on grid
     "while embedded error log appears on the screen.
@@ -1515,1032 +1500,1030 @@ CLASS ZCL_FALV IMPLEMENTATION.
     er_data_changed->display_protocol( ).
 
     cl_gui_control=>set_focus(
-      exporting
-        control           =  cast #( me )
-      exceptions
+      EXPORTING
+        control           = CAST #( me )
+      EXCEPTIONS
         cntl_error        = 1
         cntl_system_error = 2
-        others            = 3  ).
-    if sy-subrc eq 0.
+        OTHERS            = 3 ).
+    IF sy-subrc EQ 0.
       me->m_display_protocol = abap_false.
-    endif.
+    ENDIF.
 
-  endmethod.
-
-
-  method evf_dblclick_row_col.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_delayed_callback.
+  METHOD evf_dblclick_row_col.
 
-  endmethod.
-
-
-  method evf_delayed_changed_sel_call.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_delayed_change_selection.
+  METHOD evf_delayed_callback.
 
-  endmethod.
-
-
-  method evf_delayed_move_current_cell.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_double_click.
-  endmethod.
+  METHOD evf_delayed_changed_sel_call.
+
+  ENDMETHOD.
 
 
-  method evf_double_click_col_separator.
+  METHOD evf_delayed_change_selection.
 
-  endmethod.
-
-
-  method evf_drop_external_file.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_f1.
+  METHOD evf_delayed_move_current_cell.
 
-  endmethod.
-
-
-  method evf_hotspot_click.
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_menu_button.
-  endmethod.
+  METHOD evf_double_click.
+  ENDMETHOD.
 
 
-  method evf_ondrag.
+  METHOD evf_double_click_col_separator.
 
-  endmethod.
-
-
-  method evf_ondrop.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_ondropcomplete.
+  METHOD evf_drop_external_file.
 
-  endmethod.
-
-
-  method evf_ondropgetflavor.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_onf1.
-  endmethod.
+  METHOD evf_f1.
+
+  ENDMETHOD.
 
 
-  method evf_onf4.
-  endmethod.
+  METHOD evf_hotspot_click.
+  ENDMETHOD.
 
 
-  method evf_request_data.
-
-  endmethod.
-
-
-  method evf_subtotal_text.
-  endmethod.
+  METHOD evf_menu_button.
+  ENDMETHOD.
 
 
-  method evf_toolbar.
+  METHOD evf_ondrag.
 
-  endmethod.
-
-
-  method evf_toolbar_button_click.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_toolbar_internal.
-    loop at toolbar_added assigning field-symbol(<tb>).
-      insert <tb> into table e_object->mt_toolbar[].
-    endloop.
-    loop at toolbar_disabled assigning <tb>.
-      try.
+  METHOD evf_ondrop.
+
+  ENDMETHOD.
+
+
+  METHOD evf_ondropcomplete.
+
+  ENDMETHOD.
+
+
+  METHOD evf_ondropgetflavor.
+
+  ENDMETHOD.
+
+
+  METHOD evf_onf1.
+  ENDMETHOD.
+
+
+  METHOD evf_onf4.
+  ENDMETHOD.
+
+
+  METHOD evf_request_data.
+
+  ENDMETHOD.
+
+
+  METHOD evf_subtotal_text.
+  ENDMETHOD.
+
+
+  METHOD evf_toolbar.
+
+  ENDMETHOD.
+
+
+  METHOD evf_toolbar_button_click.
+
+  ENDMETHOD.
+
+
+  METHOD evf_toolbar_internal.
+    LOOP AT toolbar_added ASSIGNING FIELD-SYMBOL(<tb>).
+      INSERT <tb> INTO TABLE e_object->mt_toolbar[].
+    ENDLOOP.
+    LOOP AT toolbar_disabled ASSIGNING <tb>.
+      TRY.
           e_object->mt_toolbar[ function = <tb>-function ]-disabled = abap_true.
-        catch cx_sy_itab_line_not_found.
-          clear sy-subrc.
-      endtry.
-    endloop.
-    loop at toolbar_deleted assigning <tb>.
-      delete e_object->mt_toolbar where function = <tb>-function.
-    endloop.
+        CATCH cx_sy_itab_line_not_found.
+          CLEAR sy-subrc.
+      ENDTRY.
+    ENDLOOP.
+    LOOP AT toolbar_deleted ASSIGNING <tb>.
+      DELETE e_object->mt_toolbar WHERE function = <tb>-function.
+    ENDLOOP.
 
-  endmethod.
-
-
-  method evf_toolbar_menubutton_click.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_toolbar_menu_selected.
+  METHOD evf_toolbar_menubutton_click.
 
-  endmethod.
-
-
-  method evf_top_of_page.
-
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_total_click_row_col.
+  METHOD evf_toolbar_menu_selected.
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method evf_user_command.
-    case e_ucomm.
-      when fc_back.
-        leave to screen 0.
-      when fc_exit.
-        leave to screen 0.
-      when fc_up.
-        leave to screen 0.
-      when fc_cancel.
-        leave to screen 0.
-      when fc_mass_replace.
+  METHOD evf_top_of_page.
+
+  ENDMETHOD.
+
+
+  METHOD evf_total_click_row_col.
+
+  ENDMETHOD.
+
+
+  METHOD evf_user_command.
+    CASE e_ucomm.
+      WHEN fc_back.
+        LEAVE TO SCREEN 0.
+      WHEN fc_exit.
+        LEAVE TO SCREEN 0.
+      WHEN fc_up.
+        LEAVE TO SCREEN 0.
+      WHEN fc_cancel.
+        LEAVE TO SCREEN 0.
+      WHEN fc_mass_replace.
         mass_replace( ).
-      when fc_find.
+      WHEN fc_find.
         e_ucomm = '%SC'.
-        set_function_code( changing c_ucomm = e_ucomm ).
-      when fc_find_next.
+        set_function_code( CHANGING c_ucomm = e_ucomm ).
+      WHEN fc_find_next.
         e_ucomm = '%SC+'.
-        set_function_code( changing c_ucomm = e_ucomm ).
-    endcase.
-  endmethod.
+        set_function_code( CHANGING c_ucomm = e_ucomm ).
+    ENDCASE.
+  ENDMETHOD.
 
 
-  method exclude_function.
-    if not line_exists( exclude_functions[ table_line = iv_ucomm ] ).
-      insert iv_ucomm into table exclude_functions.
-    endif.
-  endmethod.
+  METHOD exclude_function.
+    IF NOT line_exists( exclude_functions[ table_line = iv_ucomm ] ).
+      INSERT iv_ucomm INTO TABLE exclude_functions.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method create_ex_result_falv.
-    data:
-      lt_lvc_row type lvc_t_row.
+  METHOD create_ex_result_falv.
+    DATA:
+      lt_lvc_row TYPE lvc_t_row.
 
-    clear:
+    CLEAR:
       lt_lvc_row.
     me->get_selected_rows(
-      importing
+      IMPORTING
         et_index_rows = lt_lvc_row ).
 
-    data: lt_sel_cols  type lvc_t_col,
-          lt_sel_cells type lvc_t_cell.
+    DATA: lt_sel_cols  TYPE lvc_t_col,
+          lt_sel_cells TYPE lvc_t_cell.
 
     me->get_selected_columns(
-     importing
-       et_index_columns = lt_sel_cols ).
+      IMPORTING
+        et_index_columns = lt_sel_cols ).
 
     me->get_selected_cells(
-     importing
-       et_cell = lt_sel_cells ).
+      IMPORTING
+        et_cell = lt_sel_cells ).
 
-    data:
-      ls_lvc_col  type lvc_s_col,
-      ls_lvc_row  type lvc_s_row,
-      ls_cur_cell type lvc_s_cell.
+    DATA:
+      ls_lvc_col  TYPE lvc_s_col,
+      ls_lvc_row  TYPE lvc_s_row,
+      ls_cur_cell TYPE lvc_s_cell.
 
-    clear:
+    CLEAR:
       ls_lvc_row,
       ls_lvc_col.
     me->get_current_cell(
-     importing
-       es_row_id = ls_lvc_row
-       es_col_id = ls_lvc_col ).
+      IMPORTING
+        es_row_id = ls_lvc_row
+        es_col_id = ls_lvc_col ).
     ls_cur_cell-col_id-fieldname = ls_lvc_col-fieldname.
     ls_cur_cell-row_id-index = ls_lvc_row-index.
 
     er_result_table = cl_salv_ex_util=>factory_result_data_table(
-        t_selected_rows             = lt_lvc_row
-        t_selected_columns          = lt_sel_cols
-        t_selected_cells            = lt_sel_cells
-        r_data                      = grid->mt_outtab
-        s_layout                    = grid->m_cl_variant->ms_layout
-        t_fieldcatalog              = grid->m_cl_variant->mt_fieldcatalog
-        t_sort                      = grid->m_cl_variant->mt_sort
-        t_filter                    = grid->m_cl_variant->mt_filter
-        t_hyperlinks                = grid->mt_hyperlinks
-        s_current_cell              = ls_cur_cell
-*        hyperlink_entry_column      = ls_hyper_entry
-*        dropdown_entry_column       = ls_dropdown_entry
-*        r_top_of_list               = lr_top_of_list
-*        r_end_of_list               = lr_end_of_list
-*        t_dropdown_values           = lt_drdn
-         ).
+      t_selected_rows    = lt_lvc_row
+      t_selected_columns = lt_sel_cols
+      t_selected_cells   = lt_sel_cells
+      r_data             = grid->mt_outtab
+      s_layout           = grid->m_cl_variant->ms_layout
+      t_fieldcatalog     = grid->m_cl_variant->mt_fieldcatalog
+      t_sort             = grid->m_cl_variant->mt_sort
+      t_filter           = grid->m_cl_variant->mt_filter
+      t_hyperlinks       = grid->mt_hyperlinks
+      s_current_cell     = ls_cur_cell
+*     hyperlink_entry_column      = ls_hyper_entry
+*     dropdown_entry_column       = ls_dropdown_entry
+*     r_top_of_list      = lr_top_of_list
+*     r_end_of_list      = lr_end_of_list
+*     t_dropdown_values  = lt_drdn
+    ).
 
-  endmethod.
-
-
-  method export_to_excel.
+  ENDMETHOD.
 
 
-    data: version type string.
-    data: result_data type ref to cl_salv_ex_result_data_table.
-    data: columns type ref to cl_salv_columns_table.
-    data: aggreg type ref to cl_salv_aggregations.
-    data: salv_intf_descr type ref to cl_abap_objectdescr.
-    data: salv_table type ref to cl_salv_table.
-    data: file_type type salv_bs_constant.
-    field-symbols <tab> type any table.
+  METHOD export_to_excel.
 
 
-    if cl_salv_bs_a_xml_base=>get_version( ) eq if_salv_bs_xml=>version_25 or
-       cl_salv_bs_a_xml_base=>get_version( ) eq if_salv_bs_xml=>version_26.
+    DATA: version TYPE string.
+    DATA: result_data TYPE REF TO cl_salv_ex_result_data_table.
+    DATA: columns TYPE REF TO cl_salv_columns_table.
+    DATA: aggreg TYPE REF TO cl_salv_aggregations.
+    DATA: salv_intf_descr TYPE REF TO cl_abap_objectdescr.
+    DATA: salv_table TYPE REF TO cl_salv_table.
+    DATA: file_type TYPE salv_bs_constant.
+    FIELD-SYMBOLS <tab> TYPE ANY TABLE.
+
+
+    IF cl_salv_bs_a_xml_base=>get_version( ) EQ if_salv_bs_xml=>version_25 OR
+       cl_salv_bs_a_xml_base=>get_version( ) EQ if_salv_bs_xml=>version_26.
 
       result_data = create_ex_result_falv( ).
 
-      case cl_salv_bs_a_xml_base=>get_version( ).
-        when if_salv_bs_xml=>version_25.
+      CASE cl_salv_bs_a_xml_base=>get_version( ).
+        WHEN if_salv_bs_xml=>version_25.
           version = if_salv_bs_xml=>version_25.
-        when if_salv_bs_xml=>version_26.
+        WHEN if_salv_bs_xml=>version_26.
           version = if_salv_bs_xml=>version_26.
-      endcase.
+      ENDCASE.
 
       "if XLSX is possible then we create it,  if not then MHTML excel file
-      salv_intf_descr ?= cl_abap_intfdescr=>describe_by_name( exporting p_name = 'IF_SALV_BS_XML' ).
-      if salv_intf_descr is not initial and line_exists( salv_intf_descr->attributes[ name = 'C_TYPE_XLSX'  ] ).
+      salv_intf_descr ?= cl_abap_intfdescr=>describe_by_name( EXPORTING p_name = 'IF_SALV_BS_XML' ).
+      IF salv_intf_descr IS NOT INITIAL AND line_exists( salv_intf_descr->attributes[ name = 'C_TYPE_XLSX'  ] ).
         file_type = 10.
-      else.
+      ELSE.
         file_type = 02.
-      endif.
+      ENDIF.
 
       "transformation of data to excel
-      call method cl_salv_bs_tt_util=>if_salv_bs_tt_util~transform
-        exporting
+      CALL METHOD cl_salv_bs_tt_util=>if_salv_bs_tt_util~transform
+        EXPORTING
           xml_type      = file_type
           xml_version   = version
           r_result_data = result_data
           xml_flavour   = if_salv_bs_c_tt=>c_tt_xml_flavour_export
           gui_type      = if_salv_bs_xml=>c_gui_type_gui
-        importing
+        IMPORTING
           xml           = rv_xstring.
-    endif.
+    ENDIF.
 
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method get_cell_enabled.
-    field-symbols: <outtab> type standard table,
-                   <styles> type lvc_t_styl,
-                   <field>  type any.
-    check i_row is not initial and i_field is not initial.
-    get_frontend_layout( importing es_layout = lvc_layout ).
+  METHOD get_cell_enabled.
+    FIELD-SYMBOLS: <outtab> TYPE STANDARD TABLE,
+                   <styles> TYPE lvc_t_styl,
+                   <field>  TYPE any.
+    CHECK i_row IS NOT INITIAL AND i_field IS NOT INITIAL.
+    get_frontend_layout( IMPORTING es_layout = lvc_layout ).
 
     " if sy-subrc eq 0. " The value of SY-SUBRC is always set to 0 by CALL METHOD GET_FRONTEND_LAYOUT.
-    if lvc_layout-stylefname is not initial.
-      assign outtab->* to <outtab>.
-      assign <outtab>[ i_row ] to field-symbol(<line>).
-      if sy-subrc eq 0.
-        assign component lvc_layout-stylefname of structure <line> to <styles>.
-        if sy-subrc eq 0.
-          assign <styles>[ fieldname = i_field ] to field-symbol(<style>).
-          if sy-subrc eq 0.
-            if <style>-style = mc_style_enabled.
+    IF lvc_layout-stylefname IS NOT INITIAL.
+      ASSIGN outtab->* TO <outtab>.
+      ASSIGN <outtab>[ i_row ] TO FIELD-SYMBOL(<line>).
+      IF sy-subrc EQ 0.
+        ASSIGN COMPONENT lvc_layout-stylefname OF STRUCTURE <line> TO <styles>.
+        IF sy-subrc EQ 0.
+          ASSIGN <styles>[ fieldname = i_field ] TO FIELD-SYMBOL(<style>).
+          IF sy-subrc EQ 0.
+            IF <style>-style = mc_style_enabled.
               r_enabled = abap_true.
-              return.
-            elseif <style>-style = mc_style_disabled.
+              RETURN.
+            ELSEIF <style>-style = mc_style_disabled.
               r_enabled = abap_false.
-              return.
-            endif.
-          endif.
-        endif.
-      endif.
-    endif.
+              RETURN.
+            ENDIF.
+          ENDIF.
+        ENDIF.
+      ENDIF.
+    ENDIF.
     "all cells editable
-    if lvc_layout-edit eq abap_true.
+    IF lvc_layout-edit EQ abap_true.
       r_enabled = abap_true.
-    else.
-      get_frontend_fieldcatalog( importing et_fieldcatalog = fcat ).
-      assign fcat[ fieldname = i_field ] to field-symbol(<fcat>).
-      if <fcat>-edit eq abap_true.
+    ELSE.
+      get_frontend_fieldcatalog( IMPORTING et_fieldcatalog = fcat ).
+      ASSIGN fcat[ fieldname = i_field ] TO FIELD-SYMBOL(<fcat>).
+      IF <fcat>-edit EQ abap_true.
         r_enabled = abap_true.
-      endif.
-    endif.
+      ENDIF.
+    ENDIF.
     " endif.
-  endmethod.
+  ENDMETHOD.
 
 
-  method get_file_from_mime.
+  METHOD get_file_from_mime.
     cl_mime_repository_api=>get_api( )->get(
-            exporting i_url = iv_path
-            importing e_content = ev_xstring
+            EXPORTING i_url = iv_path
+            IMPORTING e_content = ev_xstring
                       e_mime_type = ev_mime_type
-        exceptions others = 1 ).
-    check sy-subrc eq 0.
-  endmethod.
+        EXCEPTIONS OTHERS = 1 ).
+    CHECK sy-subrc EQ 0.
+  ENDMETHOD.
 
 
-  method get_picture_from_se78.
+  METHOD get_picture_from_se78.
     cl_ssf_xsf_utilities=>get_bds_graphic_as_bmp(
-      exporting
+      EXPORTING
         p_object       = 'GRAPHICS'    " SAPscript Graphics Management: Application object
-        p_name         =  iv_name   " Name
-        p_id           =  iv_id   " SAPscript Graphics Management: ID
-        p_btype        =  iv_type   " SAPscript: Type of graphic
-      receiving
-        p_bmp          =  rv_xstring   " Graphic Data
-      exceptions
+        p_name         = iv_name   " Name
+        p_id           = iv_id   " SAPscript Graphics Management: ID
+        p_btype        = iv_type   " SAPscript: Type of graphic
+      RECEIVING
+        p_bmp          = rv_xstring   " Graphic Data
+      EXCEPTIONS
         not_found      = 0
         internal_error = 0
-        others         = 0 ).
-  endmethod.
+        OTHERS         = 0 ).
+  ENDMETHOD.
 
 
-  method hide_applog.
+  METHOD hide_applog.
 
-    if main_split_container is not initial.
+    IF main_split_container IS NOT INITIAL.
       main_split_container->set_row_sash(
-        exporting
-          id                =  1   " Row Splitter Bar ID
-          type              =  split_container->type_sashvisible   " Attribute
-          value             =  0   " Value
-        exceptions
+        EXPORTING
+          id                = 1   " Row Splitter Bar ID
+          type              = split_container->type_sashvisible   " Attribute
+          value             = 0   " Value
+        EXCEPTIONS
           cntl_error        = 0
           cntl_system_error = 0
-          others            = 0      ).
+          OTHERS            = 0 ).
       main_split_container->set_row_height(
-        exporting
-          id                =   2 " Row ID
-          height            =   0  " Height
-        exceptions
+        EXPORTING
+          id                = 2 " Row ID
+          height            = 0  " Height
+        EXCEPTIONS
           cntl_error        = 0
           cntl_system_error = 0
-          others            = 0   ).
-      clear splitter_row_3_height.
-    endif.
-  endmethod.
+          OTHERS            = 0 ).
+      CLEAR splitter_row_3_height.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method hide_top_of_page.
-    if split_container is not initial.
+  METHOD hide_top_of_page.
+    IF split_container IS NOT INITIAL.
 
       split_container->set_row_sash(
-        exporting
-          id                =  1   " Row Splitter Bar ID
-          type              =  split_container->type_sashvisible   " Attribute
-          value             =  0   " Value
-        exceptions
+        EXPORTING
+          id                = 1   " Row Splitter Bar ID
+          type              = split_container->type_sashvisible   " Attribute
+          value             = 0   " Value
+        EXCEPTIONS
           cntl_error        = 0
           cntl_system_error = 0
-          others            = 0  ).
+          OTHERS            = 0 ).
 
       split_container->set_row_height(
-        exporting
-          id                =   1 " Row ID
-          height            =   0  " Height
-        exceptions
+        EXPORTING
+          id                = 1 " Row ID
+          height            = 0  " Height
+        EXCEPTIONS
           cntl_error        = 1
           cntl_system_error = 2
-          others            = 3   ).
-      if sy-subrc eq 0.
+          OTHERS            = 3 ).
+      IF sy-subrc EQ 0.
         splitter_row_1_height = 0.
-      endif.
-    endif.
+      ENDIF.
+    ENDIF.
     r_falv = me.
-  endmethod.
+  ENDMETHOD.
 
 
-  method lvc_fcat_from_itab.
-    data: table type ref to data.
-    create data table like it_table.
-    assign table->* to field-symbol(<table>).
-    try.
-        cl_salv_table=>factory( importing
-                                  r_salv_table   = data(salv_table)
-                                changing
-                                  t_table        = <table>  ).
+  METHOD lvc_fcat_from_itab.
+    DATA: table TYPE REF TO data.
+    CREATE DATA table LIKE it_table.
+    ASSIGN table->* TO FIELD-SYMBOL(<table>).
+    TRY.
+        cl_salv_table=>factory( IMPORTING r_salv_table = DATA(salv_table)
+                                CHANGING  t_table      = <table> ).
         rt_fcat = cl_salv_controller_metadata=>get_lvc_fieldcatalog(
-            r_columns      = salv_table->get_columns( ) " ALV Filter
-            r_aggregations = salv_table->get_aggregations( ) )." ALV Aggregations
-      catch cx_root.
-    endtry.
-  endmethod.
+          r_columns      = salv_table->get_columns( ) " ALV Filter
+          r_aggregations = salv_table->get_aggregations( ) ). " ALV Aggregations
+      CATCH cx_root.
+    ENDTRY.
+  ENDMETHOD.
 
 
-  method mass_replace.
-    field-symbols: <outtab> type standard table.
-    assign outtab->* to <outtab>.
-    if sy-subrc eq 0.
-      call function 'Z_FALV_MASS_REPLACE'
-        exporting
-          io_grid   = cast cl_gui_alv_grid( me )
-        changing
+  METHOD mass_replace.
+    FIELD-SYMBOLS: <outtab> TYPE STANDARD TABLE.
+    ASSIGN outtab->* TO <outtab>.
+    IF sy-subrc EQ 0.
+      CALL FUNCTION 'Z_FALV_MASS_REPLACE'
+        EXPORTING
+          io_grid   = CAST cl_gui_alv_grid( me )
+        CHANGING
           ct_outtab = <outtab>.
-    endif.
-  endmethod.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method pai.
-    data: ucomm type sy-ucomm.
+  METHOD pai.
+    DATA: ucomm TYPE sy-ucomm.
     ucomm = c_ucomm.
-    clear c_ucomm.
-    raise event user_command exporting e_ucomm = ucomm.
+    CLEAR c_ucomm.
+    RAISE EVENT user_command EXPORTING e_ucomm = ucomm.
 
     me->set_function_code(
-       changing
-         c_ucomm = ucomm ).
-  endmethod.
+      CHANGING
+        c_ucomm = ucomm ).
+  ENDMETHOD.
 
 
-  method pbo.
+  METHOD pbo.
 
     gui_status->show_gui_status( ).
-    raise event at_set_pf_status .
+    RAISE EVENT at_set_pf_status .
 
     gui_status->show_title(
-      exporting
+      EXPORTING
         iv_text1 = title_v1
         iv_text2 = title_v2
         iv_text3 = title_v3
         iv_text4 = title_v4
         iv_text5 = title_v5 ).
-    raise event at_set_title.
+    RAISE EVENT at_set_title.
 
-  endmethod.
-
-
-  method raise_top_of_page.
-
-    if top_of_page_visible_at_start eq abap_true and
-       top_of_page_container is not initial.
-
-      if me->top_of_page_doc is initial.
-        top_of_page_doc = new cl_dd_document( ).
-      endif.
-
-      export alv_form_html from abap_true
-            to memory id 'ALV_FORM_HTML'.
+  ENDMETHOD.
 
 
-      call method me->list_processing_events
-        exporting
+  METHOD raise_top_of_page.
+
+    IF top_of_page_visible_at_start EQ abap_true AND
+       top_of_page_container IS NOT INITIAL.
+
+      IF me->top_of_page_doc IS INITIAL.
+        top_of_page_doc = NEW cl_dd_document( ).
+      ENDIF.
+
+      EXPORT alv_form_html FROM abap_true
+            TO MEMORY ID 'ALV_FORM_HTML'.
+
+
+      CALL METHOD me->list_processing_events
+        EXPORTING
           i_event_name = 'TOP_OF_PAGE'
           i_dyndoc_id  = me->top_of_page_doc.
 
 
-      export alv_form_html from abap_false
-             to memory id 'ALV_FORM_HTML'.
+      EXPORT alv_form_html FROM abap_false
+             TO MEMORY ID 'ALV_FORM_HTML'.
 
       top_of_page_doc->display_document(
-        exporting
-          reuse_control      =  'X'
-           parent             =  top_of_page_container
-        exceptions
+        EXPORTING
+          reuse_control      = 'X'
+          parent             = top_of_page_container
+        EXCEPTIONS
           html_display_error = 0
-          others             = 0    ).
+          OTHERS             = 0 ).
       show_top_of_page( ).
-    endif.
-  endmethod.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method refresh_toolbar.
-    check cl_gui_alv_grid=>offline( ) is initial.
-    check grid->m_init_toolbar eq space.
-    try.
+  METHOD refresh_toolbar.
+    CHECK cl_gui_alv_grid=>offline( ) IS INITIAL.
+    CHECK grid->m_init_toolbar EQ space.
+    TRY.
         me->set_toolbar_interactive(  ).
-      catch cx_root.
+      CATCH cx_root.
         "in case method is called before the display of grid
         "no need to do anything with that
-        clear sy-subrc.
-    endtry.
+        CLEAR sy-subrc.
+    ENDTRY.
     r_falv = me.
-  endmethod.
+  ENDMETHOD.
 
 
-  method save_excel_localy.
-    data: path     type string,
-          filename type string.
+  METHOD save_excel_localy.
+    DATA: path     TYPE string,
+          filename TYPE string.
 
-    if iv_path is initial.
+    IF iv_path IS INITIAL.
       cl_gui_frontend_services=>file_save_dialog(
-      exporting
-*      window_title         = window_title
-        default_extension    = 'XLSX'
-*      default_file_name    = default_file_name
-*      with_encoding        = with_encoding
-*      file_filter          = file_filter
-*      initial_directory    = initial_directory
-*      prompt_on_overwrite  = 'X'
-      changing
-        filename             = filename
-        path                 = path
-        fullpath             = iv_path
-*      user_action          = user_action
-*      file_encoding        = file_encoding
-      exceptions
-        cntl_error           = 1
-        error_no_gui         = 2
-        not_supported_by_gui = 3
-        others               = 4 ).
-      if sy-subrc <> 0.
-        return.
-      endif.
-    endif.
+        EXPORTING
+*         window_title         = window_title
+          default_extension    = 'XLSX'
+*         default_file_name    = default_file_name
+*         with_encoding        = with_encoding
+*         file_filter          = file_filter
+*         initial_directory    = initial_directory
+*         prompt_on_overwrite  = 'X'
+        CHANGING
+          filename             = filename
+          path                 = path
+          fullpath             = iv_path
+*         user_action          = user_action
+*         file_encoding        = file_encoding
+        EXCEPTIONS
+          cntl_error           = 1
+          error_no_gui         = 2
+          not_supported_by_gui = 3
+          OTHERS               = 4 ).
+      IF sy-subrc <> 0.
+        RETURN.
+      ENDIF.
+    ENDIF.
 
-    if iv_path is not initial.
+    IF iv_path IS NOT INITIAL.
 
-      data(xstring) = me->export_to_excel( ).
-      data(xstrsize) = xstrlen( xstring ).
-      data(solix) = cl_bcs_convert=>xstring_to_solix( xstring ).
+      DATA(xstring) = me->export_to_excel( ).
+      DATA(xstrsize) = xstrlen( xstring ).
+      DATA(solix) = cl_bcs_convert=>xstring_to_solix( xstring ).
 
       cl_gui_frontend_services=>gui_download(
-        exporting
-          bin_filesize              = xstrsize
-          filename                  = iv_path
-          filetype                  = 'BIN'
-        changing
-          data_tab                  = solix
-        exceptions
-          file_write_error          = 1
-          no_batch                  = 2
-          gui_refuse_filetransfer   = 3
-          invalid_type              = 4
-          no_authority              = 5
-          unknown_error             = 6
-          header_not_allowed        = 7
-          separator_not_allowed     = 8
-          filesize_not_allowed      = 9
-          header_too_long           = 10
-          dp_error_create           = 11
-          dp_error_send             = 12
-          dp_error_write            = 13
-          unknown_dp_error          = 14
-          access_denied             = 15
-          dp_out_of_memory          = 16
-          disk_full                 = 17
-          dp_timeout                = 18
-          file_not_found            = 19
-          dataprovider_exception    = 20
-          control_flush_error       = 21
-          not_supported_by_gui      = 22
-          error_no_gui              = 23
-          others                    = 24
-             ).
-      if sy-subrc eq 0.
+        EXPORTING
+          bin_filesize            = xstrsize
+          filename                = iv_path
+          filetype                = 'BIN'
+        CHANGING
+          data_tab                = solix
+        EXCEPTIONS
+          file_write_error        = 1
+          no_batch                = 2
+          gui_refuse_filetransfer = 3
+          invalid_type            = 4
+          no_authority            = 5
+          unknown_error           = 6
+          header_not_allowed      = 7
+          separator_not_allowed   = 8
+          filesize_not_allowed    = 9
+          header_too_long         = 10
+          dp_error_create         = 11
+          dp_error_send           = 12
+          dp_error_write          = 13
+          unknown_dp_error        = 14
+          access_denied           = 15
+          dp_out_of_memory        = 16
+          disk_full               = 17
+          dp_timeout              = 18
+          file_not_found          = 19
+          dataprovider_exception  = 20
+          control_flush_error     = 21
+          not_supported_by_gui    = 22
+          error_no_gui            = 23
+          OTHERS                  = 24
+      ).
+      IF sy-subrc EQ 0.
         rv_saved = abap_true.
-      endif.
+      ENDIF.
 
-    endif.
-  endmethod.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method send.
+  METHOD send.
     r_falv = me.
-    try.
-        data(request) = cl_bcs=>create_persistent( ).
-      catch cx_send_req_bcs.
-        raise create_request_error.
-    endtry.
+    TRY.
+        DATA(request) = cl_bcs=>create_persistent( ).
+      CATCH cx_send_req_bcs.
+        RAISE create_request_error.
+    ENDTRY.
 
-    try.
-        data(document) = cl_document_bcs=>create_document(
-                                                            i_type = 'HTM'
-                                                            i_text = cl_document_bcs=>string_to_soli( iv_body )
-                                                            i_subject = conv #( iv_subject )
-                                                            i_importance = iv_importance
-                                                            i_sensitivity = iv_sensitivity ).
+    TRY.
+        DATA(document) = cl_document_bcs=>create_document(
+          i_type        = 'HTM'
+          i_text        = cl_document_bcs=>string_to_soli( iv_body )
+          i_subject     = CONV #( iv_subject )
+          i_importance  = iv_importance
+          i_sensitivity = iv_sensitivity ).
 
 
-      catch cx_document_bcs.
-        raise create_document_error.
-    endtry.
+      CATCH cx_document_bcs.
+        RAISE create_document_error.
+    ENDTRY.
 
-    data(excel) = export_to_excel( ).
+    DATA(excel) = export_to_excel( ).
 
-    try.
+    TRY.
         document->add_attachment(
-            i_attachment_type    = 'EXT'
-            i_att_content_hex    = cl_document_bcs=>xstring_to_solix( excel )
-            i_attachment_size    = conv #( xstrlen( excel ) )
-            i_attachment_subject = cond #( when iv_filename is not initial then iv_filename
-                                           else conv #( |{ sy-datum }_{ sy-uzeit }.xlsx | )
-                                                        ) ).
-      catch cx_document_bcs .
-        raise add_attachment_error.
-    endtry.
+          i_attachment_type    = 'EXT'
+          i_att_content_hex    = cl_document_bcs=>xstring_to_solix( excel )
+          i_attachment_size    = CONV #( xstrlen( excel ) )
+          i_attachment_subject = COND #( WHEN iv_filename IS NOT INITIAL THEN iv_filename
+                                         ELSE CONV #( |{ sy-datum }_{ sy-uzeit }.xlsx | )
+                                                      ) ).
+      CATCH cx_document_bcs .
+        RAISE add_attachment_error.
+    ENDTRY.
 
 
-    try.
+    TRY.
 
         request->set_document( document ).
-      catch cx_send_req_bcs.
-        raise add_document_error.
-    endtry.
+      CATCH cx_send_req_bcs.
+        RAISE add_document_error.
+    ENDTRY.
 
-    if it_recipients is not initial.
-      loop at it_recipients assigning field-symbol(<addr>).
-        try.
-            data(smtp_addr) = cl_cam_address_bcs=>create_internet_address( <addr>-smtp_addr ).
-          catch cx_address_bcs.
-            raise add_recipient_error.
-        endtry.
+    IF it_recipients IS NOT INITIAL.
+      LOOP AT it_recipients ASSIGNING FIELD-SYMBOL(<addr>).
+        TRY.
+            DATA(smtp_addr) = cl_cam_address_bcs=>create_internet_address( <addr>-smtp_addr ).
+          CATCH cx_address_bcs.
+            RAISE add_recipient_error.
+        ENDTRY.
 
-        try.
-            request->add_recipient( i_recipient = smtp_addr
-                                    i_express = <addr>-express
-                                    i_copy = <addr>-copy
+        TRY.
+            request->add_recipient( i_recipient  = smtp_addr
+                                    i_express    = <addr>-express
+                                    i_copy       = <addr>-copy
                                     i_blind_copy = <addr>-blind_copy
-            ).
+                                    ).
 
-          catch cx_send_req_bcs.
-            raise add_recipient_error.
-        endtry.
-      endloop.
+          CATCH cx_send_req_bcs.
+            RAISE add_recipient_error.
+        ENDTRY.
+      ENDLOOP.
 
-      if iv_sender is not initial.
-        try.
-            data(sender)  = cl_cam_address_bcs=>create_internet_address(  i_address_string  = iv_sender
-                                                                          i_address_name    = iv_sender_name ).
-          catch cx_address_bcs.
-            raise add_sender_error.
-        endtry.
+      IF iv_sender IS NOT INITIAL.
+        TRY.
+            DATA(sender) = cl_cam_address_bcs=>create_internet_address( i_address_string = iv_sender
+                                                                        i_address_name   = iv_sender_name ).
+          CATCH cx_address_bcs.
+            RAISE add_sender_error.
+        ENDTRY.
 
-        try.
+        TRY.
             request->set_sender( i_sender = sender ).
-          catch cx_send_req_bcs.
-            raise add_sender_error.
-        endtry.
-      endif.
+          CATCH cx_send_req_bcs.
+            RAISE add_sender_error.
+        ENDTRY.
+      ENDIF.
 
-      try.
+      TRY.
           request->set_message_subject( ip_subject = iv_subject ).
-        catch cx_root.
-      endtry.
+        CATCH cx_root.
+      ENDTRY.
 
 
-      if iv_immediately eq abap_true.
-        try .
+      IF iv_immediately EQ abap_true.
+        TRY .
 *     set send immediately
             request->set_send_immediately( abap_true ).
-          catch cx_send_req_bcs.
-            raise send_immediately_error.
-        endtry.
+          CATCH cx_send_req_bcs.
+            RAISE send_immediately_error.
+        ENDTRY.
 
-      endif.
-      try.
-          data(result) = request->send(  ).
-          if iv_commit eq abap_true.
-            commit work.
-          endif.
-        catch cx_send_req_bcs.
-          raise send_error.
-      endtry.
-    else.
-      raise add_recipient_error.
-    endif.
-  endmethod.
+      ENDIF.
+      TRY.
+          DATA(result) = request->send(  ).
+          IF iv_commit EQ abap_true.
+            COMMIT WORK.
+          ENDIF.
+        CATCH cx_send_req_bcs.
+          RAISE send_error.
+      ENDTRY.
+    ELSE.
+      RAISE add_recipient_error.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method set_cell_button.
+  METHOD set_cell_button.
     r_falv = me.
-    field-symbols: <outtab> type standard table,
-                   <styles> type lvc_t_styl.
-    get_frontend_layout( importing es_layout = lvc_layout ).
-    check lvc_layout-stylefname is not initial.
-    assign outtab->* to <outtab>.
-    if sy-subrc eq 0.
-      assign <outtab>[ iv_row ] to field-symbol(<row>).
-      if sy-subrc eq 0.
-        assign component lvc_layout-stylefname of structure <row> to <styles>.
-        if sy-subrc eq 0.
-          try.
+    FIELD-SYMBOLS: <outtab> TYPE STANDARD TABLE,
+                   <styles> TYPE lvc_t_styl.
+    get_frontend_layout( IMPORTING es_layout = lvc_layout ).
+    CHECK lvc_layout-stylefname IS NOT INITIAL.
+    ASSIGN outtab->* TO <outtab>.
+    IF sy-subrc EQ 0.
+      ASSIGN <outtab>[ iv_row ] TO FIELD-SYMBOL(<row>).
+      IF sy-subrc EQ 0.
+        ASSIGN COMPONENT lvc_layout-stylefname OF STRUCTURE <row> TO <styles>.
+        IF sy-subrc EQ 0.
+          TRY.
               <styles>[ fieldname = iv_fieldname ]-style = mc_style_button.
-            catch cx_sy_itab_line_not_found.
-              insert value #( fieldname = iv_fieldname style = mc_style_button ) into table <styles>.
-          endtry.
-        endif.
-      endif.
-    endif.
-  endmethod.
+            CATCH cx_sy_itab_line_not_found.
+              INSERT VALUE #( fieldname = iv_fieldname style = mc_style_button ) INTO TABLE <styles>.
+          ENDTRY.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method set_cell_color.
-    field-symbols: <outtab> type standard table,
-                   <colors> type lvc_t_scol.
+  METHOD set_cell_color.
+    FIELD-SYMBOLS: <outtab> TYPE STANDARD TABLE,
+                   <colors> TYPE lvc_t_scol.
     r_falv = me.
-    get_frontend_layout( importing es_layout = lvc_layout ).
-    check lvc_layout-ctab_fname is not initial.
-    assign outtab->* to <outtab>.
-    if sy-subrc eq 0.
-      assign <outtab>[ iv_row ] to field-symbol(<row>).
-      if sy-subrc eq 0.
-        assign component lvc_layout-ctab_fname of structure <row> to <colors>.
-        if sy-subrc eq 0.
-          try.
+    get_frontend_layout( IMPORTING es_layout = lvc_layout ).
+    CHECK lvc_layout-ctab_fname IS NOT INITIAL.
+    ASSIGN outtab->* TO <outtab>.
+    IF sy-subrc EQ 0.
+      ASSIGN <outtab>[ iv_row ] TO FIELD-SYMBOL(<row>).
+      IF sy-subrc EQ 0.
+        ASSIGN COMPONENT lvc_layout-ctab_fname OF STRUCTURE <row> TO <colors>.
+        IF sy-subrc EQ 0.
+          TRY.
               <colors>[ fname = iv_fieldname ]-color = iv_color.
-            catch cx_sy_itab_line_not_found.
-              insert value #( fname = iv_fieldname color = iv_color ) into table <colors>.
-          endtry.
-        endif.
-      endif.
-    endif.
-  endmethod.
+            CATCH cx_sy_itab_line_not_found.
+              INSERT VALUE #( fname = iv_fieldname color = iv_color ) INTO TABLE <colors>.
+          ENDTRY.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method set_cell_disabled.
-    field-symbols: <outtab> type standard table,
-                   <styles> type lvc_t_styl.
+  METHOD set_cell_disabled.
+    FIELD-SYMBOLS: <outtab> TYPE STANDARD TABLE,
+                   <styles> TYPE lvc_t_styl.
     r_falv = me.
-    get_frontend_layout( importing es_layout = lvc_layout ).
-    check lvc_layout-stylefname is not initial.
-    assign outtab->* to <outtab>.
-    if sy-subrc eq 0.
-      assign <outtab>[ iv_row ] to field-symbol(<row>).
-      if sy-subrc eq 0.
-        assign component lvc_layout-stylefname of structure <row> to <styles>.
-        if sy-subrc eq 0.
-          try.
+    get_frontend_layout( IMPORTING es_layout = lvc_layout ).
+    CHECK lvc_layout-stylefname IS NOT INITIAL.
+    ASSIGN outtab->* TO <outtab>.
+    IF sy-subrc EQ 0.
+      ASSIGN <outtab>[ iv_row ] TO FIELD-SYMBOL(<row>).
+      IF sy-subrc EQ 0.
+        ASSIGN COMPONENT lvc_layout-stylefname OF STRUCTURE <row> TO <styles>.
+        IF sy-subrc EQ 0.
+          TRY.
               <styles>[ fieldname = iv_fieldname ]-style = mc_style_disabled.
-            catch cx_sy_itab_line_not_found.
-              insert value #( fieldname = iv_fieldname style = mc_style_disabled ) into table <styles>.
-          endtry.
-        endif.
-      endif.
-    endif.
-  endmethod.
+            CATCH cx_sy_itab_line_not_found.
+              INSERT VALUE #( fieldname = iv_fieldname style = mc_style_disabled ) INTO TABLE <styles>.
+          ENDTRY.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method set_cell_enabled.
-    field-symbols: <outtab> type standard table,
-                   <styles> type lvc_t_styl.
+  METHOD set_cell_enabled.
+    FIELD-SYMBOLS: <outtab> TYPE STANDARD TABLE,
+                   <styles> TYPE lvc_t_styl.
     r_falv = me.
-    get_frontend_layout( importing es_layout = lvc_layout ).
-    check lvc_layout-stylefname is not initial.
-    assign outtab->* to <outtab>.
-    if sy-subrc eq 0.
-      assign <outtab>[ iv_row ] to field-symbol(<row>).
-      if sy-subrc eq 0.
-        assign component lvc_layout-stylefname of structure <row> to <styles>.
-        if sy-subrc eq 0.
-          try.
+    get_frontend_layout( IMPORTING es_layout = lvc_layout ).
+    CHECK lvc_layout-stylefname IS NOT INITIAL.
+    ASSIGN outtab->* TO <outtab>.
+    IF sy-subrc EQ 0.
+      ASSIGN <outtab>[ iv_row ] TO FIELD-SYMBOL(<row>).
+      IF sy-subrc EQ 0.
+        ASSIGN COMPONENT lvc_layout-stylefname OF STRUCTURE <row> TO <styles>.
+        IF sy-subrc EQ 0.
+          TRY.
               <styles>[ fieldname = iv_fieldname ]-style = mc_style_enabled.
-            catch cx_sy_itab_line_not_found.
-              insert value #( fieldname = iv_fieldname style = mc_style_enabled ) into table <styles>.
-          endtry.
-        endif.
-      endif.
-    endif.
-  endmethod.
+            CATCH cx_sy_itab_line_not_found.
+              INSERT VALUE #( fieldname = iv_fieldname style = mc_style_enabled ) INTO TABLE <styles>.
+          ENDTRY.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method set_cell_hotspot.
-    field-symbols: <outtab> type standard table,
-                   <styles> type lvc_t_styl.
+  METHOD set_cell_hotspot.
+    FIELD-SYMBOLS: <outtab> TYPE STANDARD TABLE,
+                   <styles> TYPE lvc_t_styl.
     r_falv = me.
-    get_frontend_layout( importing es_layout = lvc_layout ).
-    check lvc_layout-stylefname is not initial.
-    assign outtab->* to <outtab>.
-    if sy-subrc eq 0.
-      assign <outtab>[ iv_row ] to field-symbol(<row>).
-      if sy-subrc eq 0.
-        assign component lvc_layout-stylefname of structure <row> to <styles>.
-        if sy-subrc eq 0.
-          try.
+    get_frontend_layout( IMPORTING es_layout = lvc_layout ).
+    CHECK lvc_layout-stylefname IS NOT INITIAL.
+    ASSIGN outtab->* TO <outtab>.
+    IF sy-subrc EQ 0.
+      ASSIGN <outtab>[ iv_row ] TO FIELD-SYMBOL(<row>).
+      IF sy-subrc EQ 0.
+        ASSIGN COMPONENT lvc_layout-stylefname OF STRUCTURE <row> TO <styles>.
+        IF sy-subrc EQ 0.
+          TRY.
               <styles>[ fieldname = iv_fieldname ]-style = mc_style_hotspot.
-            catch cx_sy_itab_line_not_found.
-              insert value #( fieldname = iv_fieldname style = mc_style_hotspot ) into table <styles>.
-          endtry.
-        endif.
-      endif.
-    endif.
-  endmethod.
+            CATCH cx_sy_itab_line_not_found.
+              INSERT VALUE #( fieldname = iv_fieldname style = mc_style_hotspot ) INTO TABLE <styles>.
+          ENDTRY.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method set_editable.
+  METHOD set_editable.
     r_falv = me.
-    check cl_gui_alv_grid=>offline( ) is initial.
+    CHECK cl_gui_alv_grid=>offline( ) IS INITIAL.
     me->set_ready_for_input( i_ready_for_input = 1 ).
-    if iv_modify eq abap_true.
+    IF iv_modify EQ abap_true.
       me->register_edit_event(
-        exporting
-          i_event_id =  me->mc_evt_modified
-        exceptions
+        EXPORTING
+          i_event_id = me->mc_evt_modified
+        EXCEPTIONS
           error      = 0
-          others     = 0 ).
-    else.
+          OTHERS     = 0 ).
+    ELSE.
       me->register_edit_event(
-        exporting
-          i_event_id =  me->mc_evt_enter
-        exceptions
+        EXPORTING
+          i_event_id = me->mc_evt_enter
+        EXCEPTIONS
           error      = 0
-          others     = 0  ).
-    endif.
-  endmethod.
+          OTHERS     = 0 ).
+    ENDIF.
+  ENDMETHOD.
 
 
-  method set_frontend_fieldcatalog.
+  METHOD set_frontend_fieldcatalog.
     fcat = it_fieldcatalog.
     super->set_frontend_fieldcatalog( fcat ).
-  endmethod.
+  ENDMETHOD.
 
 
-  method set_frontend_layout.
+  METHOD set_frontend_layout.
     lvc_layout = is_layout.
     super->set_frontend_layout( is_layout ).
-  endmethod.
+  ENDMETHOD.
 
 
-  method set_list_view.
+  METHOD set_list_view.
     m_batch_mode = abap_true.
     r_falv = me.
-  endmethod.
+  ENDMETHOD.
 
 
-  method set_mark_field.
-    if line_exists( fcat[ fieldname = iv_fieldname ] ).
+  METHOD set_mark_field.
+    IF line_exists( fcat[ fieldname = iv_fieldname ] ).
       layout->mark_field = iv_fieldname.
-      check iv_fieldname is not initial.
+      CHECK iv_fieldname IS NOT INITIAL.
       column( iv_fieldname )->set_checkbox( abap_true ).
-    endif.
-  endmethod.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method set_output_table.
-    get reference of ct_table into outtab.
-  endmethod.
+  METHOD set_output_table.
+    GET REFERENCE OF ct_table INTO outtab.
+  ENDMETHOD.
 
 
-  method set_parent.
+  METHOD set_parent.
     me->parent ?= io_parent.
     r_falv = me.
-  endmethod.
+  ENDMETHOD.
 
 
-  method set_readonly.
+  METHOD set_readonly.
     me->set_ready_for_input( i_ready_for_input = 0 ).
     r_falv = me.
-  endmethod.
+  ENDMETHOD.
 
 
-  method set_row_color.
-    field-symbols: <outtab> type standard table,
-                   <color>  type char04.
+  METHOD set_row_color.
+    FIELD-SYMBOLS: <outtab> TYPE STANDARD TABLE,
+                   <color>  TYPE char04.
     r_falv = me.
-    get_frontend_layout( importing es_layout = lvc_layout ).
-    check lvc_layout-info_fname is not initial.
-    assign outtab->* to <outtab>.
-    if sy-subrc eq 0.
-      assign <outtab>[ iv_row ] to field-symbol(<row>).
-      if sy-subrc eq 0.
-        assign component lvc_layout-info_fname of structure <row> to <color>.
-        if sy-subrc eq 0.
+    get_frontend_layout( IMPORTING es_layout = lvc_layout ).
+    CHECK lvc_layout-info_fname IS NOT INITIAL.
+    ASSIGN outtab->* TO <outtab>.
+    IF sy-subrc EQ 0.
+      ASSIGN <outtab>[ iv_row ] TO FIELD-SYMBOL(<row>).
+      IF sy-subrc EQ 0.
+        ASSIGN COMPONENT lvc_layout-info_fname OF STRUCTURE <row> TO <color>.
+        IF sy-subrc EQ 0.
           <color> = iv_color.
-        endif.
-      endif.
-    endif.
-  endmethod.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method show_applog.
+  METHOD show_applog.
 
     r_falv = me.
-    if main_split_container is not initial.
+    IF main_split_container IS NOT INITIAL.
       main_split_container->get_row_height(
-    exporting
-      id                =  2
-    importing
-      result            =  splitter_row_2_height
-    exceptions
-      cntl_error        = 1
-      cntl_system_error = 2
-      others            = 3  ).
-      if sy-subrc eq 0 and splitter_row_2_height eq 0.
-        main_split_container->set_row_sash(
-          exporting
-            id                =  1   " Row Splitter Bar ID
-            type              =  split_container->type_sashvisible   " Attribute
-            value             =  1   " Value
-          exceptions
-            cntl_error        = 0
-            cntl_system_error = 0
-            others            = 0 ).
-        main_split_container->get_row_height(
-          exporting
-            id                =  1   " ALV
-          importing
-            result            =  splitter_row_2_height
-          exceptions
-            cntl_error        = 0
-            cntl_system_error = 0
-            others            = 0 ).
-
-        main_split_container->get_row_height(
-          exporting
-            id                = 2   " Row ID
-          importing
-            result            =  splitter_row_3_height   " Result Code
-          exceptions
-            cntl_error        = 0
-            cntl_system_error = 0
-            others            = 0 ).
-
-        main_split_container->set_row_height(
-          exporting
-            id                =   2 "error log
-            height            =   error_log_height
-          importing
-            result           = result
-          exceptions
-            cntl_error        = 0
-            cntl_system_error = 0
-            others            = 0 ).
-
-        try.
-            main_split_container->set_row_height(
-             exporting
-               id                =   1 " ALV
-               height            =   conv #( splitter_row_2_height - error_log_height )
-             importing
-               result           = result
-             exceptions
-               cntl_error        = 0
-               cntl_system_error = 0
-               others            = 0 ).
-          catch cx_root.
-        endtry.
-      endif.
-      clear splitter_row_2_height.
-      clear splitter_row_3_height.
-    endif.
-  endmethod.
-
-
-  method show_top_of_page.
-    r_falv = me.
-    if split_container is not initial.
-      split_container->set_row_sash(
-        exporting
-          id                =  1   " Row Splitter Bar ID
-          type              =  split_container->type_sashvisible   " Attribute
-          value             =  1   " Value
-        exceptions
-          cntl_error        = 0
-          cntl_system_error = 0
-          others            = 0 ).
-
-      split_container->get_row_height(
-        exporting
-          id                =  1   " Row ID
-        importing
-          result            =  splitter_row_1_height   " Result Code
-        exceptions
+        EXPORTING
+          id                = 2
+        IMPORTING
+          result            = splitter_row_2_height
+        EXCEPTIONS
           cntl_error        = 1
           cntl_system_error = 2
-          others            = 3 ).
-      if sy-subrc eq 0 and splitter_row_1_height eq 0.
-        split_container->set_row_height(
-          exporting
-            id                =   1 " Row ID
-            height            =   top_of_page_height
-          importing
-            result           = result
-          exceptions
+          OTHERS            = 3 ).
+      IF sy-subrc EQ 0 AND splitter_row_2_height EQ 0.
+        main_split_container->set_row_sash(
+          EXPORTING
+            id                = 1   " Row Splitter Bar ID
+            type              = split_container->type_sashvisible   " Attribute
+            value             = 1   " Value
+          EXCEPTIONS
             cntl_error        = 0
             cntl_system_error = 0
-            others            = 0 ).
-      endif.
-      top_of_page_visible_at_start = abap_true.
-    endif.
-  endmethod.
+            OTHERS            = 0 ).
+        main_split_container->get_row_height(
+          EXPORTING
+            id                = 1   " ALV
+          IMPORTING
+            result            = splitter_row_2_height
+          EXCEPTIONS
+            cntl_error        = 0
+            cntl_system_error = 0
+            OTHERS            = 0 ).
+
+        main_split_container->get_row_height(
+          EXPORTING
+            id                = 2   " Row ID
+          IMPORTING
+            result            = splitter_row_3_height   " Result Code
+          EXCEPTIONS
+            cntl_error        = 0
+            cntl_system_error = 0
+            OTHERS            = 0 ).
+
+        main_split_container->set_row_height(
+          EXPORTING
+            id                = 2 "error log
+            height            = error_log_height
+          IMPORTING
+            result            = result
+          EXCEPTIONS
+            cntl_error        = 0
+            cntl_system_error = 0
+            OTHERS            = 0 ).
+
+        TRY.
+            main_split_container->set_row_height(
+              EXPORTING
+                id                = 1 " ALV
+                height            = CONV #( splitter_row_2_height - error_log_height )
+              IMPORTING
+                result            = result
+              EXCEPTIONS
+                cntl_error        = 0
+                cntl_system_error = 0
+                OTHERS            = 0 ).
+          CATCH cx_root.
+        ENDTRY.
+      ENDIF.
+      CLEAR splitter_row_2_height.
+      CLEAR splitter_row_3_height.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method soft_refresh.
-    me->refresh_table_display(
-      exporting
-        is_stable      =     conv #( 'XX' ) " With Stable Rows/Columns
-        i_soft_refresh =     abap_true" Without Sort, Filter, etc.
-      exceptions
-        finished       = 0
-        others         = 0 ).
+  METHOD show_top_of_page.
     r_falv = me.
-  endmethod.
+    IF split_container IS NOT INITIAL.
+      split_container->set_row_sash(
+        EXPORTING
+          id                = 1   " Row Splitter Bar ID
+          type              = split_container->type_sashvisible   " Attribute
+          value             = 1   " Value
+        EXCEPTIONS
+          cntl_error        = 0
+          cntl_system_error = 0
+          OTHERS            = 0 ).
+
+      split_container->get_row_height(
+        EXPORTING
+          id                = 1   " Row ID
+        IMPORTING
+          result            = splitter_row_1_height   " Result Code
+        EXCEPTIONS
+          cntl_error        = 1
+          cntl_system_error = 2
+          OTHERS            = 3 ).
+      IF sy-subrc EQ 0 AND splitter_row_1_height EQ 0.
+        split_container->set_row_height(
+          EXPORTING
+            id                = 1 " Row ID
+            height            = top_of_page_height
+          IMPORTING
+            result            = result
+          EXCEPTIONS
+            cntl_error        = 0
+            cntl_system_error = 0
+            OTHERS            = 0 ).
+      ENDIF.
+      top_of_page_visible_at_start = abap_true.
+    ENDIF.
+  ENDMETHOD.
 
 
-  method copy_attributes.
-    field-symbols: <outtab> type standard table.
-    assign me->outtab->* to <outtab>.
-    i_falv->set_output_table( changing ct_table = <outtab> ).
+  METHOD soft_refresh.
+    me->refresh_table_display(
+      EXPORTING
+        is_stable      = CONV #( 'XX' ) " With Stable Rows/Columns
+        i_soft_refresh = abap_true " Without Sort, Filter, etc.
+      EXCEPTIONS
+        finished       = 0
+        OTHERS         = 0 ).
+    r_falv = me.
+  ENDMETHOD.
+
+
+  METHOD copy_attributes.
+    FIELD-SYMBOLS: <outtab> TYPE STANDARD TABLE.
+    ASSIGN me->outtab->* TO <outtab>.
+    i_falv->set_output_table( CHANGING ct_table = <outtab> ).
     i_falv->fcat = i_falv->lvc_fcat_from_itab( it_table = <outtab> ).
     i_falv->sort = me->sort.
     i_falv->filter = me->filter.
@@ -2548,7 +2531,7 @@ CLASS ZCL_FALV IMPLEMENTATION.
     i_falv->application_log_embedded = application_log_embedded.
     i_falv->built_in_screen = built_in_screen.
     i_falv->build_columns( ).
-    i_falv->layout = new zcl_falv_layout( io_falv = i_falv ).
+    i_falv->layout = NEW zcl_falv_layout( io_falv = i_falv ).
     i_falv->gui_status ?= me->gui_status->if_os_clone~clone( ). "clone object
     i_falv->lvc_layout = me->lvc_layout.
     i_falv->variant = me->variant.
@@ -2566,203 +2549,215 @@ CLASS ZCL_FALV IMPLEMENTATION.
     i_falv->layout->delete_all_buttons = me->layout->delete_all_buttons.
     i_falv->layout->mark_field = me->layout->mark_field.
     i_falv->register_f4_for_fields( it_f4 = me->grid->mt_f4 ).
-  endmethod.
+  ENDMETHOD.
 
 
-  method get_columns.
+  METHOD get_columns.
     rt_columns = me->columns.
-  endmethod.
+  ENDMETHOD.
 
 
-  method create_by_type.
-    data:
-      lr_output type ref to data.
+  METHOD create_by_type.
+    DATA:
+      lr_output TYPE REF TO data.
 
-    field-symbols:
-      <table> type any table.
+    FIELD-SYMBOLS:
+      <table> TYPE ANY TABLE.
 
-    data(lv_type_name) = i_type->absolute_name.
+    DATA(lv_type_name) = i_type->absolute_name.
 
-    if i_type->kind <> cl_abap_typedescr=>kind_table.
-      free: rv_falv.
-      return.
-    endif.
+    IF i_type->kind <> cl_abap_typedescr=>kind_table.
+      FREE: rv_falv.
+      RETURN.
+    ENDIF.
 
-    create data lr_output type (lv_type_name).
-    assign lr_output->* to <table>.
+    CREATE DATA lr_output TYPE (lv_type_name).
+    ASSIGN lr_output->* TO <table>.
 
-    if i_subclass is initial.
+    IF i_subclass IS INITIAL.
       i_subclass ?= check_if_called_from_subclass( ).
-    endif.
+    ENDIF.
 
     rv_falv = zcl_falv=>create(
-      exporting
+      EXPORTING
         i_parent          = i_parent
         i_applogparent    = i_applogparent
         i_popup           = i_popup
         i_applog_embedded = i_applog_embedded
         i_subclass        = i_subclass
-      changing
+      CHANGING
         ct_table          = <table>
     ).
-  endmethod.
+  ENDMETHOD.
 
-
-  method init_cell_styles.
+  METHOD init_cell_styles.
 * https://tricktresor.de/blog/zellen-verbinden/
-    field-symbols <data> type lvc_s_data.
+    FIELD-SYMBOLS <data> TYPE lvc_s_data.
 * Nur Spalte setze komplette Spalte
-    loop at mt_data assigning <data>.
+    LOOP AT mt_data ASSIGNING <data>.
       <data>-style = 0.
-    endloop.
+    ENDLOOP.
     call_redraw_after_merging = abap_true.
-  endmethod.
+  ENDMETHOD.
 
 
-  method set_cell_style.
+  METHOD set_cell_style.
 * https://tricktresor.de/blog/zellen-verbinden/
-    field-symbols <data> type lvc_s_data.
-    if row is initial.
-      if col is initial.
+    FIELD-SYMBOLS <data> TYPE lvc_s_data.
+    IF row IS INITIAL.
+      IF col IS INITIAL.
 * Beides leer -> nichts zu tun.
-        exit.
-      else.
+        EXIT.
+      ELSE.
 * Nur Spalte setze komplette Spalte
-        loop at mt_data assigning <data>
-              where col_pos = col.
+        LOOP AT mt_data ASSIGNING <data>
+              WHERE col_pos = col.
           <data>-style  = <data>-style + style.
           <data>-style2 = <data>-style2 + style2.
-        endloop.
-        if sy-subrc eq 0.
+        ENDLOOP.
+        IF sy-subrc EQ 0.
           call_redraw_after_merging = abap_true.
-        endif.
-      endif.
-    else.
-      if col is initial.
+        ENDIF.
+      ENDIF.
+    ELSE.
+      IF col IS INITIAL.
 * Nur Zeile eingegeben -> komplette Zeile setzen
-        loop at mt_data assigning <data>
-              where row_pos = row.
+        LOOP AT mt_data ASSIGNING <data>
+              WHERE row_pos = row.
           <data>-style  = <data>-style + style.
           <data>-style2 = <data>-style2 + style2.
-        endloop.
-        if sy-subrc eq 0.
+        ENDLOOP.
+        IF sy-subrc EQ 0.
           call_redraw_after_merging = abap_true.
-        endif.
-      else.
-        read table mt_data assigning <data>
-            with key row_pos = row
+        ENDIF.
+      ELSE.
+        READ TABLE mt_data ASSIGNING <data>
+            WITH KEY row_pos = row
                      col_pos = col.
-        if sy-subrc eq 0.
+        IF sy-subrc EQ 0.
           <data>-style  = <data>-style + style.
           <data>-style2 = <data>-style2 + style2.
           call_redraw_after_merging = abap_true.
-        else.
-          exit.
-        endif.
-      endif.
-    endif.
+        ELSE.
+          EXIT.
+        ENDIF.
+      ENDIF.
+    ENDIF.
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method set_fixed_col_row.
+  METHOD set_fixed_col_row.
 * https://tricktresor.de/blog/zellen-verbinden/
     me->set_fixed_cols( col ).
     me->set_fixed_rows( row ).
     call_redraw_after_merging = abap_true.
-  endmethod.
+  ENDMETHOD.
 
 
-  method set_merge_horizontally.
+  METHOD set_merge_horizontally.
 * https://tricktresor.de/blog/zellen-verbinden/
 * ROW - Zeile deren Spalten zusammengeführt werden sollen
 * tab_col_merge - Spalten, die zusammengeführt werden sollen
-    field-symbols <data> type lvc_s_data.
-    data outputlen type i.
+    FIELD-SYMBOLS <data> TYPE lvc_s_data.
+    DATA outputlen TYPE i.
 
-    data(cols) = tab_col_merge.
+    DATA(cols) = tab_col_merge.
 
-    sort cols.
+    SORT cols.
 
 * Die Spalten, die zusammengeführt werden sollen
-    loop at cols into data(col) where col_id > 0.
+    LOOP AT cols INTO DATA(col) WHERE col_id > 0.
 * ein paar Prüfungen
-      if col-outputlen <= col-col_id.
-        continue.
-      endif.
+      IF col-outputlen <= col-col_id.
+        CONTINUE.
+      ENDIF.
       outputlen = col-outputlen - col-col_id.
-      loop at mt_data assigning <data>
-           where row_pos = row  and
-                 ( col_pos between col-col_id and
+      LOOP AT mt_data ASSIGNING <data>
+           WHERE row_pos = row  AND
+                 ( col_pos BETWEEN col-col_id AND
                                    col-outputlen ).
 * Setze wie weit soll gemerged werden Von Spalte in Länge
 * und zwar wird bei der 1 Spalte angefangen
-        if <data>-col_pos = col-col_id.
+        IF <data>-col_pos = col-col_id.
           <data>-mergehoriz = outputlen.
 * bei allen anderen, die zusammangehören
 * muss der Wert raus, da er aus der 1. Spalte kommt
 * und das mergekennzeichen muss auch weg !
-        else.
-          clear <data>-mergehoriz.
-          clear <data>-value.
-        endif.
-      endloop.
+        ELSE.
+          CLEAR <data>-mergehoriz.
+          CLEAR <data>-value.
+        ENDIF.
+      ENDLOOP.
 
-    endloop.
+    ENDLOOP.
     call_redraw_after_merging = abap_true.
-  endmethod.
+  ENDMETHOD.
 
 
-  method set_merge_vertically.
+  METHOD set_merge_vertically.
 * https://tricktresor.de/blog/zellen-verbinden/
 
 * ROW - Zeile deren Spalten zusammengeführt werden sollen
 * tab_col_merge - Spalten, die zusammengeführt werden sollen
-    field-symbols <data> type lvc_s_data.
-    data outputlen type i.
+    FIELD-SYMBOLS <data> TYPE lvc_s_data.
+    DATA outputlen TYPE i.
 
-    data(cols) = tab_col_merge.
-    sort cols.
+    DATA(cols) = tab_col_merge.
+    SORT cols.
 
 * Die Spalten, die zusammengeführt werden sollen
-    loop at cols into data(col) where col_id > 0.
+    LOOP AT cols INTO DATA(col) WHERE col_id > 0.
 * ein paar Prüfungen
-      if col-outputlen <= col-col_id.
-        continue.
-      endif.
+      IF col-outputlen <= col-col_id.
+        CONTINUE.
+      ENDIF.
       outputlen = col-outputlen - col-col_id.
-      loop at mt_data assigning <data>
-           where row_pos = row  and
-                 ( col_pos between col-col_id and
+      LOOP AT mt_data ASSIGNING <data>
+           WHERE row_pos = row  AND
+                 ( col_pos BETWEEN col-col_id AND
                                    col-outputlen ).
 * Setze wie weit soll gemerged werden Von Spalte in Länge
 * und zwar wird bei der 1 Spalte angefangen
-        if <data>-col_pos = col-col_id.
+        IF <data>-col_pos = col-col_id.
           <data>-mergevert = outputlen.
 * bei allen anderen, die zusammangehören
 * muss der Wert raus, da er aus der 1. Spalte kommt
 * und das mergekennzeichen muss auch weg !
-        else.
-          clear <data>-mergevert.
-****************          clear <data>-value.
-        endif.
-      endloop.
+        ELSE.
+          CLEAR <data>-mergevert.
+          CLEAR <data>-value.
+        ENDIF.
+      ENDLOOP.
 
       call_redraw_after_merging = abap_true.
-    endloop.
+    ENDLOOP.
 
-  endmethod.
+  ENDMETHOD.
+  METHOD evf_before_first_display ##NEEDED.
 
+  ENDMETHOD.
 
-  method evf_before_first_display ##NEEDED.
-
-  endmethod.
-
-
-  method redraw_after_merging_change.
+  METHOD redraw_after_merging_change.
 * https://tricktresor.de/blog/zellen-verbinden/
-    me->set_data_table( changing data_table = mt_data[] ).
+    me->set_data_table( CHANGING data_table = mt_data[] ).
     set_auto_redraw( enable = 1 ).
 
-  endmethod.
+  ENDMETHOD.
+
+  METHOD evf_onf4_internal.
+    onf4_internal->handle_onf4(
+      EXPORTING
+        e_fieldname   = e_fieldname
+        e_fieldvalue  = e_fieldvalue
+        es_row_no     = es_row_no
+        er_event_data = er_event_data
+        et_bad_cells  = et_bad_cells
+        e_display     = e_display ).
+  ENDMETHOD.
+
+  METHOD get_registered_f4_for_fields.
+    f4 = grid->mt_f4.
+  ENDMETHOD.
+
 ENDCLASS.
