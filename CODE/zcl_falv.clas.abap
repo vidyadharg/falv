@@ -2748,12 +2748,12 @@ class zcl_falv implementation.
   method evf_onf4_internal.
     onf4_internal->handle_onf4(
       exporting
-        e_fieldname   = e_fieldname
-        e_fieldvalue  = e_fieldvalue
-        es_row_no     = es_row_no
-        er_event_data = er_event_data
-        et_bad_cells  = et_bad_cells
-        e_display     = e_display ).
+        fieldname   = e_fieldname
+        fieldvalue  = e_fieldvalue
+        row_no     = es_row_no
+        event_data = er_event_data
+        bad_cells  = et_bad_cells
+        display     = e_display ).
   endmethod.
 
   method get_registered_f4_for_fields.
