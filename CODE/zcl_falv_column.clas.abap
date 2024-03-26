@@ -1,2158 +1,2132 @@
-class zcl_falv_column definition
-  public
-  create public .
+CLASS zcl_falv_column DEFINITION
+  PUBLIC
+  CREATE PUBLIC.
 
-  public section.
+  PUBLIC SECTION.
+    DATA fieldname TYPE lvc_s_fcat-fieldname READ-ONLY.
 
-    data fieldname type lvc_s_fcat-fieldname read-only .
+    METHODS constructor
+      IMPORTING VALUE(iv_fieldname) TYPE lvc_s_fcat-fieldname
+                io_falv             TYPE REF TO zcl_falv.
 
-    methods constructor
-      importing
-        value(iv_fieldname) type lvc_s_fcat-fieldname
-        !io_falv            type ref to zcl_falv .
-    methods set_editable returning value(r_column) type ref to zcl_falv_column.
-    methods set_readonly returning value(r_column) type ref to zcl_falv_column.
-    methods set_row_pos
-      importing
-                value(iv_value) type lvc_rowpos
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_col_pos
-      importing
-                value(iv_value) type lvc_colpos
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_fieldname
-      importing
-                value(iv_value) type lvc_fname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_tabname
-      importing
-                value(iv_value) type lvc_tname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_currency
-      importing
-                value(iv_value) type lvc_curr
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_cfieldname
-      importing
-                value(iv_value) type lvc_cfname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_quantity
-      importing
-                value(iv_value) type lvc_quan
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_qfieldname
-      importing
-                value(iv_value) type lvc_qfname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_ifieldname
-      importing
-                value(iv_value) type lvc_fname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_round
-      importing
-                value(iv_value) type lvc_round
-      returning value(r_column) type ref to zcl_falv_column..
-    methods set_exponent
-      importing
-                value(iv_value) type lvc_expont
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_key
-      importing
-                value(iv_value) type lvc_key
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_key_sel
-      importing
-                value(iv_value) type lvc_keysel
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_icon
-      importing
-                value(iv_value) type lvc_icon
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_symbol
-      importing
-                value(iv_value) type lvc_symbol
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_checkbox
-      importing
-                value(iv_value) type lvc_checkb
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_just
-      importing
-                value(iv_value) type lvc_just
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_lzero
-      importing
-                value(iv_value) type lvc_lzero
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_sign
-      importing
-                value(iv_value) type lvc_nosign
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_zero
-      importing
-                value(iv_value) type lvc_nozero
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_convext
-      importing
-                value(iv_value) type lvc_noconv
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_edit_mask
-      importing
-                value(iv_value) type lvc_edtmsk
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_emphasize
-      importing
-                value(iv_value) type lvc_emphsz
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_color
-      importing
-                value(iv_value) type lvc_emphsz
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_fix_column
-      importing
-                value(iv_value) type lvc_fixcol
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_do_sum
-      importing
-                value(iv_value) type lvc_dosum
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_sum
-      importing
-                value(iv_value) type lvc_nosum
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_out
-      importing
-                value(iv_value) type lvc_noout
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_tech
-      importing
-                value(iv_value) type lvc_tech
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_outputlen
-      importing
-                value(iv_value) type lvc_outlen
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_convexit
-      importing
-                value(iv_value) type convexit
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_seltext
-      importing
-                value(iv_value) type lvc_txt
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_tooltip
-      importing
-                value(iv_value) type lvc_tip
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_rollname
-      importing
-                value(iv_value) type lvc_roll
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_datatype
-      importing
-                value(iv_value) type datatype_d
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_inttype
-      importing
-                value(iv_value) type inttype
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_intlen
-      importing
-                value(iv_value) type intlen
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_lowercase
-      importing
-                value(iv_value) type lowercase
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_reptext
-      importing
-                value(iv_value) type reptext
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_hier_level
-      importing
-                value(iv_value) type lvc_hierl
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_reprep
-      importing
-                value(iv_value) type lvc_crprp
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_domname
-      importing
-                value(iv_value) type domname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_sp_group
-      importing
-                value(iv_value) type lvc_spgrp
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_hotspot
-      importing
-                value(iv_value) type lvc_hotspt
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_dfieldname
-      importing
-                value(iv_value) type lvcdbgfn
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_col_id
-      importing
-                value(iv_value) type lvc_colid
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_f4availabl
-      importing
-                value(iv_value) type ddf4avail
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_auto_value
-      importing
-                value(iv_value) type lvc_auto
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_checktable
-      importing
-                value(iv_value) type tabname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_valexi
-      importing
-                value(iv_value) type valexi
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_web_field
-      importing
-                value(iv_value) type lvc_fname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_href_hndl
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_style
-      importing
-                value(iv_value) type lvc_style
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_style2
-      importing
-                value(iv_value) type lvc_style
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_style3
-      importing
-                value(iv_value) type lvc_style
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_style4
-      importing
-                value(iv_value) type lvc_style
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_drdn_hndl
-      importing
-                value(iv_value)             type int4
-                value(iv_use_domain_values) type abap_bool default 'X'
-                value(iv_use_alias)         type abap_bool default 'X'
-                value(it_drop_down)         type lvc_t_drop optional
-                value(it_drop_down_alias)   type lvc_t_dral optional
-      returning value(r_column)             type ref to zcl_falv_column.
-    methods set_drdn_field
-      importing
-                value(iv_value) type lvc_fname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_merging
-      importing
-                value(iv_value) type char01
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_h_ftype
-      importing
-                value(iv_value) type lvc_ftype
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_col_opt
-      importing
-                value(iv_value) type lvc_colopt
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_no_init_ch
-      importing
-                value(iv_value) type char01
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_drdn_alias
-      importing
-                value(iv_value) type char01
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_decfloat_style
-      importing
-                value(iv_value) type outputstyle
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter0
-      importing
-                value(iv_value) type char30
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter1
-      importing
-                value(iv_value) type char30
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter2
-      importing
-                value(iv_value) type char30
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter3
-      importing
-                value(iv_value) type char30
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter4
-      importing
-                value(iv_value) type char30
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter5
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter6
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter7
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter8
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_parameter9
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_ref_field
-      importing
-                value(iv_value) type lvc_rfname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_ref_table
-      importing
-                value(iv_value) type lvc_rtname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_txt_field
-      importing
-                value(iv_value) type lvc_fname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_roundfield
-      importing
-                value(iv_value) type lvc_rndfn
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_decimals_o
-      importing
-                value(iv_value) type lvc_decmls
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_decmlfield
-      importing
-                value(iv_value) type lvc_dfname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_dd_outlen
-      importing
-                value(iv_value) type lvc_ddlen
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_decimals
-      importing
-                value(iv_value) type decimals
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_coltext
-      importing
-                value(iv_value) type lvc_txtcol
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_scrtext_l
-      importing
-                value(iv_value) type scrtext_l
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_scrtext_m
-      importing
-                value(iv_value) type scrtext_m
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_scrtext_s
-      importing
-                value(iv_value) type scrtext_s
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_colddictxt
-      importing
-                value(iv_value) type lvc_ddict
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_selddictxt
-      importing
-                value(iv_value) type lvc_ddict
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_tipddictxt
-      importing
-                value(iv_value) type lvc_ddict
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_edit
-      importing
-                value(iv_value) type lvc_edit
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_tech_col
-      importing
-                value(iv_value) type lvc_tcol
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_tech_form
-      importing
-                value(iv_value) type lvc_tform
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_tech_comp
-      importing
-                value(iv_value) type lvc_tcomp
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_hier_cpos
-      importing
-                value(iv_value) type lvchcolpos
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_h_col_key
-      importing
-                value(iv_value) type tv_itmname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_h_select
-      importing
-                value(iv_value) type lvc_select
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_dd_roll
-      importing
-                value(iv_value) type rollname
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_dragdropid
-      importing
-                value(iv_value) type lvc_ddid
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_mac
-      importing
-                value(iv_value) type char01
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_field
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_cfiel
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_qfiel
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_ifiel
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_round
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_indx_decml
-      importing
-                value(iv_value) type int4
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_get_style
-      importing
-                value(iv_value) type char01
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_mark
-      importing
-                value(iv_value) type char01
-      returning value(r_column) type ref to zcl_falv_column.
-    methods set_texts
-      importing
-                value(iv_text_s) type scrtext_s
-                value(iv_text_m) type scrtext_m optional
-                value(iv_text_l) type scrtext_l optional
-      returning value(r_column)  type ref to zcl_falv_column.
+    METHODS set_editable RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+    METHODS set_readonly RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
 
-    methods get_editable
-      returning value(rv_editable) type abap_bool.
-    methods get_readonly
+    METHODS set_row_pos
+      IMPORTING VALUE(iv_value) TYPE lvc_rowpos
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
 
-      returning value(rv_read_only) type abap_bool.
-    methods get_row_pos
-      returning
-        value(rv_value) type lvc_rowpos .
-    methods get_col_pos
-      returning
-        value(rv_value) type lvc_colpos .
-    methods get_fieldname
-      returning
-        value(rv_value) type lvc_fname .
-    methods get_tabname
-      returning
-        value(rv_value) type lvc_tname .
-    methods get_currency
-      returning
-        value(rv_value) type lvc_curr .
-    methods get_cfieldname
-      returning
-        value(rv_value) type lvc_cfname .
-    methods get_quantity
-      returning
-        value(rv_value) type lvc_quan .
-    methods get_qfieldname
-      returning
-        value(rv_value) type lvc_qfname .
-    methods get_ifieldname
-      returning
-        value(rv_value) type lvc_fname .
-    methods get_round
-      returning
-        value(rv_value) type lvc_round .
-    methods get_exponent
-      returning
-        value(rv_value) type lvc_expont .
-    methods get_key
-      returning
-        value(rv_value) type lvc_key .
-    methods get_key_sel
-      returning
-        value(rv_value) type lvc_keysel .
-    methods get_icon
-      returning
-        value(rv_value) type lvc_icon .
-    methods get_symbol
-      returning
-        value(rv_value) type lvc_symbol .
-    methods get_checkbox
-      returning
-        value(rv_value) type lvc_checkb .
-    methods get_just
-      returning
-        value(rv_value) type lvc_just .
-    methods get_lzero
-      returning
-        value(rv_value) type lvc_lzero .
-    methods get_no_sign
-      returning
-        value(rv_value) type lvc_nosign .
-    methods get_no_zero
-      returning
-        value(rv_value) type lvc_nozero .
-    methods get_no_convext
-      returning
-        value(rv_value) type lvc_noconv .
-    methods get_edit_mask
-      returning
-        value(rv_value) type lvc_edtmsk .
-    methods get_emphasize
-      returning
-        value(rv_value) type lvc_emphsz .
-    methods get_color
-      returning
-        value(rv_value) type lvc_emphsz .
-    methods get_fix_column
-      returning
-        value(rv_value) type lvc_fixcol .
-    methods get_do_sum
-      returning
-        value(rv_value) type lvc_dosum .
-    methods get_no_sum
-      returning
-        value(rv_value) type lvc_nosum .
-    methods get_no_out
-      returning
-        value(rv_value) type lvc_noout .
-    methods get_tech
-      returning
-        value(rv_value) type lvc_tech .
-    methods get_outputlen
-      returning
-        value(rv_value) type lvc_outlen .
-    methods get_convexit
-      returning
-        value(rv_value) type convexit .
-    methods get_seltext
-      returning
-        value(rv_value) type lvc_txt .
-    methods get_tooltip
-      returning
-        value(rv_value) type lvc_tip .
-    methods get_rollname
-      returning
-        value(rv_value) type lvc_roll .
-    methods get_datatype
-      returning
-        value(rv_value) type datatype_d .
-    methods get_inttype
-      returning
-        value(rv_value) type inttype .
-    methods get_intlen
-      returning
-        value(rv_value) type intlen .
-    methods get_lowercase
-      returning
-        value(rv_value) type lowercase .
-    methods get_reptext
-      returning
-        value(rv_value) type reptext .
-    methods get_hier_level
-      returning
-        value(rv_value) type lvc_hierl .
-    methods get_reprep
-      returning
-        value(rv_value) type lvc_crprp .
-    methods get_domname
-      returning
-        value(rv_value) type domname .
-    methods get_sp_group
-      returning
-        value(rv_value) type lvc_spgrp .
-    methods get_hotspot
-      returning
-        value(rv_value) type lvc_hotspt .
-    methods get_dfieldname
-      returning
-        value(rv_value) type lvcdbgfn .
-    methods get_col_id
-      returning
-        value(rv_value) type lvc_colid .
-    methods get_f4availabl
-      returning
-        value(rv_value) type ddf4avail .
-    methods get_auto_value
-      returning
-        value(rv_value) type lvc_auto .
-    methods get_checktable
-      returning
-        value(rv_value) type tabname .
-    methods get_valexi
-      returning
-        value(rv_value) type valexi .
-    methods get_web_field
-      returning
-        value(rv_value) type lvc_fname .
-    methods get_href_hndl
-      returning
-        value(rv_value) type int4 .
-    methods get_style
-      returning
-        value(rv_value) type lvc_style .
-    methods get_style2
-      returning
-        value(rv_value) type lvc_style .
-    methods get_style3
-      returning
-        value(rv_value) type lvc_style .
-    methods get_style4
-      returning
-        value(rv_value) type lvc_style .
-    methods get_drdn_hndl
-      returning
-        value(rv_value) type int4 .
-    methods get_drdn_field
-      returning
-        value(rv_value) type lvc_fname .
-    methods get_no_merging
-      returning
-        value(rv_value) type char01 .
-    methods get_h_ftype
-      returning
-        value(rv_value) type lvc_ftype .
-    methods get_col_opt
-      returning
-        value(rv_value) type lvc_colopt .
-    methods get_no_init_ch
-      returning
-        value(rv_value) type char01 .
-    methods get_drdn_alias
-      returning
-        value(rv_value) type char01 .
-    methods get_decfloat_style
-      returning
-        value(rv_value) type outputstyle .
-    methods get_parameter0
-      returning
-        value(rv_value) type char30 .
-    methods get_parameter1
-      returning
-        value(rv_value) type char30 .
-    methods get_parameter2
-      returning
-        value(rv_value) type char30 .
-    methods get_parameter3
-      returning
-        value(rv_value) type char30 .
-    methods get_parameter4
-      returning
-        value(rv_value) type char30 .
-    methods get_parameter5
-      returning
-        value(rv_value) type int4 .
-    methods get_parameter6
-      returning
-        value(rv_value) type int4 .
-    methods get_parameter7
-      returning
-        value(rv_value) type int4 .
-    methods get_parameter8
-      returning
-        value(rv_value) type int4 .
-    methods get_parameter9
-      returning
-        value(rv_value) type int4 .
-    methods get_ref_field
-      returning
-        value(rv_value) type lvc_rfname .
-    methods get_ref_table
-      returning
-        value(rv_value) type lvc_rtname .
-    methods get_txt_field
-      returning
-        value(rv_value) type lvc_fname .
-    methods get_roundfield
-      returning
-        value(rv_value) type lvc_rndfn .
-    methods get_decimals_o
-      returning
-        value(rv_value) type lvc_decmls .
-    methods get_decmlfield
-      returning
-        value(rv_value) type lvc_dfname .
-    methods get_dd_outlen
-      returning
-        value(rv_value) type lvc_ddlen .
-    methods get_decimals
-      returning
-        value(rv_value) type decimals .
-    methods get_coltext
-      returning
-        value(rv_value) type lvc_txtcol .
-    methods get_scrtext_l
-      returning
-        value(rv_value) type scrtext_l .
-    methods get_scrtext_m
-      returning
-        value(rv_value) type scrtext_m .
-    methods get_scrtext_s
-      returning
-        value(rv_value) type scrtext_s .
-    methods get_colddictxt
-      returning
-        value(rv_value) type lvc_ddict .
-    methods get_selddictxt
-      returning
-        value(rv_value) type lvc_ddict .
-    methods get_tipddictxt
-      returning
-        value(rv_value) type lvc_ddict .
-    methods get_edit
-      returning
-        value(rv_value) type lvc_edit .
-    methods get_tech_col
-      returning
-        value(rv_value) type lvc_tcol .
-    methods get_tech_form
-      returning
-        value(rv_value) type lvc_tform .
-    methods get_tech_comp
-      returning
-        value(rv_value) type lvc_tcomp .
-    methods get_hier_cpos
-      returning
-        value(rv_value) type lvchcolpos .
-    methods get_h_col_key
-      returning
-        value(rv_value) type tv_itmname .
-    methods get_h_select
-      returning
-        value(rv_value) type lvc_select .
-    methods get_dd_roll
-      returning
-        value(rv_value) type rollname .
-    methods get_dragdropid
-      returning
-        value(rv_value) type lvc_ddid .
-    methods get_mac
-      returning
-        value(rv_value) type char01 .
-    methods get_indx_field
-      returning
-        value(rv_value) type int4 .
-    methods get_indx_cfiel
-      returning
-        value(rv_value) type int4 .
-    methods get_indx_qfiel
-      returning
-        value(rv_value) type int4 .
-    methods get_indx_ifiel
-      returning
-        value(rv_value) type int4 .
-    methods get_indx_round
-      returning
-        value(rv_value) type int4 .
-    methods get_indx_decml
-      returning
-        value(rv_value) type int4 .
-    methods get_get_style
-      returning
-        value(rv_value) type char01 .
-    methods get_mark
-      returning
-        value(rv_value) type char01 .
+    METHODS set_col_pos
+      IMPORTING VALUE(iv_value) TYPE lvc_colpos
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
 
-  protected section.
-  private section.
+    METHODS set_fieldname
+      IMPORTING VALUE(iv_value) TYPE lvc_fname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
 
-    data falv type ref to zcl_falv .
+    METHODS set_tabname
+      IMPORTING VALUE(iv_value) TYPE lvc_tname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
 
-    methods change_setting
-      importing
-        value(iv_value)   type any
-        value(iv_setting) type string .
+    METHODS set_currency
+      IMPORTING VALUE(iv_value) TYPE lvc_curr
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
 
-    methods get_setting
-      importing
-        value(iv_setting) type string
-      exporting
-        value(e_value)    type any.
-endclass.
+    METHODS set_cfieldname
+      IMPORTING VALUE(iv_value) TYPE lvc_cfname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_quantity
+      IMPORTING VALUE(iv_value) TYPE lvc_quan
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_qfieldname
+      IMPORTING VALUE(iv_value) TYPE lvc_qfname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_ifieldname
+      IMPORTING VALUE(iv_value) TYPE lvc_fname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_round
+      IMPORTING VALUE(iv_value) TYPE lvc_round
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_exponent
+      IMPORTING VALUE(iv_value) TYPE lvc_expont
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_key
+      IMPORTING VALUE(iv_value) TYPE lvc_key
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_key_sel
+      IMPORTING VALUE(iv_value) TYPE lvc_keysel
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_icon
+      IMPORTING VALUE(iv_value) TYPE lvc_icon
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_symbol
+      IMPORTING VALUE(iv_value) TYPE lvc_symbol
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_checkbox
+      IMPORTING VALUE(iv_value) TYPE lvc_checkb
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_just
+      IMPORTING VALUE(iv_value) TYPE lvc_just
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_lzero
+      IMPORTING VALUE(iv_value) TYPE lvc_lzero
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_no_sign
+      IMPORTING VALUE(iv_value) TYPE lvc_nosign
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_no_zero
+      IMPORTING VALUE(iv_value) TYPE lvc_nozero
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_no_convext
+      IMPORTING VALUE(iv_value) TYPE lvc_noconv
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_edit_mask
+      IMPORTING VALUE(iv_value) TYPE lvc_edtmsk
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_emphasize
+      IMPORTING VALUE(iv_value) TYPE lvc_emphsz
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_color
+      IMPORTING VALUE(iv_value) TYPE lvc_emphsz
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_fix_column
+      IMPORTING VALUE(iv_value) TYPE lvc_fixcol
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_do_sum
+      IMPORTING VALUE(iv_value) TYPE lvc_dosum
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_no_sum
+      IMPORTING VALUE(iv_value) TYPE lvc_nosum
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_no_out
+      IMPORTING VALUE(iv_value) TYPE lvc_noout
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_tech
+      IMPORTING VALUE(iv_value) TYPE lvc_tech
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_outputlen
+      IMPORTING VALUE(iv_value) TYPE lvc_outlen
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_convexit
+      IMPORTING VALUE(iv_value) TYPE convexit
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_seltext
+      IMPORTING VALUE(iv_value) TYPE lvc_txt
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_tooltip
+      IMPORTING VALUE(iv_value) TYPE lvc_tip
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_rollname
+      IMPORTING VALUE(iv_value) TYPE lvc_roll
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_datatype
+      IMPORTING VALUE(iv_value) TYPE datatype_d
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_inttype
+      IMPORTING VALUE(iv_value) TYPE inttype
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_intlen
+      IMPORTING VALUE(iv_value) TYPE intlen
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_lowercase
+      IMPORTING VALUE(iv_value) TYPE lowercase
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_reptext
+      IMPORTING VALUE(iv_value) TYPE reptext
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_hier_level
+      IMPORTING VALUE(iv_value) TYPE lvc_hierl
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_reprep
+      IMPORTING VALUE(iv_value) TYPE lvc_crprp
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_domname
+      IMPORTING VALUE(iv_value) TYPE domname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_sp_group
+      IMPORTING VALUE(iv_value) TYPE lvc_spgrp
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_hotspot
+      IMPORTING VALUE(iv_value) TYPE lvc_hotspt
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_dfieldname
+      IMPORTING VALUE(iv_value) TYPE lvcdbgfn
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_col_id
+      IMPORTING VALUE(iv_value) TYPE lvc_colid
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_f4availabl
+      IMPORTING VALUE(iv_value) TYPE ddf4avail
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_auto_value
+      IMPORTING VALUE(iv_value) TYPE lvc_auto
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_checktable
+      IMPORTING VALUE(iv_value) TYPE tabname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_valexi
+      IMPORTING VALUE(iv_value) TYPE valexi
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_web_field
+      IMPORTING VALUE(iv_value) TYPE lvc_fname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_href_hndl
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_style
+      IMPORTING VALUE(iv_value) TYPE lvc_style
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_style2
+      IMPORTING VALUE(iv_value) TYPE lvc_style
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_style3
+      IMPORTING VALUE(iv_value) TYPE lvc_style
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_style4
+      IMPORTING VALUE(iv_value) TYPE lvc_style
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_drdn_hndl
+      IMPORTING VALUE(iv_value)             TYPE int4
+                VALUE(iv_use_domain_values) TYPE abap_bool  DEFAULT 'X'
+                VALUE(iv_use_alias)         TYPE abap_bool  DEFAULT 'X'
+                VALUE(it_drop_down)         TYPE lvc_t_drop OPTIONAL
+                VALUE(it_drop_down_alias)   TYPE lvc_t_dral OPTIONAL
+      RETURNING VALUE(r_column)             TYPE REF TO zcl_falv_column.
+
+    METHODS set_drdn_field
+      IMPORTING VALUE(iv_value) TYPE lvc_fname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_no_merging
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_h_ftype
+      IMPORTING VALUE(iv_value) TYPE lvc_ftype
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_col_opt
+      IMPORTING VALUE(iv_value) TYPE lvc_colopt
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_no_init_ch
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_drdn_alias
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_decfloat_style
+      IMPORTING VALUE(iv_value) TYPE outputstyle
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_parameter0
+      IMPORTING VALUE(iv_value) TYPE char30
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_parameter1
+      IMPORTING VALUE(iv_value) TYPE char30
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_parameter2
+      IMPORTING VALUE(iv_value) TYPE char30
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_parameter3
+      IMPORTING VALUE(iv_value) TYPE char30
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_parameter4
+      IMPORTING VALUE(iv_value) TYPE char30
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_parameter5
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_parameter6
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_parameter7
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_parameter8
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_parameter9
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_ref_field
+      IMPORTING VALUE(iv_value) TYPE lvc_rfname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_ref_table
+      IMPORTING VALUE(iv_value) TYPE lvc_rtname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_txt_field
+      IMPORTING VALUE(iv_value) TYPE lvc_fname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_roundfield
+      IMPORTING VALUE(iv_value) TYPE lvc_rndfn
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_decimals_o
+      IMPORTING VALUE(iv_value) TYPE lvc_decmls
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_decmlfield
+      IMPORTING VALUE(iv_value) TYPE lvc_dfname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_dd_outlen
+      IMPORTING VALUE(iv_value) TYPE lvc_ddlen
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_decimals
+      IMPORTING VALUE(iv_value) TYPE decimals
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_coltext
+      IMPORTING VALUE(iv_value) TYPE lvc_txtcol
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_scrtext_l
+      IMPORTING VALUE(iv_value) TYPE scrtext_l
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_scrtext_m
+      IMPORTING VALUE(iv_value) TYPE scrtext_m
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_scrtext_s
+      IMPORTING VALUE(iv_value) TYPE scrtext_s
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_colddictxt
+      IMPORTING VALUE(iv_value) TYPE lvc_ddict
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_selddictxt
+      IMPORTING VALUE(iv_value) TYPE lvc_ddict
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_tipddictxt
+      IMPORTING VALUE(iv_value) TYPE lvc_ddict
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_edit
+      IMPORTING VALUE(iv_value) TYPE lvc_edit
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_tech_col
+      IMPORTING VALUE(iv_value) TYPE lvc_tcol
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_tech_form
+      IMPORTING VALUE(iv_value) TYPE lvc_tform
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_tech_comp
+      IMPORTING VALUE(iv_value) TYPE lvc_tcomp
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_hier_cpos
+      IMPORTING VALUE(iv_value) TYPE lvchcolpos
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_h_col_key
+      IMPORTING VALUE(iv_value) TYPE tv_itmname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_h_select
+      IMPORTING VALUE(iv_value) TYPE lvc_select
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_dd_roll
+      IMPORTING VALUE(iv_value) TYPE rollname
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_dragdropid
+      IMPORTING VALUE(iv_value) TYPE lvc_ddid
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_mac
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_indx_field
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_indx_cfiel
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_indx_qfiel
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_indx_ifiel
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_indx_round
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_indx_decml
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_get_style
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_mark
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_column) TYPE REF TO zcl_falv_column.
+
+    METHODS set_texts
+      IMPORTING VALUE(iv_text_s) TYPE scrtext_s
+                VALUE(iv_text_m) TYPE scrtext_m OPTIONAL
+                VALUE(iv_text_l) TYPE scrtext_l OPTIONAL
+      RETURNING VALUE(r_column)  TYPE REF TO zcl_falv_column.
+
+    METHODS get_editable
+      RETURNING VALUE(rv_editable) TYPE abap_bool.
+
+    METHODS get_readonly
+
+      RETURNING VALUE(rv_read_only) TYPE abap_bool.
+
+    METHODS get_row_pos
+      RETURNING VALUE(rv_value) TYPE lvc_rowpos.
+
+    METHODS get_col_pos
+      RETURNING VALUE(rv_value) TYPE lvc_colpos.
+
+    METHODS get_fieldname
+      RETURNING VALUE(rv_value) TYPE lvc_fname.
+
+    METHODS get_tabname
+      RETURNING VALUE(rv_value) TYPE lvc_tname.
+
+    METHODS get_currency
+      RETURNING VALUE(rv_value) TYPE lvc_curr.
+
+    METHODS get_cfieldname
+      RETURNING VALUE(rv_value) TYPE lvc_cfname.
+
+    METHODS get_quantity
+      RETURNING VALUE(rv_value) TYPE lvc_quan.
+
+    METHODS get_qfieldname
+      RETURNING VALUE(rv_value) TYPE lvc_qfname.
+
+    METHODS get_ifieldname
+      RETURNING VALUE(rv_value) TYPE lvc_fname.
+
+    METHODS get_round
+      RETURNING VALUE(rv_value) TYPE lvc_round.
+
+    METHODS get_exponent
+      RETURNING VALUE(rv_value) TYPE lvc_expont.
+
+    METHODS get_key
+      RETURNING VALUE(rv_value) TYPE lvc_key.
+
+    METHODS get_key_sel
+      RETURNING VALUE(rv_value) TYPE lvc_keysel.
+
+    METHODS get_icon
+      RETURNING VALUE(rv_value) TYPE lvc_icon.
+
+    METHODS get_symbol
+      RETURNING VALUE(rv_value) TYPE lvc_symbol.
+
+    METHODS get_checkbox
+      RETURNING VALUE(rv_value) TYPE lvc_checkb.
+
+    METHODS get_just
+      RETURNING VALUE(rv_value) TYPE lvc_just.
+
+    METHODS get_lzero
+      RETURNING VALUE(rv_value) TYPE lvc_lzero.
+
+    METHODS get_no_sign
+      RETURNING VALUE(rv_value) TYPE lvc_nosign.
+
+    METHODS get_no_zero
+      RETURNING VALUE(rv_value) TYPE lvc_nozero.
+
+    METHODS get_no_convext
+      RETURNING VALUE(rv_value) TYPE lvc_noconv.
+
+    METHODS get_edit_mask
+      RETURNING VALUE(rv_value) TYPE lvc_edtmsk.
+
+    METHODS get_emphasize
+      RETURNING VALUE(rv_value) TYPE lvc_emphsz.
+
+    METHODS get_color
+      RETURNING VALUE(rv_value) TYPE lvc_emphsz.
+
+    METHODS get_fix_column
+      RETURNING VALUE(rv_value) TYPE lvc_fixcol.
+
+    METHODS get_do_sum
+      RETURNING VALUE(rv_value) TYPE lvc_dosum.
+
+    METHODS get_no_sum
+      RETURNING VALUE(rv_value) TYPE lvc_nosum.
+
+    METHODS get_no_out
+      RETURNING VALUE(rv_value) TYPE lvc_noout.
+
+    METHODS get_tech
+      RETURNING VALUE(rv_value) TYPE lvc_tech.
+
+    METHODS get_outputlen
+      RETURNING VALUE(rv_value) TYPE lvc_outlen.
+
+    METHODS get_convexit
+      RETURNING VALUE(rv_value) TYPE convexit.
+
+    METHODS get_seltext
+      RETURNING VALUE(rv_value) TYPE lvc_txt.
+
+    METHODS get_tooltip
+      RETURNING VALUE(rv_value) TYPE lvc_tip.
+
+    METHODS get_rollname
+      RETURNING VALUE(rv_value) TYPE lvc_roll.
+
+    METHODS get_datatype
+      RETURNING VALUE(rv_value) TYPE datatype_d.
+
+    METHODS get_inttype
+      RETURNING VALUE(rv_value) TYPE inttype.
+
+    METHODS get_intlen
+      RETURNING VALUE(rv_value) TYPE intlen.
+
+    METHODS get_lowercase
+      RETURNING VALUE(rv_value) TYPE lowercase.
+
+    METHODS get_reptext
+      RETURNING VALUE(rv_value) TYPE reptext.
+
+    METHODS get_hier_level
+      RETURNING VALUE(rv_value) TYPE lvc_hierl.
+
+    METHODS get_reprep
+      RETURNING VALUE(rv_value) TYPE lvc_crprp.
+
+    METHODS get_domname
+      RETURNING VALUE(rv_value) TYPE domname.
+
+    METHODS get_sp_group
+      RETURNING VALUE(rv_value) TYPE lvc_spgrp.
+
+    METHODS get_hotspot
+      RETURNING VALUE(rv_value) TYPE lvc_hotspt.
+
+    METHODS get_dfieldname
+      RETURNING VALUE(rv_value) TYPE lvcdbgfn.
+
+    METHODS get_col_id
+      RETURNING VALUE(rv_value) TYPE lvc_colid.
+
+    METHODS get_f4availabl
+      RETURNING VALUE(rv_value) TYPE ddf4avail.
+
+    METHODS get_auto_value
+      RETURNING VALUE(rv_value) TYPE lvc_auto.
+
+    METHODS get_checktable
+      RETURNING VALUE(rv_value) TYPE tabname.
+
+    METHODS get_valexi
+      RETURNING VALUE(rv_value) TYPE valexi.
+
+    METHODS get_web_field
+      RETURNING VALUE(rv_value) TYPE lvc_fname.
+
+    METHODS get_href_hndl
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_style
+      RETURNING VALUE(rv_value) TYPE lvc_style.
+
+    METHODS get_style2
+      RETURNING VALUE(rv_value) TYPE lvc_style.
+
+    METHODS get_style3
+      RETURNING VALUE(rv_value) TYPE lvc_style.
+
+    METHODS get_style4
+      RETURNING VALUE(rv_value) TYPE lvc_style.
+
+    METHODS get_drdn_hndl
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_drdn_field
+      RETURNING VALUE(rv_value) TYPE lvc_fname.
+
+    METHODS get_no_merging
+      RETURNING VALUE(rv_value) TYPE char01.
+
+    METHODS get_h_ftype
+      RETURNING VALUE(rv_value) TYPE lvc_ftype.
+
+    METHODS get_col_opt
+      RETURNING VALUE(rv_value) TYPE lvc_colopt.
+
+    METHODS get_no_init_ch
+      RETURNING VALUE(rv_value) TYPE char01.
+
+    METHODS get_drdn_alias
+      RETURNING VALUE(rv_value) TYPE char01.
+
+    METHODS get_decfloat_style
+      RETURNING VALUE(rv_value) TYPE outputstyle.
+
+    METHODS get_parameter0
+      RETURNING VALUE(rv_value) TYPE char30.
+
+    METHODS get_parameter1
+      RETURNING VALUE(rv_value) TYPE char30.
+
+    METHODS get_parameter2
+      RETURNING VALUE(rv_value) TYPE char30.
+
+    METHODS get_parameter3
+      RETURNING VALUE(rv_value) TYPE char30.
+
+    METHODS get_parameter4
+      RETURNING VALUE(rv_value) TYPE char30.
+
+    METHODS get_parameter5
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_parameter6
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_parameter7
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_parameter8
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_parameter9
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_ref_field
+      RETURNING VALUE(rv_value) TYPE lvc_rfname.
+
+    METHODS get_ref_table
+      RETURNING VALUE(rv_value) TYPE lvc_rtname.
+
+    METHODS get_txt_field
+      RETURNING VALUE(rv_value) TYPE lvc_fname.
+
+    METHODS get_roundfield
+      RETURNING VALUE(rv_value) TYPE lvc_rndfn.
+
+    METHODS get_decimals_o
+      RETURNING VALUE(rv_value) TYPE lvc_decmls.
+
+    METHODS get_decmlfield
+      RETURNING VALUE(rv_value) TYPE lvc_dfname.
+
+    METHODS get_dd_outlen
+      RETURNING VALUE(rv_value) TYPE lvc_ddlen.
+
+    METHODS get_decimals
+      RETURNING VALUE(rv_value) TYPE decimals.
+
+    METHODS get_coltext
+      RETURNING VALUE(rv_value) TYPE lvc_txtcol.
+
+    METHODS get_scrtext_l
+      RETURNING VALUE(rv_value) TYPE scrtext_l.
+
+    METHODS get_scrtext_m
+      RETURNING VALUE(rv_value) TYPE scrtext_m.
+
+    METHODS get_scrtext_s
+      RETURNING VALUE(rv_value) TYPE scrtext_s.
+
+    METHODS get_colddictxt
+      RETURNING VALUE(rv_value) TYPE lvc_ddict.
+
+    METHODS get_selddictxt
+      RETURNING VALUE(rv_value) TYPE lvc_ddict.
+
+    METHODS get_tipddictxt
+      RETURNING VALUE(rv_value) TYPE lvc_ddict.
+
+    METHODS get_edit
+      RETURNING VALUE(rv_value) TYPE lvc_edit.
+
+    METHODS get_tech_col
+      RETURNING VALUE(rv_value) TYPE lvc_tcol.
+
+    METHODS get_tech_form
+      RETURNING VALUE(rv_value) TYPE lvc_tform.
+
+    METHODS get_tech_comp
+      RETURNING VALUE(rv_value) TYPE lvc_tcomp.
+
+    METHODS get_hier_cpos
+      RETURNING VALUE(rv_value) TYPE lvchcolpos.
+
+    METHODS get_h_col_key
+      RETURNING VALUE(rv_value) TYPE tv_itmname.
+
+    METHODS get_h_select
+      RETURNING VALUE(rv_value) TYPE lvc_select.
+
+    METHODS get_dd_roll
+      RETURNING VALUE(rv_value) TYPE rollname.
+
+    METHODS get_dragdropid
+      RETURNING VALUE(rv_value) TYPE lvc_ddid.
+
+    METHODS get_mac
+      RETURNING VALUE(rv_value) TYPE char01.
+
+    METHODS get_indx_field
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_indx_cfiel
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_indx_qfiel
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_indx_ifiel
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_indx_round
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_indx_decml
+      RETURNING VALUE(rv_value) TYPE int4.
+
+    METHODS get_get_style
+      RETURNING VALUE(rv_value) TYPE char01.
+
+    METHODS get_mark
+      RETURNING VALUE(rv_value) TYPE char01.
+
+  PROTECTED SECTION.
+
+  PRIVATE SECTION.
+    DATA falv TYPE REF TO zcl_falv.
+
+    METHODS change_setting
+      IMPORTING VALUE(iv_value)   TYPE any
+                VALUE(iv_setting) TYPE string.
+
+    METHODS get_setting
+      IMPORTING VALUE(iv_setting) TYPE string
+      EXPORTING VALUE(e_value)    TYPE any.
+ENDCLASS.
 
 
-
-class zcl_falv_column implementation.
-
-
-  method change_setting.
-    falv->get_frontend_fieldcatalog( importing et_fieldcatalog = falv->fcat ).
-    assign falv->fcat[ fieldname = fieldname ] to field-symbol(<fcat>).
-    if sy-subrc eq 0.
-      data(fcat_field) = |<fcat>-{ iv_setting }|.
-      assign (fcat_field) to field-symbol(<field>).
-      if sy-subrc eq 0.
+CLASS zcl_falv_column IMPLEMENTATION.
+  METHOD change_setting.
+    falv->get_frontend_fieldcatalog( IMPORTING et_fieldcatalog = falv->fcat ).
+    ASSIGN falv->fcat[ fieldname = fieldname ] TO FIELD-SYMBOL(<fcat>).
+    IF sy-subrc = 0.
+      DATA(fcat_field) = |<fcat>-{ iv_setting }|.
+      ASSIGN (fcat_field) TO FIELD-SYMBOL(<field>).
+      IF sy-subrc = 0.
         <field> = iv_value.
-      endif.
+      ENDIF.
       falv->set_frontend_fieldcatalog( it_fieldcatalog = falv->fcat ).
-    endif.
-  endmethod.
+    ENDIF.
+  ENDMETHOD.
 
-
-  method get_setting.
-    falv->get_frontend_fieldcatalog( importing et_fieldcatalog = falv->fcat ).
-    assign falv->fcat[ fieldname = fieldname ] to field-symbol(<fcat>).
-    if sy-subrc eq 0.
-      data(fcat_field) = |<fcat>-{ iv_setting }|.
-      assign (fcat_field) to field-symbol(<field>).
-      if sy-subrc eq 0.
+  METHOD get_setting.
+    falv->get_frontend_fieldcatalog( IMPORTING et_fieldcatalog = falv->fcat ).
+    ASSIGN falv->fcat[ fieldname = fieldname ] TO FIELD-SYMBOL(<fcat>).
+    IF sy-subrc = 0.
+      DATA(fcat_field) = |<fcat>-{ iv_setting }|.
+      ASSIGN (fcat_field) TO FIELD-SYMBOL(<field>).
+      IF sy-subrc = 0.
         e_value = <field>.
-      endif.
-    endif.
-  endmethod.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
 
-
-  method constructor.
+  METHOD constructor.
     fieldname = iv_fieldname.
     falv = io_falv.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_auto_value.
-    change_setting( iv_value = iv_value iv_setting = 'AUTO_VALUE' ).
+  METHOD set_auto_value.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'AUTO_VALUE' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_cfieldname.
-    change_setting( iv_value = iv_value iv_setting = 'CFIELDNAME' ).
+  METHOD set_cfieldname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'CFIELDNAME' ).
     set_tech_form( 2 ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_checkbox.
-    change_setting( iv_value = iv_value iv_setting = 'CHECKBOX' ).
+  METHOD set_checkbox.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'CHECKBOX' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_checktable.
-    change_setting( iv_value = iv_value iv_setting = 'CHECKTABLE' ).
+  METHOD set_checktable.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'CHECKTABLE' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_colddictxt.
-    change_setting( iv_value = iv_value iv_setting = 'COLDDICTXT' ).
+  METHOD set_colddictxt.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'COLDDICTXT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_color.
+  METHOD set_color.
     set_emphasize( iv_value = iv_value ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_coltext.
-    change_setting( iv_value = iv_value iv_setting = 'COLTEXT' ).
+  METHOD set_coltext.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'COLTEXT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_col_id.
-    change_setting( iv_value = iv_value iv_setting = 'COL_ID' ).
+  METHOD set_col_id.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'COL_ID' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_col_opt.
-    change_setting( iv_value = iv_value iv_setting = 'COL_OPT' ).
+  METHOD set_col_opt.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'COL_OPT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_col_pos.
-    falv->get_frontend_fieldcatalog( importing et_fieldcatalog = falv->fcat ).
-    assign falv->fcat[ fieldname = fieldname ] to field-symbol(<current_column>).
-    if sy-subrc eq 0.
-      data(original_pos) = <current_column>-col_pos.
-      sort falv->fcat by col_pos ascending.
-      loop at falv->fcat assigning field-symbol(<fcat>) where col_pos ge iv_value.
-        <fcat>-col_pos = <fcat>-col_pos + 1.
-      endloop.
+  METHOD set_col_pos.
+    falv->get_frontend_fieldcatalog( IMPORTING et_fieldcatalog = falv->fcat ).
+    ASSIGN falv->fcat[ fieldname = fieldname ] TO FIELD-SYMBOL(<current_column>).
+    IF sy-subrc = 0.
+      " TODO: variable is assigned but never used (ABAP cleaner)
+      DATA(original_pos) = <current_column>-col_pos.
+      SORT falv->fcat BY col_pos ASCENDING.
+      LOOP AT falv->fcat ASSIGNING FIELD-SYMBOL(<fcat>) WHERE col_pos >= iv_value.
+        <fcat>-col_pos += 1.
+      ENDLOOP.
       <current_column>-col_pos = iv_value.
-      sort falv->fcat by col_pos ascending.
-    endif.
+      SORT falv->fcat BY col_pos ASCENDING.
+    ENDIF.
     falv->set_frontend_fieldcatalog( it_fieldcatalog = falv->fcat ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_convexit.
-    change_setting( iv_value = iv_value iv_setting = 'CONVEXIT' ).
+  METHOD set_convexit.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'CONVEXIT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_currency.
-    change_setting( iv_value = iv_value iv_setting = 'CURRENCY' ).
+  METHOD set_currency.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'CURRENCY' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_datatype.
-    change_setting( iv_value = iv_value iv_setting = 'DATATYPE' ).
+  METHOD set_datatype.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DATATYPE' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_dd_outlen.
-    change_setting( iv_value = iv_value iv_setting = 'DD_OUTLEN' ).
+  METHOD set_dd_outlen.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DD_OUTLEN' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_dd_roll.
-    change_setting( iv_value = iv_value iv_setting = 'DD_ROLL' ).
+  METHOD set_dd_roll.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DD_ROLL' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_decfloat_style.
-    change_setting( iv_value = iv_value iv_setting = 'DECFLOAT_STYLE' ).
+  METHOD set_decfloat_style.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DECFLOAT_STYLE' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_decimals.
-    change_setting( iv_value = iv_value iv_setting = 'DECIMALS' ).
+  METHOD set_decimals.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DECIMALS' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_decimals_o.
-    change_setting( iv_value = iv_value iv_setting = 'DECIMALS_O' ).
+  METHOD set_decimals_o.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DECIMALS_O' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_decmlfield.
-    change_setting( iv_value = iv_value iv_setting = 'DECMLFIELD' ).
+  METHOD set_decmlfield.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DECMLFIELD' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_dfieldname.
-    change_setting( iv_value = iv_value iv_setting = 'DFIELDNAME' ).
+  METHOD set_dfieldname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DFIELDNAME' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_domname.
-    change_setting( iv_value = iv_value iv_setting = 'DOMNAME' ).
+  METHOD set_domname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DOMNAME' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_do_sum.
-    change_setting( iv_value = iv_value iv_setting = 'DO_SUM' ).
+  METHOD set_do_sum.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DO_SUM' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_dragdropid.
-    change_setting( iv_value = iv_value iv_setting = 'DRAGDROPID' ).
+  METHOD set_dragdropid.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DRAGDROPID' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_drdn_alias.
-    change_setting( iv_value = iv_value iv_setting = 'DRDN_ALIAS' ).
+  METHOD set_drdn_alias.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DRDN_ALIAS' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_drdn_field.
-    change_setting( iv_value = iv_value iv_setting = 'DRDN_FIELD' ).
+  METHOD set_drdn_field.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DRDN_FIELD' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
+  METHOD set_drdn_hndl.
+    DATA lt_drop_down       TYPE lvc_t_drop.
+    DATA ls_drop_down       LIKE LINE OF lt_drop_down.
+    DATA lt_drop_down_alias TYPE lvc_t_dral.
+    DATA ls_drop_down_alias LIKE LINE OF lt_drop_down_alias.
+    DATA lo_typedescr       TYPE REF TO cl_abap_typedescr.
+    DATA lo_elemdescr       TYPE REF TO cl_abap_elemdescr.
+    DATA lv_rollname        TYPE lvc_roll.
+    DATA lt_fixed_values    TYPE STANDARD TABLE OF ddfixvalue WITH EMPTY KEY.
+    DATA ls_fixed_value     LIKE LINE OF lt_fixed_values.
 
-  method set_drdn_hndl.
-    data: lt_drop_down        type  lvc_t_drop
-             ,ls_drop_down        like line of lt_drop_down
-             ,lt_drop_down_alias  type lvc_t_dral
-             ,ls_drop_down_alias  like line of lt_drop_down_alias
-             ,lo_typedescr        type ref to cl_abap_typedescr
-             ,lo_elemdescr        type ref to cl_abap_elemdescr
-             ,lv_rollname         type lvc_roll
-             ,lv_domname          type domname
-             ,lt_fixed_values     type standard table of ddfixvalue with empty key
-             ,ls_fixed_value      like line of lt_fixed_values
-             .
+    IF    ( it_drop_down       IS NOT INITIAL )
+       OR ( it_drop_down_alias IS NOT INITIAL ).
 
+      APPEND LINES OF it_drop_down       TO lt_drop_down.
+      APPEND LINES OF it_drop_down_alias TO lt_drop_down_alias.
 
-    if ( ( it_drop_down       is not initial ) or
-         ( it_drop_down_alias is not initial ) ).
-
-      append lines of it_drop_down       to lt_drop_down.
-      append lines of it_drop_down_alias to lt_drop_down_alias.
-
-    else.
-      if ( iv_use_domain_values eq abap_true ).
-        lv_rollname = me->get_rollname( ).
-        call method cl_abap_elemdescr=>describe_by_name
-          exporting
-            p_name         = lv_rollname
-          receiving
-            p_descr_ref    = lo_typedescr
-          exceptions
-            type_not_found = 1
-            others         = 2.
-        if sy-subrc eq 0.
+    ELSE.
+      IF iv_use_domain_values = abap_true.
+        lv_rollname = get_rollname( ).
+        cl_abap_elemdescr=>describe_by_name( EXPORTING  p_name         = lv_rollname
+                                             RECEIVING  p_descr_ref    = lo_typedescr
+                                             EXCEPTIONS type_not_found = 1
+                                                        OTHERS         = 2 ).
+        IF sy-subrc = 0.
           lo_elemdescr ?= lo_typedescr.
 
 *          get_ddic_fixed_values
-          call method lo_elemdescr->get_ddic_fixed_values
-            receiving
-              p_fixed_values = lt_fixed_values
-            exceptions
-              not_found      = 1
-              no_ddic_type   = 2
-              others         = 3.
-          if sy-subrc eq 0.
+          lo_elemdescr->get_ddic_fixed_values( RECEIVING  p_fixed_values = lt_fixed_values
+                                               EXCEPTIONS not_found      = 1
+                                                          no_ddic_type   = 2
+                                                          OTHERS         = 3 ).
+          IF sy-subrc = 0.
 
-            loop at lt_fixed_values into ls_fixed_value.
-              if ( iv_use_alias eq abap_true ).
-                clear: ls_drop_down_alias.
+            LOOP AT lt_fixed_values INTO ls_fixed_value.
+              IF iv_use_alias = abap_true.
+                CLEAR ls_drop_down_alias.
 
                 ls_drop_down_alias-handle = iv_value.
-                concatenate ls_fixed_value-ddtext '['
-                    into ls_drop_down_alias-value separated by space.
+                CONCATENATE ls_fixed_value-ddtext '['
+                            INTO ls_drop_down_alias-value SEPARATED BY space.
 
-                concatenate ls_drop_down_alias-value
+                CONCATENATE ls_drop_down_alias-value
                            ls_fixed_value-low ']'
-                  into ls_drop_down_alias-value.
+                            INTO ls_drop_down_alias-value.
 
                 ls_drop_down_alias-int_value = ls_fixed_value-low.
-                append ls_drop_down_alias to lt_drop_down_alias.
-              else.
-                clear: ls_drop_down.
+                APPEND ls_drop_down_alias TO lt_drop_down_alias.
+              ELSE.
+                CLEAR ls_drop_down.
 
                 ls_drop_down-handle = iv_value.
-                ls_drop_down-value = ls_fixed_value-low.
-                append ls_drop_down to lt_drop_down.
-              endif.
+                ls_drop_down-value  = ls_fixed_value-low.
+                APPEND ls_drop_down TO lt_drop_down.
+              ENDIF.
 
-            endloop.
-          else.
-          endif.
+            ENDLOOP.
+          ELSE.
+          ENDIF.
 
-        endif.
-      else.
-      endif.
-    endif.
+        ENDIF.
+      ELSE.
+      ENDIF.
+    ENDIF.
 
+    IF    ( lt_drop_down       IS NOT INITIAL )
+       OR ( lt_drop_down_alias IS NOT INITIAL ).
 
+      change_setting( iv_value   = iv_value
+                      iv_setting = 'DRDN_HNDL' ).
+      IF iv_use_alias = abap_true.
+        falv->set_drop_down_table( it_drop_down_alias = lt_drop_down_alias ).
+        change_setting( iv_value   = 'X'
+                        iv_setting = 'DRDN_ALIAS' ).
+      ELSE.
+        falv->set_drop_down_table( it_drop_down = lt_drop_down ).
+      ENDIF.
 
-
-    if ( ( lt_drop_down       is not initial ) or
-         ( lt_drop_down_alias is not initial ) ).
-
-
-      change_setting( iv_value = iv_value iv_setting = 'DRDN_HNDL' ).
-      if ( iv_use_alias eq abap_true ).
-        falv->set_drop_down_table(
-          it_drop_down_alias = lt_drop_down_alias ).
-        change_setting( iv_value = 'X' iv_setting = 'DRDN_ALIAS' ).
-      else.
-        falv->set_drop_down_table(
-          it_drop_down = lt_drop_down
-        ).
-      endif.
-
-
-    endif.
+    ENDIF.
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_edit.
-    change_setting( iv_value = iv_value iv_setting = 'EDIT' ).
+  METHOD set_edit.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'EDIT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_editable.
-    change_setting( iv_value = abap_true iv_setting = 'EDIT' ).
+  METHOD set_editable.
+    change_setting( iv_value   = abap_true
+                    iv_setting = 'EDIT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_edit_mask.
-    change_setting( iv_value = iv_value iv_setting = 'EDIT_MASK' ).
+  METHOD set_edit_mask.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'EDIT_MASK' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_emphasize.
-    change_setting( iv_value = iv_value iv_setting = 'EMPHASIZE' ).
+  METHOD set_emphasize.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'EMPHASIZE' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_exponent.
-    change_setting( iv_value = iv_value iv_setting = 'EXPONENT' ).
+  METHOD set_exponent.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'EXPONENT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_f4availabl.
-    change_setting( iv_value = iv_value iv_setting = 'F4AVAILABL' ).
+  METHOD set_f4availabl.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'F4AVAILABL' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_fieldname.
-    change_setting( iv_value = iv_value iv_setting = 'FIELDNAME' ).
+  METHOD set_fieldname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'FIELDNAME' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_fix_column.
-    change_setting( iv_value = iv_value iv_setting = 'FIX_COLUMN' ).
+  METHOD set_fix_column.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'FIX_COLUMN' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_get_style.
-    change_setting( iv_value = iv_value iv_setting = 'GET_STYLE' ).
+  METHOD set_get_style.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'GET_STYLE' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_hier_cpos.
-    change_setting( iv_value = iv_value iv_setting = 'HIER_CPOS' ).
+  METHOD set_hier_cpos.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'HIER_CPOS' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_hier_level.
-    change_setting( iv_value = iv_value iv_setting = 'HIER_LEVEL' ).
+  METHOD set_hier_level.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'HIER_LEVEL' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_hotspot.
-    change_setting( iv_value = iv_value iv_setting = 'HOTSPOT' ).
+  METHOD set_hotspot.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'HOTSPOT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_href_hndl.
-    change_setting( iv_value = iv_value iv_setting = 'HREF_HNDL' ).
+  METHOD set_href_hndl.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'HREF_HNDL' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_h_col_key.
-    change_setting( iv_value = iv_value iv_setting = 'H_COL_KEY' ).
+  METHOD set_h_col_key.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'H_COL_KEY' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_h_ftype.
-    change_setting( iv_value = iv_value iv_setting = 'H_FTYPE' ).
+  METHOD set_h_ftype.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'H_FTYPE' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_h_select.
-    change_setting( iv_value = iv_value iv_setting = 'H_SELECT' ).
+  METHOD set_h_select.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'H_SELECT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_icon.
-    change_setting( iv_value = iv_value iv_setting = 'ICON' ).
+  METHOD set_icon.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'ICON' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_ifieldname.
-    change_setting( iv_value = iv_value iv_setting = 'IFIELDNAME' ).
+  METHOD set_ifieldname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'IFIELDNAME' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_indx_cfiel.
-    change_setting( iv_value = iv_value iv_setting = 'INDX_CFIEL' ).
+  METHOD set_indx_cfiel.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'INDX_CFIEL' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_indx_decml.
-    change_setting( iv_value = iv_value iv_setting = 'INDX_DECML' ).
+  METHOD set_indx_decml.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'INDX_DECML' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_indx_field.
-    change_setting( iv_value = iv_value iv_setting = 'INDX_FIELD' ).
+  METHOD set_indx_field.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'INDX_FIELD' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_indx_ifiel.
-    change_setting( iv_value = iv_value iv_setting = 'INDX_IFIEL' ).
+  METHOD set_indx_ifiel.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'INDX_IFIEL' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_indx_qfiel.
-    change_setting( iv_value = iv_value iv_setting = 'INDX_QFIEL' ).
+  METHOD set_indx_qfiel.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'INDX_QFIEL' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_indx_round.
-    change_setting( iv_value = iv_value iv_setting = 'INDX_ROUND' ).
+  METHOD set_indx_round.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'INDX_ROUND' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_intlen.
-    change_setting( iv_value = iv_value iv_setting = 'INTLEN' ).
+  METHOD set_intlen.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'INTLEN' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_inttype.
-    change_setting( iv_value = iv_value iv_setting = 'INTTYPE' ).
+  METHOD set_inttype.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'INTTYPE' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_just.
-    change_setting( iv_value = iv_value iv_setting = 'JUST' ).
+  METHOD set_just.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'JUST' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_key.
-    change_setting( iv_value = iv_value iv_setting = 'KEY' ).
+  METHOD set_key.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'KEY' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_key_sel.
-    change_setting( iv_value = iv_value iv_setting = 'KEY_SEL' ).
+  METHOD set_key_sel.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'KEY_SEL' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_lowercase.
-    change_setting( iv_value = iv_value iv_setting = 'LOWERCASE' ).
+  METHOD set_lowercase.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'LOWERCASE' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_lzero.
-    change_setting( iv_value = iv_value iv_setting = 'LZERO' ).
+  METHOD set_lzero.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'LZERO' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_mac.
-    change_setting( iv_value = iv_value iv_setting = 'MAC' ).
+  METHOD set_mac.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'MAC' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_mark.
-    change_setting( iv_value = iv_value iv_setting = 'MARK' ).
+  METHOD set_mark.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'MARK' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_texts.
-    data(lv_text_l) = cond scrtext_l( when iv_text_l is not initial then iv_text_l
-                                      when iv_text_m is not initial then iv_text_m
-                                      else iv_text_s ).
-    data(lv_text_m) = cond scrtext_m( when iv_text_m is not initial then iv_text_m
-                                      else iv_text_s ).
+  METHOD set_texts.
+    DATA(lv_text_l) = COND scrtext_l( WHEN iv_text_l IS NOT INITIAL THEN iv_text_l
+                                      WHEN iv_text_m IS NOT INITIAL THEN iv_text_m
+                                      ELSE                               iv_text_s ).
+    DATA(lv_text_m) = COND scrtext_m( WHEN iv_text_m IS NOT INITIAL
+                                      THEN iv_text_m
+                                      ELSE iv_text_s ).
     set_scrtext_s( iv_text_s ).
     set_scrtext_m( lv_text_m ).
     set_scrtext_l( lv_text_l ).
-    set_tooltip( lv_text_l ) .
+    set_tooltip( lv_text_l ).
     set_coltext( lv_text_l ).
     set_seltext( lv_text_l ).
-    set_reptext( lv_text_l && '' ).
+    set_reptext( |{ lv_text_l }| ).
 
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_convext.
-    change_setting( iv_value = iv_value iv_setting = 'NO_CONVEXT' ).
+  METHOD set_no_convext.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_CONVEXT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_init_ch.
-    change_setting( iv_value = iv_value iv_setting = 'NO_INIT_CH' ).
+  METHOD set_no_init_ch.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_INIT_CH' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_merging.
-    change_setting( iv_value = iv_value iv_setting = 'NO_MERGING' ).
+  METHOD set_no_merging.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_MERGING' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_out.
-    change_setting( iv_value = iv_value iv_setting = 'NO_OUT' ).
+  METHOD set_no_out.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_OUT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_sign.
-    change_setting( iv_value = iv_value iv_setting = 'NO_SIGN' ).
+  METHOD set_no_sign.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_SIGN' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_sum.
-    change_setting( iv_value = iv_value iv_setting = 'NO_SUM' ).
+  METHOD set_no_sum.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_SUM' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_zero.
-    change_setting( iv_value = iv_value iv_setting = 'NO_ZERO' ).
+  METHOD set_no_zero.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_ZERO' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_outputlen.
-    change_setting( iv_value = iv_value iv_setting = 'OUTPUTLEN' ).
+  METHOD set_outputlen.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'OUTPUTLEN' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_parameter0.
-    change_setting( iv_value = iv_value iv_setting = 'PARAMETER0' ).
+  METHOD set_parameter0.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'PARAMETER0' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_parameter1.
-    change_setting( iv_value = iv_value iv_setting = 'PARAMETER1' ).
+  METHOD set_parameter1.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'PARAMETER1' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_parameter2.
-    change_setting( iv_value = iv_value iv_setting = 'PARAMETER2' ).
+  METHOD set_parameter2.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'PARAMETER2' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_parameter3.
-    change_setting( iv_value = iv_value iv_setting = 'PARAMETER3' ).
+  METHOD set_parameter3.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'PARAMETER3' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_parameter4.
-    change_setting( iv_value = iv_value iv_setting = 'PARAMETER4' ).
+  METHOD set_parameter4.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'PARAMETER4' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_parameter5.
-    change_setting( iv_value = iv_value iv_setting = 'PARAMETER5' ).
+  METHOD set_parameter5.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'PARAMETER5' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_parameter6.
-    change_setting( iv_value = iv_value iv_setting = 'PARAMETER6' ).
+  METHOD set_parameter6.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'PARAMETER6' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_parameter7.
-    change_setting( iv_value = iv_value iv_setting = 'PARAMETER7' ).
+  METHOD set_parameter7.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'PARAMETER7' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_parameter8.
-    change_setting( iv_value = iv_value iv_setting = 'PARAMETER8' ).
+  METHOD set_parameter8.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'PARAMETER8' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_parameter9.
-    change_setting( iv_value = iv_value iv_setting = 'PARAMETER9' ).
+  METHOD set_parameter9.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'PARAMETER9' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_qfieldname.
-    change_setting( iv_value = iv_value iv_setting = 'QFIELDNAME' ).
+  METHOD set_qfieldname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'QFIELDNAME' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_quantity.
-    change_setting( iv_value = iv_value iv_setting = 'QUANTITY' ).
+  METHOD set_quantity.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'QUANTITY' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_readonly.
-    change_setting( iv_value = abap_false iv_setting = 'EDIT' ).
+  METHOD set_readonly.
+    change_setting( iv_value   = abap_false
+                    iv_setting = 'EDIT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_ref_field.
-    change_setting( iv_value = iv_value iv_setting = 'REF_FIELD' ).
+  METHOD set_ref_field.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'REF_FIELD' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_ref_table.
-    change_setting( iv_value = iv_value iv_setting = 'REF_TABLE' ).
+  METHOD set_ref_table.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'REF_TABLE' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_reprep.
-    change_setting( iv_value = iv_value iv_setting = 'REPREP' ).
+  METHOD set_reprep.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'REPREP' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_reptext.
-    change_setting( iv_value = iv_value iv_setting = 'REPTEXT' ).
+  METHOD set_reptext.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'REPTEXT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_rollname.
-    change_setting( iv_value = iv_value iv_setting = 'ROLLNAME' ).
+  METHOD set_rollname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'ROLLNAME' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_round.
-    change_setting( iv_value = iv_value iv_setting = 'ROUND' ).
+  METHOD set_round.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'ROUND' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_roundfield.
-    change_setting( iv_value = iv_value iv_setting = 'ROUNDFIELD' ).
+  METHOD set_roundfield.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'ROUNDFIELD' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_row_pos.
-    change_setting( iv_value = iv_value iv_setting = 'ROW_POS' ).
+  METHOD set_row_pos.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'ROW_POS' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_scrtext_l.
-    change_setting( iv_value = iv_value iv_setting = 'SCRTEXT_L' ).
+  METHOD set_scrtext_l.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'SCRTEXT_L' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_scrtext_m.
-    change_setting( iv_value = iv_value iv_setting = 'SCRTEXT_M' ).
+  METHOD set_scrtext_m.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'SCRTEXT_M' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_scrtext_s.
-    change_setting( iv_value = iv_value iv_setting = 'SCRTEXT_S' ).
+  METHOD set_scrtext_s.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'SCRTEXT_S' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_selddictxt.
-    change_setting( iv_value = iv_value iv_setting = 'SELDDICTXT' ).
+  METHOD set_selddictxt.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'SELDDICTXT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_seltext.
-    change_setting( iv_value = iv_value iv_setting = 'SELTEXT' ).
+  METHOD set_seltext.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'SELTEXT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_sp_group.
-    change_setting( iv_value = iv_value iv_setting = 'SP_GROUP' ).
+  METHOD set_sp_group.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'SP_GROUP' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_style.
-    change_setting( iv_value = iv_value iv_setting = 'STYLE' ).
+  METHOD set_style.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'STYLE' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_style2.
-    change_setting( iv_value = iv_value iv_setting = 'STYLE2' ).
+  METHOD set_style2.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'STYLE2' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_style3.
-    change_setting( iv_value = iv_value iv_setting = 'STYLE3' ).
+  METHOD set_style3.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'STYLE3' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_style4.
-    change_setting( iv_value = iv_value iv_setting = 'STYLE4' ).
+  METHOD set_style4.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'STYLE4' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_symbol.
-    change_setting( iv_value = iv_value iv_setting = 'SYMBOL' ).
+  METHOD set_symbol.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'SYMBOL' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_tabname.
-    change_setting( iv_value = iv_value iv_setting = 'TABNAME' ).
+  METHOD set_tabname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'TABNAME' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_tech.
-    change_setting( iv_value = iv_value iv_setting = 'TECH' ).
+  METHOD set_tech.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'TECH' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_tech_col.
-    change_setting( iv_value = iv_value iv_setting = 'TECH_COL' ).
+  METHOD set_tech_col.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'TECH_COL' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_tech_comp.
-    change_setting( iv_value = iv_value iv_setting = 'TECH_COMP' ).
+  METHOD set_tech_comp.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'TECH_COMP' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_tech_form.
-    change_setting( iv_value = iv_value iv_setting = 'TECH_FORM' ).
+  METHOD set_tech_form.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'TECH_FORM' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_tipddictxt.
-    change_setting( iv_value = iv_value iv_setting = 'TIPDDICTXT' ).
+  METHOD set_tipddictxt.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'TIPDDICTXT' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_tooltip.
-    change_setting( iv_value = iv_value iv_setting = 'TOOLTIP' ).
+  METHOD set_tooltip.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'TOOLTIP' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_txt_field.
-    change_setting( iv_value = iv_value iv_setting = 'TXT_FIELD' ).
+  METHOD set_txt_field.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'TXT_FIELD' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_valexi.
-    change_setting( iv_value = iv_value iv_setting = 'VALEXI' ).
+  METHOD set_valexi.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'VALEXI' ).
     r_column = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_web_field.
-    change_setting( iv_value = iv_value iv_setting = 'WEB_FIELD' ).
+  METHOD set_web_field.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'WEB_FIELD' ).
     r_column = me.
-  endmethod.
-
-
-  method get_auto_value.
-    get_setting( exporting iv_setting = 'AUTO_VALUE' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_cfieldname.
-    get_setting( exporting iv_setting = 'CFIELDNAME' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_checkbox.
-    get_setting( exporting iv_setting = 'CHECKBOX' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_checktable.
-    get_setting( exporting iv_setting = 'CHECKTABLE' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_colddictxt.
-    get_setting( exporting iv_setting = 'COLDDICTXT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_color.
-    get_emphasize( receiving rv_value = rv_value ).
-  endmethod.
-
-
-  method get_coltext.
-    get_setting( exporting iv_setting = 'COLTEXT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_col_id.
-    get_setting( exporting iv_setting = 'COL_ID' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_col_opt.
-    get_setting( exporting iv_setting = 'COL_OPT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_col_pos.
-    get_setting( exporting iv_setting = 'COL_POS' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_convexit.
-    get_setting( exporting iv_setting = 'CONVEXIT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_currency.
-    get_setting( exporting iv_setting = 'CURRENCY' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_datatype.
-    get_setting( exporting iv_setting = 'DATATYPE' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_dd_outlen.
-    get_setting( exporting iv_setting = 'DD_OUTLEN' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_dd_roll.
-    get_setting( exporting iv_setting = 'DD_ROLL' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_decfloat_style.
-    get_setting( exporting iv_setting = 'DECFLOAT_STYLE' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_decimals.
-    get_setting( exporting iv_setting = 'DECIMALS' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_decimals_o.
-    get_setting( exporting iv_setting = 'DECIMALS_O' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_decmlfield.
-    get_setting( exporting iv_setting = 'DECMLFIELD' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_dfieldname.
-    get_setting( exporting iv_setting = 'DFIELDNAME' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_domname.
-    get_setting( exporting iv_setting = 'DOMNAME' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_do_sum.
-    get_setting( exporting iv_setting = 'DO_SUM' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_dragdropid.
-    get_setting( exporting iv_setting = 'DRAGDROPID' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_drdn_alias.
-    get_setting( exporting iv_setting = 'DRDN_ALIAS' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_drdn_field.
-    get_setting( exporting iv_setting = 'DRDN_FIELD' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_drdn_hndl.
-    get_setting( exporting iv_setting = 'DRDN_HNDL' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_edit.
-    get_setting( exporting iv_setting = 'EDIT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_editable.
-    get_setting( exporting iv_setting = 'EDIT' importing e_value = rv_editable ).
-  endmethod.
-
-
-  method get_edit_mask.
-    get_setting( exporting iv_setting = 'EDIT_MASK' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_emphasize.
-    get_setting( exporting iv_setting = 'EMPHASIZE' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_exponent.
-    get_setting( exporting iv_setting = 'EXPONENT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_f4availabl.
-    get_setting( exporting iv_setting = 'F4AVAILABL' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_fieldname.
-    get_setting( exporting iv_setting = 'FIELDNAME' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_fix_column.
-    get_setting( exporting iv_setting = 'FIX_COLUMN' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_get_style.
-    get_setting( exporting iv_setting = 'GET_STYLE' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_hier_cpos.
-    get_setting( exporting iv_setting = 'HIER_CPOS' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_hier_level.
-    get_setting( exporting iv_setting = 'HIER_LEVEL' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_hotspot.
-    get_setting( exporting iv_setting = 'HOTSPOT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_href_hndl.
-    get_setting( exporting iv_setting = 'HREF_HNDL' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_h_col_key.
-    get_setting( exporting iv_setting = 'H_COL_KEY' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_h_ftype.
-    get_setting( exporting iv_setting = 'H_FTYPE' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_h_select.
-    get_setting( exporting iv_setting = 'H_SELECT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_icon.
-    get_setting( exporting iv_setting = 'ICON' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_ifieldname.
-    get_setting( exporting iv_setting = 'IFIELDNAME' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_indx_cfiel.
-    get_setting( exporting iv_setting = 'INDX_CFIEL' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_indx_decml.
-    get_setting( exporting iv_setting = 'INDX_DECML' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_indx_field.
-    get_setting( exporting iv_setting = 'INDX_FIELD' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_indx_ifiel.
-    get_setting( exporting iv_setting = 'INDX_IFIEL' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_indx_qfiel.
-    get_setting( exporting iv_setting = 'INDX_QFIEL' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_indx_round.
-    get_setting( exporting iv_setting = 'INDX_ROUND' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_intlen.
-    get_setting( exporting iv_setting = 'INTLEN' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_inttype.
-    get_setting( exporting iv_setting = 'INTTYPE' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_just.
-    get_setting( exporting iv_setting = 'JUST' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_key.
-    get_setting( exporting iv_setting = 'KEY' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_key_sel.
-    get_setting( exporting iv_setting = 'KEY_SEL' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_lowercase.
-    get_setting( exporting iv_setting = 'LOWERCASE' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_lzero.
-    get_setting( exporting iv_setting = 'LZERO' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_mac.
-    get_setting( exporting iv_setting = 'MAC' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_mark.
-    get_setting( exporting iv_setting = 'MARK' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_no_convext.
-    get_setting( exporting iv_setting = 'NO_CONVEXT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_no_init_ch.
-    get_setting( exporting iv_setting = 'NO_INIT_CH' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_no_merging.
-    get_setting( exporting iv_setting = 'NO_MERGING' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_no_out.
-    get_setting( exporting iv_setting = 'NO_OUT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_no_sign.
-    get_setting( exporting iv_setting = 'NO_SIGN' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_no_sum.
-    get_setting( exporting iv_setting = 'NO_SUM' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_no_zero.
-    get_setting( exporting iv_setting = 'NO_ZERO' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_outputlen.
-    get_setting( exporting iv_setting = 'OUTPUTLEN' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_parameter0.
-    get_setting( exporting iv_setting = 'PARAMETER0' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_parameter1.
-    get_setting( exporting iv_setting = 'PARAMETER1' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_parameter2.
-    get_setting( exporting iv_setting = 'PARAMETER2' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_parameter3.
-    get_setting( exporting iv_setting = 'PARAMETER3' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_parameter4.
-    get_setting( exporting iv_setting = 'PARAMETER4' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_parameter5.
-    get_setting( exporting iv_setting = 'PARAMETER5' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_parameter6.
-    get_setting( exporting iv_setting = 'PARAMETER6' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_parameter7.
-    get_setting( exporting iv_setting = 'PARAMETER7' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_parameter8.
-    get_setting( exporting iv_setting = 'PARAMETER8' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_parameter9.
-    get_setting( exporting iv_setting = 'PARAMETER9' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_qfieldname.
-    get_setting( exporting iv_setting = 'QFIELDNAME' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_quantity.
-    get_setting( exporting iv_setting = 'QUANTITY' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_readonly.
-    get_setting( exporting iv_setting = 'EDIT' importing e_value = rv_read_only ).
-    rv_read_only = switch #( rv_read_only when abap_true then abap_false
-                                          when abap_false then abap_true ).
-  endmethod.
-
-
-  method get_ref_field.
-    get_setting( exporting iv_setting = 'REF_FIELD' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_ref_table.
-    get_setting( exporting iv_setting = 'REF_TABLE' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_reprep.
-    get_setting( exporting iv_setting = 'REPREP' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_reptext.
-    get_setting( exporting iv_setting = 'REPTEXT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_rollname.
-    get_setting( exporting iv_setting = 'ROLLNAME' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_round.
-    get_setting( exporting iv_setting = 'ROUND' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_roundfield.
-    get_setting( exporting iv_setting = 'ROUNDFIELD' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_row_pos.
-    get_setting( exporting iv_setting = 'ROW_POS' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_scrtext_l.
-    get_setting( exporting iv_setting = 'SCRTEXT_L' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_scrtext_m.
-    get_setting( exporting iv_setting = 'SCRTEXT_M' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_scrtext_s.
-    get_setting( exporting iv_setting = 'SCRTEXT_S' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_selddictxt.
-    get_setting( exporting iv_setting = 'SELDDICTXT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_seltext.
-    get_setting( exporting iv_setting = 'SELTEXT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_sp_group.
-    get_setting( exporting iv_setting = 'SP_GROUP' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_style.
-    get_setting( exporting iv_setting = 'STYLE' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_style2.
-    get_setting( exporting iv_setting = 'STYLE2' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_style3.
-    get_setting( exporting iv_setting = 'STYLE3' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_style4.
-    get_setting( exporting iv_setting = 'STYLE4' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_symbol.
-    get_setting( exporting iv_setting = 'SYMBOL' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_tabname.
-    get_setting( exporting iv_setting = 'TABNAME' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_tech.
-    get_setting( exporting iv_setting = 'TECH' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_tech_col.
-    get_setting( exporting iv_setting = 'TECH_COL' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_tech_comp.
-    get_setting( exporting iv_setting = 'TECH_COMP' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_tech_form.
-    get_setting( exporting iv_setting = 'TECH_FORM' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_tipddictxt.
-    get_setting( exporting iv_setting = 'TIPDDICTXT' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_tooltip.
-    get_setting( exporting iv_setting = 'TOOLTIP' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_txt_field.
-    get_setting( exporting iv_setting = 'TXT_FIELD' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_valexi.
-    get_setting( exporting iv_setting = 'VALEXI' importing e_value = rv_value ).
-  endmethod.
-
-
-  method get_web_field.
-    get_setting( exporting iv_setting = 'WEB_FIELD' importing e_value = rv_value ).
-  endmethod.
-endclass.
+  ENDMETHOD.
+
+  METHOD get_auto_value.
+    get_setting( EXPORTING iv_setting = 'AUTO_VALUE'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_cfieldname.
+    get_setting( EXPORTING iv_setting = 'CFIELDNAME'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_checkbox.
+    get_setting( EXPORTING iv_setting = 'CHECKBOX'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_checktable.
+    get_setting( EXPORTING iv_setting = 'CHECKTABLE'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_colddictxt.
+    get_setting( EXPORTING iv_setting = 'COLDDICTXT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_color.
+    rv_value = get_emphasize( ).
+  ENDMETHOD.
+
+  METHOD get_coltext.
+    get_setting( EXPORTING iv_setting = 'COLTEXT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_col_id.
+    get_setting( EXPORTING iv_setting = 'COL_ID'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_col_opt.
+    get_setting( EXPORTING iv_setting = 'COL_OPT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_col_pos.
+    get_setting( EXPORTING iv_setting = 'COL_POS'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_convexit.
+    get_setting( EXPORTING iv_setting = 'CONVEXIT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_currency.
+    get_setting( EXPORTING iv_setting = 'CURRENCY'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_datatype.
+    get_setting( EXPORTING iv_setting = 'DATATYPE'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_dd_outlen.
+    get_setting( EXPORTING iv_setting = 'DD_OUTLEN'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_dd_roll.
+    get_setting( EXPORTING iv_setting = 'DD_ROLL'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_decfloat_style.
+    get_setting( EXPORTING iv_setting = 'DECFLOAT_STYLE'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_decimals.
+    get_setting( EXPORTING iv_setting = 'DECIMALS'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_decimals_o.
+    get_setting( EXPORTING iv_setting = 'DECIMALS_O'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_decmlfield.
+    get_setting( EXPORTING iv_setting = 'DECMLFIELD'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_dfieldname.
+    get_setting( EXPORTING iv_setting = 'DFIELDNAME'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_domname.
+    get_setting( EXPORTING iv_setting = 'DOMNAME'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_do_sum.
+    get_setting( EXPORTING iv_setting = 'DO_SUM'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_dragdropid.
+    get_setting( EXPORTING iv_setting = 'DRAGDROPID'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_drdn_alias.
+    get_setting( EXPORTING iv_setting = 'DRDN_ALIAS'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_drdn_field.
+    get_setting( EXPORTING iv_setting = 'DRDN_FIELD'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_drdn_hndl.
+    get_setting( EXPORTING iv_setting = 'DRDN_HNDL'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_edit.
+    get_setting( EXPORTING iv_setting = 'EDIT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_editable.
+    get_setting( EXPORTING iv_setting = 'EDIT'
+                 IMPORTING e_value    = rv_editable ).
+  ENDMETHOD.
+
+  METHOD get_edit_mask.
+    get_setting( EXPORTING iv_setting = 'EDIT_MASK'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_emphasize.
+    get_setting( EXPORTING iv_setting = 'EMPHASIZE'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_exponent.
+    get_setting( EXPORTING iv_setting = 'EXPONENT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_f4availabl.
+    get_setting( EXPORTING iv_setting = 'F4AVAILABL'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_fieldname.
+    get_setting( EXPORTING iv_setting = 'FIELDNAME'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_fix_column.
+    get_setting( EXPORTING iv_setting = 'FIX_COLUMN'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_get_style.
+    get_setting( EXPORTING iv_setting = 'GET_STYLE'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_hier_cpos.
+    get_setting( EXPORTING iv_setting = 'HIER_CPOS'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_hier_level.
+    get_setting( EXPORTING iv_setting = 'HIER_LEVEL'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_hotspot.
+    get_setting( EXPORTING iv_setting = 'HOTSPOT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_href_hndl.
+    get_setting( EXPORTING iv_setting = 'HREF_HNDL'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_h_col_key.
+    get_setting( EXPORTING iv_setting = 'H_COL_KEY'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_h_ftype.
+    get_setting( EXPORTING iv_setting = 'H_FTYPE'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_h_select.
+    get_setting( EXPORTING iv_setting = 'H_SELECT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_icon.
+    get_setting( EXPORTING iv_setting = 'ICON'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_ifieldname.
+    get_setting( EXPORTING iv_setting = 'IFIELDNAME'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_indx_cfiel.
+    get_setting( EXPORTING iv_setting = 'INDX_CFIEL'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_indx_decml.
+    get_setting( EXPORTING iv_setting = 'INDX_DECML'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_indx_field.
+    get_setting( EXPORTING iv_setting = 'INDX_FIELD'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_indx_ifiel.
+    get_setting( EXPORTING iv_setting = 'INDX_IFIEL'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_indx_qfiel.
+    get_setting( EXPORTING iv_setting = 'INDX_QFIEL'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_indx_round.
+    get_setting( EXPORTING iv_setting = 'INDX_ROUND'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_intlen.
+    get_setting( EXPORTING iv_setting = 'INTLEN'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_inttype.
+    get_setting( EXPORTING iv_setting = 'INTTYPE'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_just.
+    get_setting( EXPORTING iv_setting = 'JUST'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_key.
+    get_setting( EXPORTING iv_setting = 'KEY'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_key_sel.
+    get_setting( EXPORTING iv_setting = 'KEY_SEL'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_lowercase.
+    get_setting( EXPORTING iv_setting = 'LOWERCASE'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_lzero.
+    get_setting( EXPORTING iv_setting = 'LZERO'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_mac.
+    get_setting( EXPORTING iv_setting = 'MAC'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_mark.
+    get_setting( EXPORTING iv_setting = 'MARK'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_no_convext.
+    get_setting( EXPORTING iv_setting = 'NO_CONVEXT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_no_init_ch.
+    get_setting( EXPORTING iv_setting = 'NO_INIT_CH'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_no_merging.
+    get_setting( EXPORTING iv_setting = 'NO_MERGING'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_no_out.
+    get_setting( EXPORTING iv_setting = 'NO_OUT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_no_sign.
+    get_setting( EXPORTING iv_setting = 'NO_SIGN'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_no_sum.
+    get_setting( EXPORTING iv_setting = 'NO_SUM'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_no_zero.
+    get_setting( EXPORTING iv_setting = 'NO_ZERO'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_outputlen.
+    get_setting( EXPORTING iv_setting = 'OUTPUTLEN'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_parameter0.
+    get_setting( EXPORTING iv_setting = 'PARAMETER0'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_parameter1.
+    get_setting( EXPORTING iv_setting = 'PARAMETER1'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_parameter2.
+    get_setting( EXPORTING iv_setting = 'PARAMETER2'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_parameter3.
+    get_setting( EXPORTING iv_setting = 'PARAMETER3'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_parameter4.
+    get_setting( EXPORTING iv_setting = 'PARAMETER4'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_parameter5.
+    get_setting( EXPORTING iv_setting = 'PARAMETER5'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_parameter6.
+    get_setting( EXPORTING iv_setting = 'PARAMETER6'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_parameter7.
+    get_setting( EXPORTING iv_setting = 'PARAMETER7'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_parameter8.
+    get_setting( EXPORTING iv_setting = 'PARAMETER8'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_parameter9.
+    get_setting( EXPORTING iv_setting = 'PARAMETER9'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_qfieldname.
+    get_setting( EXPORTING iv_setting = 'QFIELDNAME'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_quantity.
+    get_setting( EXPORTING iv_setting = 'QUANTITY'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_readonly.
+    get_setting( EXPORTING iv_setting = 'EDIT'
+                 IMPORTING e_value    = rv_read_only ).
+    rv_read_only = SWITCH #( rv_read_only
+                             WHEN abap_true  THEN abap_false
+                             WHEN abap_false THEN abap_true ).
+  ENDMETHOD.
+
+  METHOD get_ref_field.
+    get_setting( EXPORTING iv_setting = 'REF_FIELD'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_ref_table.
+    get_setting( EXPORTING iv_setting = 'REF_TABLE'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_reprep.
+    get_setting( EXPORTING iv_setting = 'REPREP'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_reptext.
+    get_setting( EXPORTING iv_setting = 'REPTEXT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_rollname.
+    get_setting( EXPORTING iv_setting = 'ROLLNAME'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_round.
+    get_setting( EXPORTING iv_setting = 'ROUND'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_roundfield.
+    get_setting( EXPORTING iv_setting = 'ROUNDFIELD'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_row_pos.
+    get_setting( EXPORTING iv_setting = 'ROW_POS'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_scrtext_l.
+    get_setting( EXPORTING iv_setting = 'SCRTEXT_L'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_scrtext_m.
+    get_setting( EXPORTING iv_setting = 'SCRTEXT_M'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_scrtext_s.
+    get_setting( EXPORTING iv_setting = 'SCRTEXT_S'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_selddictxt.
+    get_setting( EXPORTING iv_setting = 'SELDDICTXT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_seltext.
+    get_setting( EXPORTING iv_setting = 'SELTEXT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_sp_group.
+    get_setting( EXPORTING iv_setting = 'SP_GROUP'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_style.
+    get_setting( EXPORTING iv_setting = 'STYLE'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_style2.
+    get_setting( EXPORTING iv_setting = 'STYLE2'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_style3.
+    get_setting( EXPORTING iv_setting = 'STYLE3'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_style4.
+    get_setting( EXPORTING iv_setting = 'STYLE4'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_symbol.
+    get_setting( EXPORTING iv_setting = 'SYMBOL'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_tabname.
+    get_setting( EXPORTING iv_setting = 'TABNAME'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_tech.
+    get_setting( EXPORTING iv_setting = 'TECH'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_tech_col.
+    get_setting( EXPORTING iv_setting = 'TECH_COL'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_tech_comp.
+    get_setting( EXPORTING iv_setting = 'TECH_COMP'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_tech_form.
+    get_setting( EXPORTING iv_setting = 'TECH_FORM'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_tipddictxt.
+    get_setting( EXPORTING iv_setting = 'TIPDDICTXT'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_tooltip.
+    get_setting( EXPORTING iv_setting = 'TOOLTIP'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_txt_field.
+    get_setting( EXPORTING iv_setting = 'TXT_FIELD'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_valexi.
+    get_setting( EXPORTING iv_setting = 'VALEXI'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+
+  METHOD get_web_field.
+    get_setting( EXPORTING iv_setting = 'WEB_FIELD'
+                 IMPORTING e_value    = rv_value ).
+  ENDMETHOD.
+ENDCLASS.

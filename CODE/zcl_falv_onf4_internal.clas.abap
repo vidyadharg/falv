@@ -15,7 +15,7 @@ CLASS zcl_falv_onf4_internal DEFINITION
                                   VALUE(row_no)     TYPE lvc_s_roid               OPTIONAL
                                   VALUE(event_data) TYPE REF TO cl_alv_event_data OPTIONAL
                                   VALUE(bad_cells)  TYPE lvc_t_modi               OPTIONAL
-                                  VALUE(display)    TYPE char01                   OPTIONAL.
+                                  VALUE(display)    TYPE char01                   OPTIONAL ##NEEDED.
 
   PRIVATE SECTION.
     TYPES:
@@ -65,10 +65,6 @@ ENDCLASS.
 
 CLASS zcl_falv_onf4_internal IMPLEMENTATION.
   METHOD handle_onf4.
-    " TODO: parameter FIELDVALUE is never used (ABAP cleaner)
-    " TODO: parameter BAD_CELLS is never used (ABAP cleaner)
-    " TODO: parameter DISPLAY is never used (ABAP cleaner)
-
     CHECK line_exists( automatic_f4[ fieldname = fieldname ] ).
 
     falv->get_frontend_fieldcatalog( IMPORTING et_fieldcatalog = falv->fcat ).
@@ -252,9 +248,11 @@ CLASS zcl_falv_onf4_internal IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_data_element.
-    SELECT SINGLE * FROM dd04l
+    SELECT SINGLE rollname, domname, shlpname, shlpfield FROM dd04l
       WHERE rollname = @rollname
-      INTO CORRESPONDING FIELDS OF @data_element.
+      AND   as4local = 'A'
+      AND   as4vers  = '0000'
+      INTO CORRESPONDING FIELDS OF @data_element. "#EC CI_SEL_NESTED
   ENDMETHOD.
 
   METHOD domain_have_fixed_values.
