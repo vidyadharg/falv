@@ -999,7 +999,6 @@ CLASS zcl_falv_column IMPLEMENTATION.
     change_setting( iv_value   = iv_value
                     iv_setting = 'DRDN_HNDL' ).
 
-
     IF    ( it_drop_down       IS NOT INITIAL )
        OR ( it_drop_down_alias IS NOT INITIAL ).
 

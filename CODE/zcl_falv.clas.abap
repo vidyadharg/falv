@@ -1508,7 +1508,7 @@ CLASS zcl_falv IMPLEMENTATION.
 
   METHOD evf_user_command.
     CASE e_ucomm.
-      WHEN fc_back or fc_exit or fc_up or fc_cancel.
+      WHEN fc_back OR fc_exit OR fc_up OR fc_cancel.
         LEAVE TO SCREEN 0.
       WHEN fc_mass_replace.
         mass_replace( ).
