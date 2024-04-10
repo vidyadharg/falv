@@ -996,6 +996,10 @@ CLASS zcl_falv_column IMPLEMENTATION.
     DATA lt_fixed_values    TYPE STANDARD TABLE OF ddfixvalue WITH EMPTY KEY.
     DATA ls_fixed_value     LIKE LINE OF lt_fixed_values.
 
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DRDN_HNDL' ).
+
+
     IF    ( it_drop_down       IS NOT INITIAL )
        OR ( it_drop_down_alias IS NOT INITIAL ).
 
@@ -1011,14 +1015,11 @@ CLASS zcl_falv_column IMPLEMENTATION.
                                                         OTHERS         = 2 ).
         IF sy-subrc = 0.
           lo_elemdescr ?= lo_typedescr.
-
-*          get_ddic_fixed_values
           lo_elemdescr->get_ddic_fixed_values( RECEIVING  p_fixed_values = lt_fixed_values
                                                EXCEPTIONS not_found      = 1
                                                           no_ddic_type   = 2
                                                           OTHERS         = 3 ).
           IF sy-subrc = 0.
-
             LOOP AT lt_fixed_values INTO ls_fixed_value.
               IF iv_use_alias = abap_true.
                 CLEAR ls_drop_down_alias.
@@ -1040,21 +1041,14 @@ CLASS zcl_falv_column IMPLEMENTATION.
                 ls_drop_down-value  = ls_fixed_value-low.
                 APPEND ls_drop_down TO lt_drop_down.
               ENDIF.
-
             ENDLOOP.
-          ELSE.
           ENDIF.
-
         ENDIF.
-      ELSE.
       ENDIF.
     ENDIF.
 
     IF    ( lt_drop_down       IS NOT INITIAL )
        OR ( lt_drop_down_alias IS NOT INITIAL ).
-
-      change_setting( iv_value   = iv_value
-                      iv_setting = 'DRDN_HNDL' ).
       IF iv_use_alias = abap_true.
         falv->set_drop_down_table( it_drop_down_alias = lt_drop_down_alias ).
         change_setting( iv_value   = 'X'
