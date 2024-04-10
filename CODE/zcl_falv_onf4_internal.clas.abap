@@ -59,12 +59,16 @@ CLASS zcl_falv_onf4_internal DEFINITION
     METHODS correct_ft_field_proposals
       IMPORTING data_element TYPE dd04l
       CHANGING  shlp         TYPE shlp_descr.
+
     METHODS register_f4_for_fields.
 ENDCLASS.
 
 
 CLASS zcl_falv_onf4_internal IMPLEMENTATION.
   METHOD handle_onf4.
+    " TODO: parameter FIELDVALUE is never used (ABAP cleaner)
+    " TODO: parameter BAD_CELLS is never used (ABAP cleaner)
+
     CHECK line_exists( automatic_f4[ fieldname = fieldname ] ).
 
     falv->get_frontend_fieldcatalog( IMPORTING et_fieldcatalog = falv->fcat ).
@@ -217,7 +221,7 @@ CLASS zcl_falv_onf4_internal IMPLEMENTATION.
                         chngeafter = abap_true
                         register   = abap_true )
                INTO TABLE automatic_f4.
-      ELSEIF data_element-domname IS NOT INITIAL
+      ELSEIF     data_element-domname IS NOT INITIAL
              AND domain_have_fixed_values( data_element-domname )  = abap_true.
 
         INSERT VALUE #( fieldname  = <fcat>-fieldname
@@ -231,27 +235,24 @@ CLASS zcl_falv_onf4_internal IMPLEMENTATION.
     register_f4_for_fields( ).
   ENDMETHOD.
 
-  method register_f4_for_fields.
-
-    if automatic_f4 is not initial.
-      data(f4_to_register) = automatic_f4.
-      insert lines of falv->get_registered_f4_for_fields( ) into table f4_to_register.
+  METHOD register_f4_for_fields.
+    IF automatic_f4 IS NOT INITIAL.
+      DATA(f4_to_register) = automatic_f4.
+      INSERT LINES OF falv->get_registered_f4_for_fields( ) INTO TABLE f4_to_register.
       falv->register_f4_for_fields( it_f4 = f4_to_register ).
-    endif.
-
-  endmethod.
-
-
+    ENDIF.
+  ENDMETHOD.
 
   METHOD constructor.
     me->falv = falv.
   ENDMETHOD.
 
   METHOD get_data_element.
-    SELECT SINGLE rollname, domname, shlpname, shlpfield FROM dd04l
+    SELECT SINGLE rollname, domname, shlpname, shlpfield
+      FROM dd04l
       WHERE rollname = @rollname
-      AND   as4local = 'A'
-      AND   as4vers  = '0000'
+        AND as4local = 'A'
+        AND as4vers  = '0000'
       INTO CORRESPONDING FIELDS OF @data_element. "#EC CI_SEL_NESTED
   ENDMETHOD.
 
