@@ -1,646 +1,640 @@
-class zcl_falv_layout definition
-  public
-  create public
+CLASS zcl_falv_layout DEFINITION
+  PUBLIC
+  CREATE PUBLIC
+  GLOBAL FRIENDS zcl_falv.
 
-  global friends zcl_falv .
+  PUBLIC SECTION.
+    DATA mark_field TYPE lvc_fname READ-ONLY.
 
-  public section.
+    METHODS constructor
+      IMPORTING io_falv TYPE REF TO zcl_falv.
 
-    data mark_field type lvc_fname read-only .
+    METHODS set_zebra
+      IMPORTING VALUE(iv_value) TYPE lvc_zebra
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
 
-    methods constructor
-      importing
-        !io_falv type ref to zcl_falv .
-    methods set_zebra
-      importing
-                value(iv_value) type lvc_zebra
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_edit
-      importing
-                value(iv_value) type lvc_edit
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_edit_mode
-      importing
-                value(iv_value) type lvc_edmo
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_keyfix
-      importing
-                value(iv_value) type lvc_nokfix
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_frontend
-      importing
-                value(iv_value) type lvc_front
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_object_key
-      importing
-                value(iv_value) type bds_typeid
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_doc_id
-      importing
-                value(iv_value) type bds_docid
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_template
-      importing
-                value(iv_value) type bds_filena
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_language
-      importing
-                value(iv_value) type lang
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_graphics
-      importing
-                value(iv_value) type guid_32
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_smalltitle
-      importing
-                value(iv_value) type lvc_titsz
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_hgridln
-      importing
-                value(iv_value) type lvc_hgrid
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_vgridln
-      importing
-                value(iv_value) type lvc_vgrid
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_headers
-      importing
-                value(iv_value) type lvc_heads
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_merging
-      importing
-                value(iv_value) type lvc_merge
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_cwidth_opt
-      importing
-                value(iv_value) type lvc_cwo
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_totals_bef
-      importing
-                value(iv_value) type lvc_totbef
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_totarr
-      importing
-                value(iv_value) type char01
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_totexp
-      importing
-                value(iv_value) type char01
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_rowmove
-      importing
-                value(iv_value) type char01
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_rowins
-      importing
-                value(iv_value) type char01
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_colexpd
-      importing
-                value(iv_value) type char01
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_f4
-      importing
-                value(iv_value) type char01
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_countfname
-      importing
-                value(iv_value) type lvc_fname
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_col_opt
-      importing
-                value(iv_value) type char01
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_val_data
-      importing
-                value(iv_value) type char01
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_blob_scope
-      importing
-                value(iv_value) type salv_bs_blob_scope
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_blob_flavour
-      importing
-                value(iv_value) type salv_bs_blob_flavour
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_blob_name
-      importing
-                value(iv_value) type salv_bs_blob_name
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_blob_key
-      importing
-                value(iv_value) type slis_blob_key
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_blob_type
-      importing
-                value(iv_value) type slis_blob_type
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_stylefname
-      importing
-                value(iv_value) type lvc_fname
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_rowmark
-      importing
-                value(iv_value) type lvc_rowmk
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_toolbar
-      importing
-                value(iv_value) type lvc_toolb
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_grid_title
-      importing
-                value(iv_value) type lvc_title
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_sel_mode
-      importing
-                value(iv_value) type lvc_libox
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_box_fname
-      importing
-                value(iv_value) type lvc_fname
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_sgl_clk_hd
-      importing
-                value(iv_value) type lvc_sglclh
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_totline
-      importing
-                value(iv_value) type lvc_nototl
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_numc_total
-      importing
-                value(iv_value) type lvc_numcto
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_utsplit
-      importing
-                value(iv_value) type lvc_unitsp
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_excp_fname
-      importing
-                value(iv_value) type lvc_exfnm
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_excp_rolln
-      importing
-                value(iv_value) type lvc_exrol
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_excp_conds
-      importing
-                value(iv_value) type lvc_excon
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_excp_led
-      importing
-                value(iv_value) type lvc_exled
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_excp_group
-      importing
-                value(iv_value) type lvc_exgrp
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_detailinit
-      importing
-                value(iv_value) type lvc_detini
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_detailtitl
-      importing
-                value(iv_value) type lvc_dettit
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_keyhot
-      importing
-                value(iv_value) type lvc_keyhot
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_no_author
-      importing
-                value(iv_value) type lvc_noauth
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_xifunckey
-      importing
-                value(iv_value) type aqs_xikey
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_xidirect
-      importing
-                value(iv_value) type flag
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_s_dragdrop
-      importing
-                value(iv_value) type lvc_s_dd01
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_info_fname
-      importing
-                value(iv_value) type lvc_cifnm
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_ctab_fname
-      importing
-                value(iv_value) type lvc_ctfnm
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_weblook
-      importing
-                value(iv_value) type lvc_look
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_webstyle
-      importing
-                value(iv_value) type lvc_style
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_webrows
-      importing
-                value(iv_value) type lvc_webrow
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_webxwidth
-      importing
-                value(iv_value) type int4
-      returning value(r_layout) type ref to zcl_falv_layout.
-    methods set_webxheight
-      importing
-                value(iv_value) type int4
-      returning value(r_layout) type ref to zcl_falv_layout.
-  protected section.
-  private section.
+    METHODS set_edit
+      IMPORTING VALUE(iv_value) TYPE lvc_edit
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
 
-    data: falv               type ref to zcl_falv,
-          "! Deletes all buttons except the once passed in delete_all_buttons
-          "! method
-          delete_all_buttons type abap_bool.
-    methods change_setting
-      importing
-        value(iv_value)   type any
-        value(iv_setting) type string .
+    METHODS set_edit_mode
+      IMPORTING VALUE(iv_value) TYPE lvc_edmo
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_keyfix
+      IMPORTING VALUE(iv_value) TYPE lvc_nokfix
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_frontend
+      IMPORTING VALUE(iv_value) TYPE lvc_front
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_object_key
+      IMPORTING VALUE(iv_value) TYPE bds_typeid
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_doc_id
+      IMPORTING VALUE(iv_value) TYPE bds_docid
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_template
+      IMPORTING VALUE(iv_value) TYPE bds_filena
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_language
+      IMPORTING VALUE(iv_value) TYPE lang
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_graphics
+      IMPORTING VALUE(iv_value) TYPE guid_32
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_smalltitle
+      IMPORTING VALUE(iv_value) TYPE lvc_titsz
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_hgridln
+      IMPORTING VALUE(iv_value) TYPE lvc_hgrid
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_vgridln
+      IMPORTING VALUE(iv_value) TYPE lvc_vgrid
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_headers
+      IMPORTING VALUE(iv_value) TYPE lvc_heads
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_merging
+      IMPORTING VALUE(iv_value) TYPE lvc_merge
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_cwidth_opt
+      IMPORTING VALUE(iv_value) TYPE lvc_cwo
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_totals_bef
+      IMPORTING VALUE(iv_value) TYPE lvc_totbef
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_totarr
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_totexp
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_rowmove
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_rowins
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_colexpd
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_f4
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_countfname
+      IMPORTING VALUE(iv_value) TYPE lvc_fname
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_col_opt
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_val_data
+      IMPORTING VALUE(iv_value) TYPE char01
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_blob_scope
+      IMPORTING VALUE(iv_value) TYPE salv_bs_blob_scope
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_blob_flavour
+      IMPORTING VALUE(iv_value) TYPE salv_bs_blob_flavour
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_blob_name
+      IMPORTING VALUE(iv_value) TYPE salv_bs_blob_name
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_blob_key
+      IMPORTING VALUE(iv_value) TYPE slis_blob_key
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_blob_type
+      IMPORTING VALUE(iv_value) TYPE slis_blob_type
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_stylefname
+      IMPORTING VALUE(iv_value) TYPE lvc_fname
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_rowmark
+      IMPORTING VALUE(iv_value) TYPE lvc_rowmk
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_toolbar
+      IMPORTING VALUE(iv_value) TYPE lvc_toolb
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_grid_title
+      IMPORTING VALUE(iv_value) TYPE lvc_title
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_sel_mode
+      IMPORTING VALUE(iv_value) TYPE lvc_libox
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_box_fname
+      IMPORTING VALUE(iv_value) TYPE lvc_fname
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_sgl_clk_hd
+      IMPORTING VALUE(iv_value) TYPE lvc_sglclh
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_totline
+      IMPORTING VALUE(iv_value) TYPE lvc_nototl
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_numc_total
+      IMPORTING VALUE(iv_value) TYPE lvc_numcto
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_utsplit
+      IMPORTING VALUE(iv_value) TYPE lvc_unitsp
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_excp_fname
+      IMPORTING VALUE(iv_value) TYPE lvc_exfnm
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_excp_rolln
+      IMPORTING VALUE(iv_value) TYPE lvc_exrol
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_excp_conds
+      IMPORTING VALUE(iv_value) TYPE lvc_excon
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_excp_led
+      IMPORTING VALUE(iv_value) TYPE lvc_exled
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_excp_group
+      IMPORTING VALUE(iv_value) TYPE lvc_exgrp
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_detailinit
+      IMPORTING VALUE(iv_value) TYPE lvc_detini
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_detailtitl
+      IMPORTING VALUE(iv_value) TYPE lvc_dettit
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_keyhot
+      IMPORTING VALUE(iv_value) TYPE lvc_keyhot
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_no_author
+      IMPORTING VALUE(iv_value) TYPE lvc_noauth
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_xifunckey
+      IMPORTING VALUE(iv_value) TYPE aqs_xikey
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_xidirect
+      IMPORTING VALUE(iv_value) TYPE flag
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_s_dragdrop
+      IMPORTING VALUE(iv_value) TYPE lvc_s_dd01
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_info_fname
+      IMPORTING VALUE(iv_value) TYPE lvc_cifnm
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_ctab_fname
+      IMPORTING VALUE(iv_value) TYPE lvc_ctfnm
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_weblook
+      IMPORTING VALUE(iv_value) TYPE lvc_look
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_webstyle
+      IMPORTING VALUE(iv_value) TYPE lvc_style
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_webrows
+      IMPORTING VALUE(iv_value) TYPE lvc_webrow
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_webxwidth
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+    METHODS set_webxheight
+      IMPORTING VALUE(iv_value) TYPE int4
+      RETURNING VALUE(r_layout) TYPE REF TO zcl_falv_layout.
+
+  PROTECTED SECTION.
+
+  PRIVATE SECTION.
+    DATA falv               TYPE REF TO zcl_falv.
+    "! Deletes all buttons except the once passed in delete_all_buttons
+    "! method
+    DATA delete_all_buttons TYPE abap_bool.
+
+    METHODS change_setting
+      IMPORTING VALUE(iv_value)   TYPE any
+                VALUE(iv_setting) TYPE string.
 ENDCLASS.
 
 
-
-CLASS ZCL_FALV_LAYOUT IMPLEMENTATION.
-
-
-  method change_setting.
-    falv->get_frontend_layout(  importing  es_layout = falv->lvc_layout ).
-    data(layout_field) = |falv->lvc_layout-{ iv_setting }|.
-    assign (layout_field) to field-symbol(<field>).
-    if sy-subrc eq 0.
+CLASS zcl_falv_layout IMPLEMENTATION.
+  METHOD change_setting.
+    falv->get_frontend_layout( IMPORTING es_layout = falv->lvc_layout ).
+    DATA(layout_field) = |falv->lvc_layout-{ iv_setting }|.
+    ASSIGN (layout_field) TO FIELD-SYMBOL(<field>).
+    IF sy-subrc = 0.
       <field> = iv_value.
-    endif.
+    ENDIF.
     falv->set_frontend_layout( is_layout = falv->lvc_layout  ).
-  endmethod.
+  ENDMETHOD.
 
-
-  method constructor.
+  METHOD constructor.
     falv = io_falv.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_blob_flavour.
-    change_setting( iv_value = iv_value iv_setting = 'BLOB_FLAVOUR' ).
+  METHOD set_blob_flavour.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'BLOB_FLAVOUR' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_blob_key.
-    change_setting( iv_value = iv_value iv_setting = 'BLOB_KEY' ).
+  METHOD set_blob_key.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'BLOB_KEY' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_blob_name.
-    change_setting( iv_value = iv_value iv_setting = 'BLOB_NAME' ).
+  METHOD set_blob_name.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'BLOB_NAME' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_blob_scope.
-    change_setting( iv_value = iv_value iv_setting = 'BLOB_SCOPE' ).
+  METHOD set_blob_scope.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'BLOB_SCOPE' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_blob_type.
-    change_setting( iv_value = iv_value iv_setting = 'BLOB_TYPE' ).
+  METHOD set_blob_type.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'BLOB_TYPE' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_box_fname.
-    change_setting( iv_value = iv_value iv_setting = 'BOX_FNAME' ).
+  METHOD set_box_fname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'BOX_FNAME' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_col_opt.
-    change_setting( iv_value = iv_value iv_setting = 'COL_OPT' ).
+  METHOD set_col_opt.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'COL_OPT' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_countfname.
-    change_setting( iv_value = iv_value iv_setting = 'COUNTFNAME' ).
+  METHOD set_countfname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'COUNTFNAME' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_ctab_fname.
-    change_setting( iv_value = iv_value iv_setting = 'CTAB_FNAME' ).
+  METHOD set_ctab_fname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'CTAB_FNAME' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_cwidth_opt.
-    change_setting( iv_value = iv_value iv_setting = 'CWIDTH_OPT' ).
+  METHOD set_cwidth_opt.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'CWIDTH_OPT' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_detailinit.
-    change_setting( iv_value = iv_value iv_setting = 'DETAILINIT' ).
+  METHOD set_detailinit.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DETAILINIT' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_detailtitl.
-    change_setting( iv_value = iv_value iv_setting = 'DETAILTITL' ).
+  METHOD set_detailtitl.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DETAILTITL' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_doc_id.
-    change_setting( iv_value = iv_value iv_setting = 'DOC_ID' ).
+  METHOD set_doc_id.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'DOC_ID' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_edit.
-    change_setting( iv_value = iv_value iv_setting = 'EDIT' ).
+  METHOD set_edit.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'EDIT' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_edit_mode.
-    change_setting( iv_value = iv_value iv_setting = 'EDIT_MODE' ).
+  METHOD set_edit_mode.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'EDIT_MODE' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_excp_conds.
-    change_setting( iv_value = iv_value iv_setting = 'EXCP_CONDS' ).
+  METHOD set_excp_conds.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'EXCP_CONDS' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_excp_fname.
-    change_setting( iv_value = iv_value iv_setting = 'EXCP_FNAME' ).
+  METHOD set_excp_fname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'EXCP_FNAME' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_excp_group.
-    change_setting( iv_value = iv_value iv_setting = 'EXCP_GROUP' ).
+  METHOD set_excp_group.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'EXCP_GROUP' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_excp_led.
-    change_setting( iv_value = iv_value iv_setting = 'EXCP_LED' ).
+  METHOD set_excp_led.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'EXCP_LED' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_excp_rolln.
-    change_setting( iv_value = iv_value iv_setting = 'EXCP_ROLLN' ).
+  METHOD set_excp_rolln.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'EXCP_ROLLN' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_frontend.
-    change_setting( iv_value = iv_value iv_setting = 'FRONTEND' ).
+  METHOD set_frontend.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'FRONTEND' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_graphics.
-    change_setting( iv_value = iv_value iv_setting = 'GRAPHICS' ).
+  METHOD set_graphics.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'GRAPHICS' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_grid_title.
-    change_setting( iv_value = iv_value iv_setting = 'GRID_TITLE' ).
+  METHOD set_grid_title.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'GRID_TITLE' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_info_fname.
-    change_setting( iv_value = iv_value iv_setting = 'INFO_FNAME' ).
+  METHOD set_info_fname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'INFO_FNAME' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_keyhot.
-    change_setting( iv_value = iv_value iv_setting = 'KEYHOT' ).
+  METHOD set_keyhot.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'KEYHOT' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_language.
-    change_setting( iv_value = iv_value iv_setting = 'LANGUAGE' ).
+  METHOD set_language.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'LANGUAGE' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_author.
-    change_setting( iv_value = iv_value iv_setting = 'NO_AUTHOR' ).
+  METHOD set_no_author.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_AUTHOR' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_colexpd.
-    change_setting( iv_value = iv_value iv_setting = 'NO_COLEXPD' ).
+  METHOD set_no_colexpd.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_COLEXPD' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_f4.
-    change_setting( iv_value = iv_value iv_setting = 'NO_F4' ).
+  METHOD set_no_f4.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_F4' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_headers.
-    change_setting( iv_value = iv_value iv_setting = 'NO_HEADERS' ).
+  METHOD set_no_headers.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_HEADERS' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_hgridln.
-    change_setting( iv_value = iv_value iv_setting = 'NO_HGRIDLN' ).
+  METHOD set_no_hgridln.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_HGRIDLN' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_keyfix.
-    change_setting( iv_value = iv_value iv_setting = 'NO_KEYFIX' ).
+  METHOD set_no_keyfix.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_KEYFIX' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_merging.
-    change_setting( iv_value = iv_value iv_setting = 'NO_MERGING' ).
+  METHOD set_no_merging.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_MERGING' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_rowins.
-    change_setting( iv_value = iv_value iv_setting = 'NO_ROWINS' ).
+  METHOD set_no_rowins.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_ROWINS' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_rowmark.
-    change_setting( iv_value = iv_value iv_setting = 'NO_ROWMARK' ).
+  METHOD set_no_rowmark.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_ROWMARK' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_rowmove.
-    change_setting( iv_value = iv_value iv_setting = 'NO_ROWMOVE' ).
+  METHOD set_no_rowmove.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_ROWMOVE' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_toolbar.
-    change_setting( iv_value = iv_value iv_setting = 'NO_TOOLBAR' ).
+  METHOD set_no_toolbar.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_TOOLBAR' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_totarr.
-    change_setting( iv_value = iv_value iv_setting = 'NO_TOTARR' ).
+  METHOD set_no_totarr.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_TOTARR' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_totexp.
-    change_setting( iv_value = iv_value iv_setting = 'NO_TOTEXP' ).
+  METHOD set_no_totexp.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_TOTEXP' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_totline.
-    change_setting( iv_value = iv_value iv_setting = 'NO_TOTLINE' ).
+  METHOD set_no_totline.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_TOTLINE' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_utsplit.
-    change_setting( iv_value = iv_value iv_setting = 'NO_UTSPLIT' ).
+  METHOD set_no_utsplit.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_UTSPLIT' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_no_vgridln.
-    change_setting( iv_value = iv_value iv_setting = 'NO_VGRIDLN' ).
+  METHOD set_no_vgridln.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NO_VGRIDLN' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_numc_total.
-    change_setting( iv_value = iv_value iv_setting = 'NUMC_TOTAL' ).
+  METHOD set_numc_total.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'NUMC_TOTAL' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_object_key.
-    change_setting( iv_value = iv_value iv_setting = 'OBJECT_KEY' ).
+  METHOD set_object_key.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'OBJECT_KEY' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_sel_mode.
-    change_setting( iv_value = iv_value iv_setting = 'SEL_MODE' ).
+  METHOD set_sel_mode.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'SEL_MODE' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_sgl_clk_hd.
-    change_setting( iv_value = iv_value iv_setting = 'SGL_CLK_HD' ).
+  METHOD set_sgl_clk_hd.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'SGL_CLK_HD' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_smalltitle.
-    change_setting( iv_value = iv_value iv_setting = 'SMALLTITLE' ).
+  METHOD set_smalltitle.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'SMALLTITLE' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_stylefname.
-    change_setting( iv_value = iv_value iv_setting = 'STYLEFNAME' ).
+  METHOD set_stylefname.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'STYLEFNAME' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_s_dragdrop.
-    change_setting( iv_value = iv_value iv_setting = 'S_DRAGDROP' ).
+  METHOD set_s_dragdrop.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'S_DRAGDROP' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_template.
-    change_setting( iv_value = iv_value iv_setting = 'TEMPLATE' ).
+  METHOD set_template.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'TEMPLATE' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_totals_bef.
-    change_setting( iv_value = iv_value iv_setting = 'TOTALS_BEF' ).
+  METHOD set_totals_bef.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'TOTALS_BEF' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_val_data.
-    change_setting( iv_value = iv_value iv_setting = 'VAL_DATA' ).
+  METHOD set_val_data.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'VAL_DATA' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_weblook.
-    change_setting( iv_value = iv_value iv_setting = 'WEBLOOK' ).
+  METHOD set_weblook.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'WEBLOOK' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_webrows.
-    change_setting( iv_value = iv_value iv_setting = 'WEBROWS' ).
+  METHOD set_webrows.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'WEBROWS' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_webstyle.
-    change_setting( iv_value = iv_value iv_setting = 'WEBSTYLE' ).
+  METHOD set_webstyle.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'WEBSTYLE' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_webxheight.
-    change_setting( iv_value = iv_value iv_setting = 'WEBXHEIGHT' ).
+  METHOD set_webxheight.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'WEBXHEIGHT' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_webxwidth.
-    change_setting( iv_value = iv_value iv_setting = 'WEBXWIDTH' ).
+  METHOD set_webxwidth.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'WEBXWIDTH' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_xidirect.
-    change_setting( iv_value = iv_value iv_setting = 'XIDIRECT' ).
+  METHOD set_xidirect.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'XIDIRECT' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_xifunckey.
-    change_setting( iv_value = iv_value iv_setting = 'XIFUNCKEY' ).
+  METHOD set_xifunckey.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'XIFUNCKEY' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 
-
-  method set_zebra.
-    change_setting( iv_value = iv_value iv_setting = 'ZEBRA' ).
+  METHOD set_zebra.
+    change_setting( iv_value   = iv_value
+                    iv_setting = 'ZEBRA' ).
     r_layout = me.
-  endmethod.
+  ENDMETHOD.
 ENDCLASS.
