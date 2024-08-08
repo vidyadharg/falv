@@ -1525,6 +1525,7 @@ CLASS zcl_falv IMPLEMENTATION.
     IF NOT line_exists( exclude_functions[ table_line = iv_ucomm ] ).
       INSERT iv_ucomm INTO TABLE exclude_functions.
     ENDIF.
+    r_falv = me.
   ENDMETHOD.
 
   METHOD create_ex_result_falv.
