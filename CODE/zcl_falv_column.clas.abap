@@ -886,7 +886,8 @@ CLASS zcl_falv_column IMPLEMENTATION.
       DATA(original_pos) = <current_column>-col_pos.
       SORT falv->fcat BY col_pos ASCENDING.
       LOOP AT falv->fcat ASSIGNING FIELD-SYMBOL(<fcat>) WHERE col_pos >= iv_value.
-        <fcat>-col_pos += 1.
+*        <fcat>-col_pos += 1.
+         add 1 to <fcat>-col_pos.
       ENDLOOP.
       <current_column>-col_pos = iv_value.
       SORT falv->fcat BY col_pos ASCENDING.
