@@ -2358,8 +2358,10 @@ CLASS zcl_falv IMPLEMENTATION.
         " Nur Spalte setze komplette Spalte
         LOOP AT mt_data ASSIGNING <data>
              WHERE col_pos = col.
-          <data>-style  += style.
-          <data>-style2 += style2.
+*          <data>-style  += style.
+*          <data>-style2 += style2.
+          ADD style TO <data>-style.
+          ADD style2 TO <data>-style2.
         ENDLOOP.
         IF sy-subrc = 0.
           call_redraw_after_merging = abap_true.
@@ -2370,8 +2372,10 @@ CLASS zcl_falv IMPLEMENTATION.
         " Nur Zeile eingegeben -> komplette Zeile setzen
         LOOP AT mt_data ASSIGNING <data>
              WHERE row_pos = row.
-          <data>-style  += style.
-          <data>-style2 += style2.
+*          <data>-style  += style.
+*          <data>-style2 += style2.
+          ADD style TO <data>-style.
+          ADD style2 TO <data>-style2.
         ENDLOOP.
         IF sy-subrc = 0.
           call_redraw_after_merging = abap_true.
@@ -2380,8 +2384,10 @@ CLASS zcl_falv IMPLEMENTATION.
         ASSIGN mt_data[ row_pos = row
                         col_pos = col ] TO <data>.
         IF sy-subrc = 0.
-          <data>-style  += style.
-          <data>-style2 += style2.
+*          <data>-style  += style.
+*          <data>-style2 += style2.
+          ADD style TO <data>-style.
+          ADD style2 TO <data>-style2.
           call_redraw_after_merging = abap_true.
         ELSE.
           EXIT.
