@@ -1,32 +1,45 @@
-CLASS zcl_falv DEFINITION
-  PUBLIC
-  INHERITING FROM cl_gui_alv_grid
-  CREATE PUBLIC
-  GLOBAL FRIENDS zcl_falv_layout.
+class ZCL_FALV definition
+  public
+  inheriting from CL_GUI_ALV_GRID
+  create public
 
-  PUBLIC SECTION.
-    INTERFACES if_alv_rm_grid_friend.
+  global friends ZCL_FALV_LAYOUT .
 
-    TYPES:
-      BEGIN OF t_subcl_call,
+public section.
+
+  interfaces IF_ALV_RM_GRID_FRIEND .
+
+  types:
+    begin of FALV_S_RO01,
+    ROW_ID type i,
+    outputlen type i,
+    END OF FALV_S_RO01 .
+  types:
+    FALV_T_RO01 TYPE TABLE OF FALV_S_RO01 .
+  types:
+    BEGIN OF t_subcl_call,
         progname TYPE progname,
         line     TYPE i,
         column   TYPE i,
         class    TYPE string,
-      END OF t_subcl_call.
-    TYPES tt_subcl_call TYPE SORTED TABLE OF t_subcl_call WITH UNIQUE KEY progname line column.
-    TYPES:
-      BEGIN OF t_email,
+      END OF t_subcl_call .
+  types:
+    tt_subcl_call TYPE SORTED TABLE OF t_subcl_call WITH UNIQUE KEY progname line column .
+  types:
+    BEGIN OF t_email,
         smtp_addr  TYPE ad_smtpadr,
         express    TYPE os_boolean,
         copy       TYPE os_boolean,
         blind_copy TYPE os_boolean,
-      END OF t_email.
-    TYPES tt_email  TYPE TABLE OF t_email.
-    TYPES t_column  TYPE REF TO zcl_falv_column.
-    TYPES t_columns TYPE SORTED TABLE OF t_column WITH UNIQUE KEY table_line.
+      END OF t_email .
+  types:
+    tt_email  TYPE TABLE OF t_email .
+  types T_COLUMN type ref to ZCL_FALV_COLUMN .
+  types:
+    t_columns TYPE SORTED TABLE OF t_column WITH UNIQUE KEY table_line .
 
-    CONSTANTS: BEGIN OF color,
+  constants:
+    BEGIN OF color,
                  blue                         TYPE char4 VALUE 'C100',
                  blue_intensified             TYPE char4 VALUE 'C110',
                  blue_intensified_inversed    TYPE char4 VALUE 'C111',
@@ -55,39 +68,38 @@ CLASS zcl_falv DEFINITION
                  orange_intensified           TYPE char4 VALUE 'C710',
                  orange_intensified_inversed  TYPE char4 VALUE 'C711',
                  orange_inversed              TYPE char4 VALUE 'C701',
-               END OF color ##NEEDED.
-    CONSTANTS version        TYPE string   VALUE '740.1.0.19' ##NO_TEXT.
-    CONSTANTS cc_name        TYPE char30   VALUE 'CC_GRID' ##NO_TEXT.
-    CONSTANTS c_screen_popup TYPE sy-dynnr VALUE '0200' ##NO_TEXT.
-    CONSTANTS c_screen_full  TYPE sy-dynnr VALUE '0100' ##NO_TEXT.
-    CONSTANTS c_fscr_repid   TYPE sy-repid VALUE 'SAPLZFALV' ##NO_TEXT.
-
-    DATA result                TYPE i READ-ONLY.
-    DATA splitter_row_1_height TYPE i READ-ONLY.
-    DATA splitter_row_2_height TYPE i READ-ONLY.
-    DATA splitter_row_3_height TYPE i READ-ONLY.
-
-    CONSTANTS fc_back             TYPE sy-ucomm VALUE 'BACK' ##NO_TEXT.
-    CONSTANTS fc_up               TYPE sy-ucomm VALUE 'UP' ##NO_TEXT.
-    CONSTANTS fc_exit             TYPE sy-ucomm VALUE 'EXIT' ##NO_TEXT.
-    CONSTANTS fc_cancel           TYPE sy-ucomm VALUE 'CANCEL' ##NO_TEXT.
-    CONSTANTS fc_mass_replace     TYPE sy-ucomm VALUE 'MASS_REPL' ##NO_TEXT.
-    CONSTANTS fc_save             TYPE sy-ucomm VALUE '&DATA_SAVE' ##NO_TEXT.
-    CONSTANTS fc_print            TYPE sy-ucomm VALUE 'PRINT' ##NO_TEXT.
-    CONSTANTS fc_find             TYPE sy-ucomm VALUE 'FIND' ##NO_TEXT.
-    CONSTANTS fc_find_next        TYPE sy-ucomm VALUE 'FINDNEXT' ##NO_TEXT.
-    CONSTANTS fc_first_page       TYPE sy-ucomm VALUE 'PGHOME' ##NO_TEXT.
-    CONSTANTS fc_last_page        TYPE sy-ucomm VALUE 'PGEND' ##NO_TEXT.
-    CONSTANTS fc_previous_page    TYPE sy-ucomm VALUE 'PGUP' ##NO_TEXT.
-    CONSTANTS fc_next_page        TYPE sy-ucomm VALUE 'PGDOWN' ##NO_TEXT.
-    CONSTANTS button_normal       TYPE tb_btype VALUE 0.
-    CONSTANTS button_menu_default TYPE tb_btype VALUE 1.
-    CONSTANTS button_menu         TYPE tb_btype VALUE 2.
-    CONSTANTS button_separator    TYPE tb_btype VALUE 3.
-    CONSTANTS button_radiobutton  TYPE tb_btype VALUE 4.
-    CONSTANTS button_checkbox     TYPE tb_btype VALUE 5.
-    CONSTANTS button_menu_entry   TYPE tb_btype VALUE 6.
-    CONSTANTS: BEGIN OF symbol,
+               END OF color .
+  constants VERSION type STRING value '740.1.0.19' ##NO_TEXT.
+  constants CC_NAME type CHAR30 value 'CC_GRID' ##NO_TEXT.
+  constants C_SCREEN_POPUP type SY-DYNNR value '0200' ##NO_TEXT.
+  constants C_SCREEN_FULL type SY-DYNNR value '0100' ##NO_TEXT.
+  constants C_FSCR_REPID type SY-REPID value 'SAPLZFALV' ##NO_TEXT.
+  data RESULT type I read-only .
+  data SPLITTER_ROW_1_HEIGHT type I read-only .
+  data SPLITTER_ROW_2_HEIGHT type I read-only .
+  data SPLITTER_ROW_3_HEIGHT type I read-only .
+  constants FC_BACK type SY-UCOMM value 'BACK' ##NO_TEXT.
+  constants FC_UP type SY-UCOMM value 'UP' ##NO_TEXT.
+  constants FC_EXIT type SY-UCOMM value 'EXIT' ##NO_TEXT.
+  constants FC_CANCEL type SY-UCOMM value 'CANCEL' ##NO_TEXT.
+  constants FC_MASS_REPLACE type SY-UCOMM value 'MASS_REPL' ##NO_TEXT.
+  constants FC_SAVE type SY-UCOMM value '&DATA_SAVE' ##NO_TEXT.
+  constants FC_PRINT type SY-UCOMM value 'PRINT' ##NO_TEXT.
+  constants FC_FIND type SY-UCOMM value 'FIND' ##NO_TEXT.
+  constants FC_FIND_NEXT type SY-UCOMM value 'FINDNEXT' ##NO_TEXT.
+  constants FC_FIRST_PAGE type SY-UCOMM value 'PGHOME' ##NO_TEXT.
+  constants FC_LAST_PAGE type SY-UCOMM value 'PGEND' ##NO_TEXT.
+  constants FC_PREVIOUS_PAGE type SY-UCOMM value 'PGUP' ##NO_TEXT.
+  constants FC_NEXT_PAGE type SY-UCOMM value 'PGDOWN' ##NO_TEXT.
+  constants BUTTON_NORMAL type TB_BTYPE value 0 ##NO_TEXT.
+  constants BUTTON_MENU_DEFAULT type TB_BTYPE value 1 ##NO_TEXT.
+  constants BUTTON_MENU type TB_BTYPE value 2 ##NO_TEXT.
+  constants BUTTON_SEPARATOR type TB_BTYPE value 3 ##NO_TEXT.
+  constants BUTTON_RADIOBUTTON type TB_BTYPE value 4 ##NO_TEXT.
+  constants BUTTON_CHECKBOX type TB_BTYPE value 5 ##NO_TEXT.
+  constants BUTTON_MENU_ENTRY type TB_BTYPE value 6 ##NO_TEXT.
+  constants:
+    BEGIN OF symbol,
                  empty_space        TYPE char01 VALUE ' ',
                  plus_box           TYPE char01 VALUE '!',
                  minus_box          TYPE char01 VALUE '"',
@@ -143,306 +155,335 @@ CLASS zcl_falv DEFINITION
                  flash              TYPE char01 VALUE 'V',
                  large_square       TYPE char01 VALUE 'W',
                  ellipsis           TYPE char01 VALUE 'X',
-               END OF symbol.
+               END OF symbol .
+  data MAIN_CONTAINER type ref to CL_GUI_CONTAINER read-only .
+  data SPLIT_CONTAINER type ref to CL_GUI_SPLITTER_CONTAINER .
+  data MAIN_SPLIT_CONTAINER type ref to CL_GUI_SPLITTER_CONTAINER .
+  data TOP_OF_PAGE_CONTAINER type ref to CL_GUI_CONTAINER .
+  data VARIANT type DISVARIANT .
+  data LAYOUT_SAVE type CHAR01 .
+  data EXCLUDE_FUNCTIONS type UI_FUNCTIONS .
+  data FCAT type LVC_T_FCAT .
+  data SORT type LVC_T_SORT .
+  data FILTER type LVC_T_FILT .
+  data LVC_LAYOUT type LVC_S_LAYO read-only .
+  data LAYOUT type ref to ZCL_FALV_LAYOUT .
+  data GUI_STATUS type ref to ZCL_FALV_DYNAMIC_STATUS .
+  data SCREEN type SY-DYNNR read-only .
+  data OUTTAB type ref to DATA .
+  data TITLE_V1 type STRING .
+  data TITLE_V2 type STRING .
+  data TITLE_V3 type STRING .
+  data TITLE_V4 type STRING .
+  data TITLE_V5 type STRING .
+  data DELAY_MOVE_CURRENT_CELL type I read-only value 20 ##NO_TEXT.
+  data DELAY_CHANGE_SELECTION type I read-only value 20 ##NO_TEXT.
+  data TOP_OF_PAGE_HEIGHT type I value 150 ##NO_TEXT.
+  data ERROR_LOG_HEIGHT type I value 100 ##NO_TEXT.
+  data GRID type ref to CL_GUI_ALV_GRID .
+  data BUILT_IN_SCREEN type ABAP_BOOL read-only .
+  data BUFFERING_ACTIVE type ABAP_BOOL value ABAP_TRUE ##NO_TEXT.
+  data BYPASSING_BUFFER type ABAP_BOOL value ABAP_FALSE ##NO_TEXT.
 
-    DATA main_container          TYPE REF TO cl_gui_container          READ-ONLY.
-    DATA split_container         TYPE REF TO cl_gui_splitter_container.
-    DATA main_split_container    TYPE REF TO cl_gui_splitter_container.
-    DATA top_of_page_container   TYPE REF TO cl_gui_container.
-    DATA variant                 TYPE disvariant.
-    DATA layout_save             TYPE char01.
-    DATA exclude_functions       TYPE ui_functions.
-    DATA fcat                    TYPE lvc_t_fcat.
-    DATA sort                    TYPE lvc_t_sort.
-    DATA filter                  TYPE lvc_t_filt.
-    DATA lvc_layout              TYPE lvc_s_layo                       READ-ONLY.
-    DATA layout                  TYPE REF TO zcl_falv_layout.
-    DATA gui_status              TYPE REF TO zcl_falv_dynamic_status.
-    DATA screen                  TYPE sy-dynnr                         READ-ONLY.
-    DATA outtab                  TYPE REF TO data.
-    DATA title_v1                TYPE string.
-    DATA title_v2                TYPE string.
-    DATA title_v3                TYPE string.
-    DATA title_v4                TYPE string.
-    DATA title_v5                TYPE string.
-    DATA delay_move_current_cell TYPE i                                READ-ONLY VALUE 20 ##NO_TEXT.
-    DATA delay_change_selection  TYPE i                                READ-ONLY VALUE 20 ##NO_TEXT.
-    DATA top_of_page_height      TYPE i VALUE 150 ##NO_TEXT.
-    DATA error_log_height        TYPE i VALUE 100 ##NO_TEXT.
-    DATA grid                    TYPE REF TO cl_gui_alv_grid.
-    DATA built_in_screen         TYPE abap_bool                        READ-ONLY.
-    DATA buffering_active        TYPE abap_bool VALUE abap_true.
-    DATA bypassing_buffer        TYPE abap_bool VALUE abap_false.
-
-    CLASS-METHODS create
-      IMPORTING VALUE(i_parent)          TYPE REF TO cl_gui_container  OPTIONAL
-                VALUE(i_applogparent)    TYPE REF TO cl_gui_container  OPTIONAL
-                VALUE(i_popup)           TYPE abap_bool                DEFAULT abap_false
-                VALUE(i_applog_embedded) TYPE abap_bool                DEFAULT abap_false
-                VALUE(i_subclass)        TYPE REF TO cl_abap_typedescr OPTIONAL
-                VALUE(i_handle)          TYPE slis_handl               OPTIONAL
-      CHANGING  ct_table                 TYPE STANDARD TABLE
-      RETURNING VALUE(rv_falv)           TYPE REF TO zcl_falv.
-
-    METHODS create_by_copy
-      IMPORTING VALUE(i_parent)       TYPE REF TO cl_gui_container OPTIONAL
-                VALUE(i_applogparent) TYPE REF TO cl_gui_container OPTIONAL
-                VALUE(i_popup)        TYPE abap_bool               DEFAULT abap_false
-      RETURNING VALUE(rv_falv)        TYPE REF TO zcl_falv.
-
-    CLASS-METHODS create_by_type
-      IMPORTING VALUE(i_parent)          TYPE REF TO cl_gui_container  OPTIONAL
-                VALUE(i_applogparent)    TYPE REF TO cl_gui_container  OPTIONAL
-                VALUE(i_popup)           TYPE abap_bool                DEFAULT abap_false
-                VALUE(i_applog_embedded) TYPE abap_bool                DEFAULT abap_false
-                VALUE(i_subclass)        TYPE REF TO cl_abap_typedescr OPTIONAL
-                i_type                   TYPE REF TO cl_abap_typedescr
-      RETURNING VALUE(rv_falv)           TYPE REF TO zcl_falv.
-
-    CLASS-METHODS lvc_fcat_from_itab
-      IMPORTING it_table       TYPE STANDARD TABLE
-      RETURNING VALUE(rt_fcat) TYPE lvc_t_fcat.
-
-    METHODS constructor
-      IMPORTING  VALUE(i_shellstyle)  TYPE i                       DEFAULT 0
-                 VALUE(i_lifetime)    TYPE i                       OPTIONAL
-                 VALUE(i_parent)      TYPE REF TO cl_gui_container OPTIONAL
-                 VALUE(i_appl_events) TYPE char01                  DEFAULT space
-                 i_parentdbg          TYPE REF TO cl_gui_container OPTIONAL
-                 i_applogparent       TYPE REF TO cl_gui_container OPTIONAL
-                 i_graphicsparent     TYPE REF TO cl_gui_container OPTIONAL
-                 VALUE(i_name)        TYPE string                  OPTIONAL
-                 i_fcat_complete      TYPE sap_bool                DEFAULT space
-      EXCEPTIONS error_cntl_create
-                 error_cntl_init
-                 error_cntl_link
-                 error_dp_create
-                 object_created_manually.
-
-    METHODS pbo
-      IMPORTING VALUE(iv_dynnr) TYPE sy-dynnr DEFAULT sy-dynnr.
-
-    METHODS pai
-      IMPORTING VALUE(iv_dynnr) TYPE sy-dynnr DEFAULT sy-dynnr
-      CHANGING  c_ucomm         TYPE sy-ucomm DEFAULT sy-ucomm.
-
-    METHODS display FINAL
-      IMPORTING VALUE(iv_force_grid)   TYPE abap_bool DEFAULT space
-                VALUE(iv_start_row)    TYPE i         OPTIONAL
-                VALUE(iv_start_column) TYPE i         OPTIONAL
-                VALUE(iv_end_row)      TYPE i         OPTIONAL
-                VALUE(iv_end_column)   TYPE i         OPTIONAL
-      RETURNING VALUE(r_falv)          TYPE REF TO zcl_falv.
-
-    METHODS exclude_function
-      IMPORTING VALUE(iv_ucomm) TYPE sy-ucomm
-      RETURNING VALUE(r_falv)   TYPE REF TO zcl_falv.
-
-    METHODS column
-      IMPORTING VALUE(iv_fieldname) TYPE lvc_s_fcat-fieldname
-      RETURNING VALUE(rv_column)    TYPE REF TO zcl_falv_column.
-
-    METHODS soft_refresh
-      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv.
-
-    METHODS set_mark_field
-      IMPORTING VALUE(iv_fieldname) TYPE lvc_s_fcat-fieldname
-      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv.
-
-    METHODS set_editable
-      IMPORTING VALUE(iv_modify) TYPE abap_bool DEFAULT abap_false
-      RETURNING VALUE(r_falv)    TYPE REF TO zcl_falv.
-
-    METHODS set_readonly
-      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv.
-
-    METHODS add_button
-      IMPORTING VALUE(iv_function)  TYPE ui_func
-                VALUE(iv_icon)      TYPE icon_d    OPTIONAL
-                VALUE(iv_quickinfo) TYPE iconquick OPTIONAL
-                VALUE(iv_butn_type) TYPE tb_btype  OPTIONAL
-                VALUE(iv_disabled)  TYPE abap_bool OPTIONAL
-                VALUE(iv_text)      TYPE text40    OPTIONAL
-                VALUE(iv_checked)   TYPE abap_bool OPTIONAL
-      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv.
-
+  class-methods CREATE
+    importing
+      value(I_PARENT) type ref to CL_GUI_CONTAINER optional
+      value(I_APPLOGPARENT) type ref to CL_GUI_CONTAINER optional
+      value(I_POPUP) type ABAP_BOOL default ABAP_FALSE
+      value(I_APPLOG_EMBEDDED) type ABAP_BOOL default ABAP_FALSE
+      value(I_SUBCLASS) type ref to CL_ABAP_TYPEDESCR optional
+      value(I_HANDLE) type SLIS_HANDL optional
+    changing
+      !CT_TABLE type STANDARD TABLE
+    returning
+      value(RV_FALV) type ref to ZCL_FALV .
+  methods CREATE_BY_COPY
+    importing
+      value(I_PARENT) type ref to CL_GUI_CONTAINER optional
+      value(I_APPLOGPARENT) type ref to CL_GUI_CONTAINER optional
+      value(I_POPUP) type ABAP_BOOL default ABAP_FALSE
+    returning
+      value(RV_FALV) type ref to ZCL_FALV .
+  class-methods CREATE_BY_TYPE
+    importing
+      value(I_PARENT) type ref to CL_GUI_CONTAINER optional
+      value(I_APPLOGPARENT) type ref to CL_GUI_CONTAINER optional
+      value(I_POPUP) type ABAP_BOOL default ABAP_FALSE
+      value(I_APPLOG_EMBEDDED) type ABAP_BOOL default ABAP_FALSE
+      value(I_SUBCLASS) type ref to CL_ABAP_TYPEDESCR optional
+      !I_TYPE type ref to CL_ABAP_TYPEDESCR
+    returning
+      value(RV_FALV) type ref to ZCL_FALV .
+  class-methods LVC_FCAT_FROM_ITAB
+    importing
+      !IT_TABLE type STANDARD TABLE
+    returning
+      value(RT_FCAT) type LVC_T_FCAT .
+  methods CONSTRUCTOR
+    importing
+      value(I_SHELLSTYLE) type I default 0
+      value(I_LIFETIME) type I optional
+      value(I_PARENT) type ref to CL_GUI_CONTAINER optional
+      value(I_APPL_EVENTS) type CHAR01 default SPACE
+      !I_PARENTDBG type ref to CL_GUI_CONTAINER optional
+      !I_APPLOGPARENT type ref to CL_GUI_CONTAINER optional
+      !I_GRAPHICSPARENT type ref to CL_GUI_CONTAINER optional
+      value(I_NAME) type STRING optional
+      !I_FCAT_COMPLETE type SAP_BOOL default SPACE
+    exceptions
+      ERROR_CNTL_CREATE
+      ERROR_CNTL_INIT
+      ERROR_CNTL_LINK
+      ERROR_DP_CREATE
+      OBJECT_CREATED_MANUALLY .
+  methods PBO
+    importing
+      value(IV_DYNNR) type SY-DYNNR default SY-DYNNR .
+  methods PAI
+    importing
+      value(IV_DYNNR) type SY-DYNNR default SY-DYNNR
+    changing
+      !C_UCOMM type SY-UCOMM default SY-UCOMM .
+  methods DISPLAY
+  final
+    importing
+      value(IV_FORCE_GRID) type ABAP_BOOL default SPACE
+      value(IV_START_ROW) type I optional
+      value(IV_START_COLUMN) type I optional
+      value(IV_END_ROW) type I optional
+      value(IV_END_COLUMN) type I optional
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods EXCLUDE_FUNCTION
+    importing
+      value(IV_UCOMM) type SY-UCOMM
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods COLUMN
+    importing
+      value(IV_FIELDNAME) type LVC_S_FCAT-FIELDNAME
+    returning
+      value(RV_COLUMN) type ref to ZCL_FALV_COLUMN .
+  methods SOFT_REFRESH
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SET_MARK_FIELD
+    importing
+      value(IV_FIELDNAME) type LVC_S_FCAT-FIELDNAME
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SET_EDITABLE
+    importing
+      value(IV_MODIFY) type ABAP_BOOL default ABAP_FALSE
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SET_READONLY
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods ADD_BUTTON
+    importing
+      value(IV_FUNCTION) type UI_FUNC
+      value(IV_ICON) type ICON_D optional
+      value(IV_QUICKINFO) type ICONQUICK optional
+      value(IV_BUTN_TYPE) type TB_BTYPE optional
+      value(IV_DISABLED) type ABAP_BOOL optional
+      value(IV_TEXT) type TEXT40 optional
+      value(IV_CHECKED) type ABAP_BOOL optional
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
     "! Don't call it from Toolbar event handler
     "! as it will cause endless loop
     "!
     "! @parameter iv_function |
     "! @parameter r_falv |
-    METHODS disable_button
-      IMPORTING VALUE(iv_function) TYPE ui_func
-      RETURNING VALUE(r_falv)      TYPE REF TO zcl_falv.
-
+  methods DISABLE_BUTTON
+    importing
+      value(IV_FUNCTION) type UI_FUNC
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
     "! Don't call it from Toolbar event handler
     "! as it will cause endless loop
     "!
     "! @parameter iv_function |
     "! @parameter r_falv |
-    METHODS enable_button
-      IMPORTING VALUE(iv_function) TYPE ui_func
-      RETURNING VALUE(r_falv)      TYPE REF TO zcl_falv.
-
+  methods ENABLE_BUTTON
+    importing
+      value(IV_FUNCTION) type UI_FUNC
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
     "! Don't call it from Toolbar event handler
     "! as it will cause endless loop
     "!
     "! @parameter iv_function |
     "! @parameter r_falv |
-    METHODS delete_button
-      IMPORTING VALUE(iv_function) TYPE ui_func
-      RETURNING VALUE(r_falv)      TYPE REF TO zcl_falv.
-
+  methods DELETE_BUTTON
+    importing
+      value(IV_FUNCTION) type UI_FUNC
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
     "! Don't call it from Toolbar event handler
     "! as it will cause endless loop
     "!
     "! @parameter iv_exceptions |
     "! @parameter r_falv |
-    METHODS delete_all_buttons
-      IMPORTING VALUE(iv_exceptions) TYPE ttb_button OPTIONAL
-      RETURNING VALUE(r_falv)        TYPE REF TO zcl_falv.
-
-    METHODS set_cell_disabled
-      IMPORTING VALUE(iv_fieldname) TYPE fieldname
-                VALUE(iv_row)       TYPE lvc_s_roid-row_id
-      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv.
-
-    METHODS set_cell_enabled
-      IMPORTING VALUE(iv_fieldname) TYPE fieldname
-                VALUE(iv_row)       TYPE lvc_s_roid-row_id
-      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv.
-
-    METHODS set_cell_button
-      IMPORTING VALUE(iv_fieldname) TYPE fieldname
-                VALUE(iv_row)       TYPE lvc_s_roid-row_id
-      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv.
-
-    METHODS set_cell_hotspot
-      IMPORTING VALUE(iv_fieldname) TYPE fieldname
-                VALUE(iv_row)       TYPE lvc_s_roid-row_id
-      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv.
-
-    METHODS set_row_color
-      IMPORTING VALUE(iv_color) TYPE char04
-                VALUE(iv_row)   TYPE lvc_s_roid-row_id
-      RETURNING VALUE(r_falv)   TYPE REF TO zcl_falv.
-
-    METHODS set_cell_color
-      IMPORTING VALUE(iv_fieldname) TYPE fieldname
-                VALUE(iv_color)     TYPE lvc_s_colo
-                VALUE(iv_row)       TYPE lvc_s_roid-row_id
-      RETURNING VALUE(r_falv)       TYPE REF TO zcl_falv.
-
-    METHODS mass_replace.
-
-    METHODS export_to_excel
-      RETURNING VALUE(rv_xstring) TYPE xstring.
-
-    METHODS save_excel_localy
-      IMPORTING VALUE(iv_path)  TYPE string OPTIONAL
-      RETURNING VALUE(rv_saved) TYPE abap_bool.
-
-    METHODS hide_top_of_page
-      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv.
-
-    METHODS show_top_of_page
-      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv.
-
-    METHODS set_list_view
-      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv.
-
-    METHODS encode_picture_base64
-      IMPORTING VALUE(iv_xstring)   TYPE xstring
-                VALUE(iv_mime_type) TYPE csequence
-      RETURNING VALUE(rv_image)     TYPE string.
-
-    METHODS get_file_from_mime
-      IMPORTING VALUE(iv_path)      TYPE string
-      EXPORTING VALUE(ev_xstring)   TYPE xstring
-                VALUE(ev_mime_type) TYPE string.
-
-    METHODS get_picture_from_se78
-      IMPORTING VALUE(iv_name)    TYPE stxbitmaps-tdname
-                VALUE(iv_type)    TYPE stxbitmaps-tdbtype DEFAULT 'BCOL'
-                VALUE(iv_id)      TYPE stxbitmaps-tdid    DEFAULT 'BMAP'
-      RETURNING VALUE(rv_xstring) TYPE xstring.
-
-    METHODS send
-      IMPORTING  VALUE(iv_subject)     TYPE csequence  OPTIONAL
-                 VALUE(iv_sender)      TYPE ad_smtpadr OPTIONAL
-                 VALUE(iv_sender_name) TYPE ad_smtpadr OPTIONAL
-                 VALUE(iv_filename)    TYPE csequence  OPTIONAL
-                 VALUE(it_recipients)  TYPE tt_email
-                 VALUE(iv_body)        TYPE string     OPTIONAL
-                 VALUE(iv_importance)  TYPE bcs_docimp OPTIONAL
-                 VALUE(iv_sensitivity) TYPE so_obj_sns OPTIONAL
-                 VALUE(iv_immediately) TYPE abap_bool  OPTIONAL
-                 VALUE(iv_commit)      TYPE abap_bool  DEFAULT abap_true
-      RETURNING  VALUE(r_falv)         TYPE REF TO zcl_falv
-      EXCEPTIONS create_request_error
-                 create_document_error
-                 add_attachment_error
-                 add_document_error
-                 add_recipient_error
-                 add_sender_error
-                 send_error
-                 send_immediately_error.
-
-    METHODS hide_applog.
-
-    METHODS show_applog
-      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv.
-
+  methods DELETE_ALL_BUTTONS
+    importing
+      value(IV_EXCEPTIONS) type TTB_BUTTON optional
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SET_CELL_DISABLED
+    importing
+      value(IV_FIELDNAME) type FIELDNAME
+      value(IV_ROW) type LVC_S_ROID-ROW_ID
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SET_CELL_ENABLED
+    importing
+      value(IV_FIELDNAME) type FIELDNAME
+      value(IV_ROW) type LVC_S_ROID-ROW_ID
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SET_CELL_BUTTON
+    importing
+      value(IV_FIELDNAME) type FIELDNAME
+      value(IV_ROW) type LVC_S_ROID-ROW_ID
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SET_CELL_HOTSPOT
+    importing
+      value(IV_FIELDNAME) type FIELDNAME
+      value(IV_ROW) type LVC_S_ROID-ROW_ID
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SET_ROW_COLOR
+    importing
+      value(IV_COLOR) type CHAR04
+      value(IV_ROW) type LVC_S_ROID-ROW_ID
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SET_CELL_COLOR
+    importing
+      value(IV_FIELDNAME) type FIELDNAME
+      value(IV_COLOR) type LVC_S_COLO
+      value(IV_ROW) type LVC_S_ROID-ROW_ID
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods MASS_REPLACE .
+  methods EXPORT_TO_EXCEL
+    returning
+      value(RV_XSTRING) type XSTRING .
+  methods SAVE_EXCEL_LOCALY
+    importing
+      value(IV_PATH) type STRING optional
+    returning
+      value(RV_SAVED) type ABAP_BOOL .
+  methods HIDE_TOP_OF_PAGE
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SHOW_TOP_OF_PAGE
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SET_LIST_VIEW
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods ENCODE_PICTURE_BASE64
+    importing
+      value(IV_XSTRING) type XSTRING
+      value(IV_MIME_TYPE) type CSEQUENCE
+    returning
+      value(RV_IMAGE) type STRING .
+  methods GET_FILE_FROM_MIME
+    importing
+      value(IV_PATH) type STRING
+    exporting
+      value(EV_XSTRING) type XSTRING
+      value(EV_MIME_TYPE) type STRING .
+  methods GET_PICTURE_FROM_SE78
+    importing
+      value(IV_NAME) type STXBITMAPS-TDNAME
+      value(IV_TYPE) type STXBITMAPS-TDBTYPE default 'BCOL'
+      value(IV_ID) type STXBITMAPS-TDID default 'BMAP'
+    returning
+      value(RV_XSTRING) type XSTRING .
+  methods SEND
+    importing
+      value(IV_SUBJECT) type CSEQUENCE optional
+      value(IV_SENDER) type AD_SMTPADR optional
+      value(IV_SENDER_NAME) type AD_SMTPADR optional
+      value(IV_FILENAME) type CSEQUENCE optional
+      value(IT_RECIPIENTS) type TT_EMAIL
+      value(IV_BODY) type STRING optional
+      value(IV_IMPORTANCE) type BCS_DOCIMP optional
+      value(IV_SENSITIVITY) type SO_OBJ_SNS optional
+      value(IV_IMMEDIATELY) type ABAP_BOOL optional
+      value(IV_COMMIT) type ABAP_BOOL default ABAP_TRUE
+    returning
+      value(R_FALV) type ref to ZCL_FALV
+    exceptions
+      CREATE_REQUEST_ERROR
+      CREATE_DOCUMENT_ERROR
+      ADD_ATTACHMENT_ERROR
+      ADD_DOCUMENT_ERROR
+      ADD_RECIPIENT_ERROR
+      ADD_SENDER_ERROR
+      SEND_ERROR
+      SEND_IMMEDIATELY_ERROR .
+  methods HIDE_APPLOG .
+  methods SHOW_APPLOG
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
     "! Cell can be editable by layout, by field-catalog or by cell styles
     "!
     "! @parameter i_row |
     "! @parameter i_field |
     "! @parameter r_enabled |
-    METHODS get_cell_enabled
-      IMPORTING VALUE(i_row)     TYPE i
-                VALUE(i_field)   TYPE lvc_fname
-      RETURNING VALUE(r_enabled) TYPE abap_bool.
-
-    METHODS refresh_toolbar
-      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv.
-
-    METHODS set_dummy_function_code
-      RETURNING VALUE(r_falv) TYPE REF TO zcl_falv.
-
-    METHODS set_frontend_fieldcatalog REDEFINITION.
-    METHODS set_frontend_layout       REDEFINITION.
-
-    METHODS get_columns
-      RETURNING VALUE(rt_columns) TYPE t_columns.
-
-    METHODS set_output_table
-      CHANGING ct_table TYPE STANDARD TABLE.
-
-    METHODS set_merge_horizontally
-      IMPORTING !row          TYPE i
-                tab_col_merge TYPE lvc_t_co01.
-
-    METHODS set_merge_vertically
-      IMPORTING !row          TYPE i
-                tab_col_merge TYPE lvc_t_co01.
-
+  methods GET_CELL_ENABLED
+    importing
+      value(I_ROW) type I
+      value(I_FIELD) type LVC_FNAME
+    returning
+      value(R_ENABLED) type ABAP_BOOL .
+  methods REFRESH_TOOLBAR
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods SET_DUMMY_FUNCTION_CODE
+    returning
+      value(R_FALV) type ref to ZCL_FALV .
+  methods GET_COLUMNS
+    returning
+      value(RT_COLUMNS) type T_COLUMNS .
+  methods SET_OUTPUT_TABLE
+    changing
+      !CT_TABLE type STANDARD TABLE .
+  methods SET_MERGE_HORIZONTALLY
+    importing
+      !ROW type I
+      !TAB_COL_MERGE type LVC_T_CO01 .
+  methods SET_MERGE_VERTICALLY
+    importing
+      !COL type I
+      !TAB_ROW_MERGE type FALV_T_RO01 .
     " methods Z_DISPLAY .
-    METHODS set_cell_style
-      IMPORTING !row   TYPE i         OPTIONAL
-                col    TYPE i         OPTIONAL
-                !style TYPE lvc_style
-                style2 TYPE lvc_style OPTIONAL.
+  methods SET_CELL_STYLE
+    importing
+      !ROW type I optional
+      !COL type I optional
+      !STYLE type LVC_STYLE
+      !STYLE2 type LVC_STYLE optional .
+  methods SET_FIXED_COL_ROW
+    importing
+      !COL type I
+      !ROW type I .
+  methods INIT_CELL_STYLES .
+  methods REDRAW_AFTER_MERGING_CHANGE .
+  methods GET_REGISTERED_F4_FOR_FIELDS
+    returning
+      value(F4) type LVC_T_F4 .
 
-    METHODS set_fixed_col_row
-      IMPORTING col  TYPE i
-                !row TYPE i.
-
-    METHODS init_cell_styles.
-
-    METHODS redraw_after_merging_change.
-
-    METHODS get_registered_f4_for_fields RETURNING VALUE(f4) TYPE lvc_t_f4.
-
+  methods SET_FRONTEND_FIELDCATALOG
+    redefinition .
+  methods SET_FRONTEND_LAYOUT
+    redefinition .
   PROTECTED SECTION.
     DATA toolbar_added            TYPE ttb_button.
     DATA toolbar_deleted          TYPE ttb_button.
@@ -747,7 +788,10 @@ CLASS zcl_falv DEFINITION
 ENDCLASS.
 
 
-CLASS zcl_falv IMPLEMENTATION.
+
+CLASS ZCL_FALV IMPLEMENTATION.
+
+
   METHOD add_button.
     IF NOT line_exists( toolbar_added[ function = iv_function ] ).
       INSERT VALUE #( function  = iv_function
@@ -765,6 +809,7 @@ CLASS zcl_falv IMPLEMENTATION.
     r_falv = me.
   ENDMETHOD.
 
+
   METHOD build_columns.
     LOOP AT fcat ASSIGNING FIELD-SYMBOL(<fcat>).
       DATA(column) = NEW zcl_falv_column( iv_fieldname = <fcat>-fieldname
@@ -772,6 +817,7 @@ CLASS zcl_falv IMPLEMENTATION.
       INSERT column INTO TABLE columns.
     ENDLOOP.
   ENDMETHOD.
+
 
   METHOD check_if_called_from_subclass.
     DATA callstack TYPE abap_callstack.
@@ -839,12 +885,14 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD column.
     TRY.
         rv_column = columns[ table_line->fieldname = iv_fieldname ].
       CATCH cx_sy_itab_line_not_found ##NO_HANDLER.
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD constructor.
     IF created_from_factory = abap_false.
@@ -878,6 +926,7 @@ CLASS zcl_falv IMPLEMENTATION.
       ENDCASE.
     ENDIF.
   ENDMETHOD.
+
 
   METHOD create.
     IF i_subclass IS INITIAL.
@@ -937,6 +986,7 @@ CLASS zcl_falv IMPLEMENTATION.
     rv_falv->grid = CAST #( rv_falv ).
   ENDMETHOD.
 
+
   METHOD link_containers.
     iv_falv->main_container        ?= i_custom_container.
     iv_falv->split_container        = i_split_container.
@@ -958,6 +1008,7 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD create_falv_object.
     created_from_factory = abap_true.
 
@@ -976,6 +1027,7 @@ CLASS zcl_falv IMPLEMENTATION.
 
     ENDIF.
   ENDMETHOD.
+
 
   METHOD create_containters.
     DATA main_parent    TYPE REF TO cl_gui_container.
@@ -1045,12 +1097,14 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD crate_main_splitter.
     r_split_container = NEW cl_gui_splitter_container( parent  = i_main_split_container->get_container( row    = 1
                                                                                                         column = 1 )
                                                        rows    = 2
                                                        columns = 1 ).
   ENDMETHOD.
+
 
   METHOD create_main_cont_for_full_scr.
     IF i_popup = abap_true.
@@ -1065,6 +1119,7 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD create_main_split_cotainer.
     " Create split container, log at bottom, grid at top.
     " Log hidden as default, will appear when error will be thrown.
@@ -1078,6 +1133,7 @@ CLASS zcl_falv IMPLEMENTATION.
                                                                                  ELSE 1 )
                                                             columns    = 1 ).
   ENDMETHOD.
+
 
   METHOD create_by_copy.
     create_containters( EXPORTING i_parent               = i_parent
@@ -1115,6 +1171,7 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
     rv_falv->grid = CAST #( rv_falv ).
   ENDMETHOD.
+
 
   METHOD set_handlers.
     SET HANDLER iv_falv->evf_after_refresh FOR iv_falv.
@@ -1171,6 +1228,7 @@ CLASS zcl_falv IMPLEMENTATION.
                                                      OTHERS = 0 ).
   ENDMETHOD.
 
+
   METHOD delete_all_buttons.
     layout->delete_all_buttons = abap_true.
     IF iv_exceptions IS INITIAL.
@@ -1190,6 +1248,7 @@ CLASS zcl_falv IMPLEMENTATION.
     r_falv = me.
   ENDMETHOD.
 
+
   METHOD delete_button.
     DELETE toolbar_added WHERE function = iv_function.
     IF sy-subrc <> 0.
@@ -1198,6 +1257,7 @@ CLASS zcl_falv IMPLEMENTATION.
     refresh_toolbar( ).
     r_falv = me.
   ENDMETHOD.
+
 
   METHOD disable_button.
     TRY.
@@ -1209,6 +1269,7 @@ CLASS zcl_falv IMPLEMENTATION.
     refresh_toolbar( ).
     r_falv = me.
   ENDMETHOD.
+
 
   METHOD display.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
@@ -1284,12 +1345,14 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD raise_before_first_display.
     RAISE EVENT before_first_display.
     IF call_redraw_after_merging = abap_true.
       redraw_after_merging_change( ).
     ENDIF.
   ENDMETHOD.
+
 
   METHOD enable_button.
     TRY.
@@ -1302,22 +1365,28 @@ CLASS zcl_falv IMPLEMENTATION.
     r_falv = me.
   ENDMETHOD.
 
+
   METHOD encode_picture_base64.
     rv_image = |<img src="data:{ iv_mime_type };base64,{ cl_http_utility=>encode_x_base64(
                                                              unencoded = iv_xstring ) }">|.
   ENDMETHOD.
 
+
   METHOD evf_after_refresh ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_after_user_command ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_at_set_pf_status ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_at_set_title ##NEEDED.
   ENDMETHOD.
+
 
   METHOD set_dummy_function_code.
     CALL FUNCTION 'SAPGUI_SET_FUNCTIONCODE'
@@ -1326,6 +1395,7 @@ CLASS zcl_falv IMPLEMENTATION.
                  OTHERS                 = 0.
     r_falv = me.
   ENDMETHOD.
+
 
   METHOD evf_before_ucommand_internal.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
@@ -1364,32 +1434,42 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDCASE.
   ENDMETHOD.
 
+
   METHOD evf_before_user_command ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_btn_click ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_click_col_header ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_click_row_col ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_context_menu ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_context_menu_selected ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_context_menu_request ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_data_changed ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_data_changed_finished ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_data_changed_internal.
     IF er_data_changed->mt_protocol IS NOT INITIAL.
@@ -1415,68 +1495,90 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD evf_dblclick_row_col ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_delayed_callback ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_delayed_changed_sel_call ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_delayed_change_selection ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_delayed_move_current_cell ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_double_click ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_double_click_col_separator ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_drop_external_file ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_f1 ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_hotspot_click ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_menu_button ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_ondrag ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_ondrop ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_ondropcomplete ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_ondropgetflavor ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_onf1 ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_onf4 ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_request_data ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_subtotal_text ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_toolbar ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_toolbar_button_click ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_toolbar_internal.
     LOOP AT toolbar_added ASSIGNING FIELD-SYMBOL(<tb>).
@@ -1494,17 +1596,22 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD evf_toolbar_menubutton_click ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_toolbar_menu_selected ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_top_of_page ##NEEDED.
   ENDMETHOD.
 
+
   METHOD evf_total_click_row_col ##NEEDED.
   ENDMETHOD.
+
 
   METHOD evf_user_command.
     CASE e_ucomm.
@@ -1521,12 +1628,14 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDCASE.
   ENDMETHOD.
 
+
   METHOD exclude_function.
     IF NOT line_exists( exclude_functions[ table_line = iv_ucomm ] ).
       INSERT iv_ucomm INTO TABLE exclude_functions.
     ENDIF.
     r_falv = me.
   ENDMETHOD.
+
 
   METHOD create_ex_result_falv.
     DATA lt_lvc_row TYPE lvc_t_row.
@@ -1571,6 +1680,7 @@ CLASS zcl_falv IMPLEMENTATION.
     ).
   ENDMETHOD.
 
+
   METHOD export_to_excel.
     DATA version         TYPE string.
     DATA result_data     TYPE REF TO cl_salv_ex_result_data_table.
@@ -1607,6 +1717,7 @@ CLASS zcl_falv IMPLEMENTATION.
                                                                 gui_type      = if_salv_bs_xml=>c_gui_type_gui
                                                       IMPORTING xml           = rv_xstring ).
   ENDMETHOD.
+
 
   METHOD get_cell_enabled.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
@@ -1648,6 +1759,7 @@ CLASS zcl_falv IMPLEMENTATION.
     " endif.
   ENDMETHOD.
 
+
   METHOD get_file_from_mime.
     cl_mime_repository_api=>get_api( )->get( EXPORTING  i_url       = iv_path
                                              IMPORTING  e_content   = ev_xstring
@@ -1657,6 +1769,7 @@ CLASS zcl_falv IMPLEMENTATION.
       RETURN.
     ENDIF.
   ENDMETHOD.
+
 
   METHOD get_picture_from_se78.
     cl_ssf_xsf_utilities=>get_bds_graphic_as_bmp( EXPORTING  p_object       = 'GRAPHICS'    " SAPscript Graphics Management: Application object
@@ -1668,6 +1781,7 @@ CLASS zcl_falv IMPLEMENTATION.
                                                              internal_error = 0
                                                              OTHERS         = 0 ).
   ENDMETHOD.
+
 
   METHOD hide_applog.
     IF main_split_container IS INITIAL.
@@ -1687,6 +1801,7 @@ CLASS zcl_falv IMPLEMENTATION.
                                                      OTHERS            = 0 ).
     CLEAR splitter_row_3_height.
   ENDMETHOD.
+
 
   METHOD hide_top_of_page.
     IF split_container IS NOT INITIAL.
@@ -1710,6 +1825,7 @@ CLASS zcl_falv IMPLEMENTATION.
     r_falv = me.
   ENDMETHOD.
 
+
   METHOD lvc_fcat_from_itab.
     DATA table TYPE REF TO data.
 
@@ -1724,6 +1840,7 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD mass_replace.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
 
@@ -1734,6 +1851,7 @@ CLASS zcl_falv IMPLEMENTATION.
         CHANGING  ct_outtab = <outtab>.
     ENDIF.
   ENDMETHOD.
+
 
   METHOD pai.
     " TODO: parameter IV_DYNNR is never used (ABAP cleaner)
@@ -1746,6 +1864,7 @@ CLASS zcl_falv IMPLEMENTATION.
 
     set_function_code( CHANGING c_ucomm = ucomm ).
   ENDMETHOD.
+
 
   METHOD pbo.
     " TODO: parameter IV_DYNNR is never used (ABAP cleaner)
@@ -1760,6 +1879,7 @@ CLASS zcl_falv IMPLEMENTATION.
                             iv_text5 = title_v5 ).
     RAISE EVENT at_set_title.
   ENDMETHOD.
+
 
   METHOD raise_top_of_page.
     IF    top_of_page_visible_at_start  = abap_false
@@ -1787,6 +1907,7 @@ CLASS zcl_falv IMPLEMENTATION.
     show_top_of_page( ).
   ENDMETHOD.
 
+
   METHOD refresh_toolbar.
     CHECK cl_gui_alv_grid=>offline( ) IS INITIAL.
     CHECK grid->m_init_toolbar = space.
@@ -1798,6 +1919,7 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDTRY.
     r_falv = me.
   ENDMETHOD.
+
 
   METHOD save_excel_localy.
     DATA path     TYPE string.
@@ -1866,6 +1988,7 @@ CLASS zcl_falv IMPLEMENTATION.
       rv_saved = abap_true.
     ENDIF.
   ENDMETHOD.
+
 
   METHOD send.
     r_falv = me.
@@ -1967,6 +2090,7 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD set_cell_button.
     r_falv = me.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
@@ -1993,6 +2117,7 @@ CLASS zcl_falv IMPLEMENTATION.
       ENDIF.
     ENDIF.
   ENDMETHOD.
+
 
   METHOD set_cell_color.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
@@ -2022,6 +2147,7 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD set_cell_disabled.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
     FIELD-SYMBOLS <styles> TYPE lvc_t_styl.
@@ -2049,6 +2175,7 @@ CLASS zcl_falv IMPLEMENTATION.
       ENDIF.
     ENDIF.
   ENDMETHOD.
+
 
   METHOD set_cell_enabled.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
@@ -2078,6 +2205,7 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD set_cell_hotspot.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
     FIELD-SYMBOLS <styles> TYPE lvc_t_styl.
@@ -2106,6 +2234,7 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD set_editable.
     r_falv = me.
     IF cl_gui_alv_grid=>offline( ) IS NOT INITIAL.
@@ -2123,20 +2252,24 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD set_frontend_fieldcatalog.
     fcat = it_fieldcatalog.
     super->set_frontend_fieldcatalog( fcat ).
   ENDMETHOD.
+
 
   METHOD set_frontend_layout.
     lvc_layout = is_layout.
     super->set_frontend_layout( is_layout ).
   ENDMETHOD.
 
+
   METHOD set_list_view.
     m_batch_mode = abap_true.
     r_falv = me.
   ENDMETHOD.
+
 
   METHOD set_mark_field.
     IF line_exists( fcat[ fieldname = iv_fieldname ] ).
@@ -2148,19 +2281,23 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD set_output_table.
     GET REFERENCE OF ct_table INTO outtab.
   ENDMETHOD.
+
 
   METHOD set_parent.
     parent ?= io_parent.
     r_falv = me.
   ENDMETHOD.
 
+
   METHOD set_readonly.
     set_ready_for_input( i_ready_for_input = 0 ).
     r_falv = me.
   ENDMETHOD.
+
 
   METHOD set_row_color.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
@@ -2182,6 +2319,7 @@ CLASS zcl_falv IMPLEMENTATION.
       ENDIF.
     ENDIF.
   ENDMETHOD.
+
 
   METHOD show_applog.
     r_falv = me.
@@ -2235,6 +2373,7 @@ CLASS zcl_falv IMPLEMENTATION.
     CLEAR splitter_row_3_height.
   ENDMETHOD.
 
+
   METHOD show_top_of_page.
     r_falv = me.
     IF split_container IS INITIAL.
@@ -2264,6 +2403,7 @@ CLASS zcl_falv IMPLEMENTATION.
     top_of_page_visible_at_start = abap_true.
   ENDMETHOD.
 
+
   METHOD soft_refresh.
     refresh_table_display( EXPORTING  is_stable      = CONV #( 'XX' ) " With Stable Rows/Columns
                                       i_soft_refresh = abap_true " Without Sort, Filter, etc.
@@ -2271,6 +2411,7 @@ CLASS zcl_falv IMPLEMENTATION.
                                       OTHERS         = 0 ).
     r_falv = me.
   ENDMETHOD.
+
 
   METHOD copy_attributes.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
@@ -2304,9 +2445,11 @@ CLASS zcl_falv IMPLEMENTATION.
     i_falv->register_f4_for_fields( it_f4 = grid->mt_f4 ).
   ENDMETHOD.
 
+
   METHOD get_columns.
     rt_columns = columns.
   ENDMETHOD.
+
 
   METHOD create_by_type.
     DATA lr_output TYPE REF TO data.
@@ -2335,6 +2478,7 @@ CLASS zcl_falv IMPLEMENTATION.
                                 CHANGING  ct_table          = <table> ).
   ENDMETHOD.
 
+
   METHOD init_cell_styles.
     " https://tricktresor.de/blog/zellen-verbinden/
     FIELD-SYMBOLS <data> TYPE lvc_s_data.
@@ -2345,6 +2489,7 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDLOOP.
     call_redraw_after_merging = abap_true.
   ENDMETHOD.
+
 
   METHOD set_cell_style.
     " https://tricktresor.de/blog/zellen-verbinden/
@@ -2396,12 +2541,14 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD set_fixed_col_row.
     " https://tricktresor.de/blog/zellen-verbinden/
     set_fixed_cols( col ).
     set_fixed_rows( row ).
     call_redraw_after_merging = abap_true.
   ENDMETHOD.
+
 
   METHOD set_merge_horizontally.
     " https://tricktresor.de/blog/zellen-verbinden/
@@ -2442,6 +2589,7 @@ CLASS zcl_falv IMPLEMENTATION.
     call_redraw_after_merging = abap_true.
   ENDMETHOD.
 
+
   METHOD set_merge_vertically.
     " https://tricktresor.de/blog/zellen-verbinden/
 
@@ -2450,23 +2598,23 @@ CLASS zcl_falv IMPLEMENTATION.
     FIELD-SYMBOLS <data> TYPE lvc_s_data.
     DATA outputlen TYPE i.
 
-    DATA(cols) = tab_col_merge.
-    SORT cols.
+    DATA(rows) = tab_row_merge.
+    SORT rows.
 
     " Die Spalten, die zusammengeführt werden sollen
-    LOOP AT cols INTO DATA(col) WHERE col_id > 0.
+    LOOP AT rows INTO DATA(row) WHERE row_id > 0.
       " ein paar Prüfungen
-      IF col-outputlen <= col-col_id.
+      IF row-outputlen <= row-row_id.
         CONTINUE.
       ENDIF.
-      outputlen = col-outputlen - col-col_id.
+      outputlen = row-outputlen - row-row_id.
       LOOP AT mt_data ASSIGNING <data>
-           WHERE       row_pos       = row
-                 AND ( col_pos BETWEEN col-col_id
-                                   AND col-outputlen ).
+           WHERE       col_pos       = col
+                 AND ( row_pos BETWEEN row-row_id
+                                   AND row-outputlen ).
         " Setze wie weit soll gemerged werden Von Spalte in Länge
         " und zwar wird bei der 1 Spalte angefangen
-        IF <data>-col_pos = col-col_id.
+        IF <data>-row_pos = row-row_id.
           <data>-mergevert = outputlen.
           " bei allen anderen, die zusammangehören
           " muss der Wert raus, da er aus der 1. Spalte kommt
@@ -2481,14 +2629,17 @@ CLASS zcl_falv IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD evf_before_first_display ##NEEDED.
   ENDMETHOD.
+
 
   METHOD redraw_after_merging_change.
     " https://tricktresor.de/blog/zellen-verbinden/
     set_data_table( CHANGING data_table = mt_data[] ).
     set_auto_redraw( enable = 1 ).
   ENDMETHOD.
+
 
   METHOD evf_onf4_internal.
     onf4_internal->handle_onf4( fieldname  = e_fieldname
@@ -2498,6 +2649,7 @@ CLASS zcl_falv IMPLEMENTATION.
                                 bad_cells  = et_bad_cells
                                 display    = e_display ).
   ENDMETHOD.
+
 
   METHOD get_registered_f4_for_fields.
     f4 = grid->mt_f4.
