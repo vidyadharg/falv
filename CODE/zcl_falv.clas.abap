@@ -929,47 +929,6 @@ CLASS ZCL_FALV IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD copy_attributes.
-    FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
-
-    ASSIGN me->outtab->* TO <outtab>.
-    i_falv->set_output_table( CHANGING ct_table = <outtab> ).
-    i_falv->fcat   = i_falv->lvc_fcat_from_itab( it_table = <outtab> ).
-    i_falv->sort   = sort.
-    i_falv->filter = filter.
-    i_falv->set_frontend_fieldcatalog( it_fieldcatalog = fcat ).
-    i_falv->application_log_embedded = application_log_embedded.
-    i_falv->built_in_screen          = built_in_screen.
-    i_falv->build_columns( ).
-    i_falv->layout                        = NEW zcl_falv_layout( io_falv = i_falv ).
-    i_falv->gui_status                   ?= gui_status->if_os_clone~clone( ). " clone object
-    i_falv->lvc_layout                    = lvc_layout.
-    i_falv->variant                       = variant.
-    i_falv->top_of_page_height            = top_of_page_height.
-    i_falv->top_of_page_visible_at_start  = top_of_page_visible_at_start.
-    i_falv->title_v1                      = title_v1.
-    i_falv->title_v2                      = title_v2.
-    i_falv->title_v3                      = title_v3.
-    i_falv->title_v4                      = title_v4.
-    i_falv->exclude_functions             = exclude_functions.
-    i_falv->toolbar_added                 = toolbar_added.
-    i_falv->toolbar_deleted               = toolbar_deleted.
-    i_falv->toolbar_disabled              = toolbar_disabled.
-    i_falv->m_batch_mode                  = m_batch_mode.
-    i_falv->layout->delete_all_buttons = layout->delete_all_buttons.
-    i_falv->layout->mark_field         = layout->mark_field.
-    i_falv->register_f4_for_fields( it_f4 = grid->mt_f4 ).
-  ENDMETHOD.
-
-
-  METHOD crate_main_splitter.
-    r_split_container = NEW cl_gui_splitter_container( parent  = i_main_split_container->get_container( row    = 1
-                                                                                                        column = 1 )
-                                                       rows    = 2
-                                                       columns = 1 ).
-  ENDMETHOD.
-
-
   METHOD create.
     IF i_subclass IS INITIAL.
       i_subclass ?= check_if_called_from_subclass( ).
@@ -1029,69 +988,45 @@ CLASS ZCL_FALV IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD create_by_copy.
-    create_containters( EXPORTING i_parent               = i_parent
-                                  i_applogparent         = i_applogparent
-                                  i_popup                = i_popup
-                                  i_applog_embedded      = application_log_embedded
-                        IMPORTING
-*                                  e_built_in_screen      = data(built_in_screen)
-                                  e_parent               = DATA(parent)
-                                  e_applog               = DATA(applog)
-                                  e_top_of_page_parent   = DATA(top_of_page_parent)
-                                  e_custom_container     = DATA(custom_container)
-                                  e_main_split_container = DATA(main_split_container)
-                                  e_split_container      = DATA(split_container) ).
-
-    rv_falv = create_falv_object( i_subclass = subclass_type
-                                  i_parent   = parent
-                                  i_applog   = applog ).
-
-    copy_attributes( rv_falv ).
-    set_handlers( rv_falv ).
-
-    rv_falv->screen = SWITCH #( i_popup
-                                WHEN abap_true  THEN c_screen_popup
-                                WHEN abap_false THEN c_screen_full ).
-    link_containers( iv_falv                = rv_falv
-                     i_top_of_page_parent   = top_of_page_parent
-                     i_custom_container     = custom_container
-                     i_main_split_container = main_split_container
-                     i_split_container      = split_container ).
-
-    IF rv_falv->built_in_screen = abap_true.
-      CALL FUNCTION 'Z_FALV_ADD_FALV_TO_STACK'
-        EXPORTING io_falv = rv_falv.
+  METHOD link_containers.
+    iv_falv->main_container        ?= i_custom_container.
+    iv_falv->split_container        = i_split_container.
+    iv_falv->main_split_container   = i_main_split_container.
+    iv_falv->top_of_page_container  = i_top_of_page_parent.
+    IF i_main_split_container IS NOT INITIAL.
+      i_main_split_container->set_row_mode( EXPORTING  mode              = i_split_container->mode_absolute
+                                            EXCEPTIONS cntl_error        = 0
+                                                       cntl_system_error = 0
+                                                       OTHERS            = 0 ).
+      iv_falv->hide_applog( ).
     ENDIF.
-    rv_falv->grid = CAST #( rv_falv ).
+    IF i_split_container IS NOT INITIAL.
+      i_split_container->set_row_mode( EXPORTING  mode              = i_split_container->mode_absolute
+                                       EXCEPTIONS cntl_error        = 0
+                                                  cntl_system_error = 0
+                                                  OTHERS            = 0 ).
+      iv_falv->hide_top_of_page( ).
+    ENDIF.
   ENDMETHOD.
 
 
-  METHOD create_by_type.
-    DATA lr_output TYPE REF TO data.
+  METHOD create_falv_object.
+    created_from_factory = abap_true.
 
-    FIELD-SYMBOLS <table> TYPE ANY TABLE.
+    IF i_subclass IS NOT INITIAL.
+      DATA subclass TYPE REF TO object.
+      DATA(sublcass_abs_name) = i_subclass->absolute_name.
+      CREATE OBJECT subclass TYPE (sublcass_abs_name)
+        EXPORTING i_parent       = i_parent
+                  i_applogparent = i_applog.
+      rv_falv ?= subclass.
+      rv_falv->subclass_type = i_subclass.
 
-    DATA(lv_type_name) = i_type->absolute_name.
+    ELSE.
+      rv_falv = NEW #( i_parent       = i_parent
+                       i_applogparent = i_applog ).
 
-    IF i_type->kind <> cl_abap_typedescr=>kind_table.
-      FREE rv_falv.
-      RETURN.
     ENDIF.
-
-    CREATE DATA lr_output TYPE (lv_type_name).
-    ASSIGN lr_output->* TO <table>.
-
-    IF i_subclass IS INITIAL.
-      i_subclass ?= check_if_called_from_subclass( ).
-    ENDIF.
-
-    rv_falv = zcl_falv=>create( EXPORTING i_parent          = i_parent
-                                          i_applogparent    = i_applogparent
-                                          i_popup           = i_popup
-                                          i_applog_embedded = i_applog_embedded
-                                          i_subclass        = i_subclass
-                                CHANGING  ct_table          = <table> ).
   ENDMETHOD.
 
 
@@ -1164,67 +1099,11 @@ CLASS ZCL_FALV IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD create_ex_result_falv.
-    DATA lt_lvc_row TYPE lvc_t_row.
-
-    get_selected_rows( IMPORTING et_index_rows = lt_lvc_row ).
-
-    DATA lt_sel_cols  TYPE lvc_t_col.
-    DATA lt_sel_cells TYPE lvc_t_cell.
-
-    get_selected_columns( IMPORTING et_index_columns = lt_sel_cols ).
-
-    get_selected_cells( IMPORTING et_cell = lt_sel_cells ).
-
-    DATA ls_lvc_col  TYPE lvc_s_col.
-    DATA ls_lvc_row  TYPE lvc_s_row.
-    DATA ls_cur_cell TYPE lvc_s_cell.
-
-    CLEAR:
-      ls_lvc_row,
-      ls_lvc_col.
-    get_current_cell( IMPORTING es_row_id = ls_lvc_row
-                                es_col_id = ls_lvc_col ).
-    ls_cur_cell-col_id-fieldname = ls_lvc_col-fieldname.
-    ls_cur_cell-row_id-index = ls_lvc_row-index.
-
-    er_result_table = cl_salv_ex_util=>factory_result_data_table(
-                          t_selected_rows    = lt_lvc_row
-                          t_selected_columns = lt_sel_cols
-                          t_selected_cells   = lt_sel_cells
-                          r_data             = grid->mt_outtab
-                          s_layout           = grid->m_cl_variant->ms_layout
-                          t_fieldcatalog     = grid->m_cl_variant->mt_fieldcatalog
-                          t_sort             = grid->m_cl_variant->mt_sort
-                          t_filter           = grid->m_cl_variant->mt_filter
-                          t_hyperlinks       = grid->mt_hyperlinks
-                          s_current_cell     = ls_cur_cell
-*                          hyperlink_entry_column = ls_hyper_entry
-*                          dropdown_entry_column = ls_dropdown_entry
-*                          r_top_of_list      = lr_top_of_list
-*                          r_end_of_list      = lr_end_of_list
-*                          t_dropdown_values  = lt_drdn
-    ).
-  ENDMETHOD.
-
-
-  METHOD create_falv_object.
-    created_from_factory = abap_true.
-
-    IF i_subclass IS NOT INITIAL.
-      DATA subclass TYPE REF TO object.
-      DATA(sublcass_abs_name) = i_subclass->absolute_name.
-      CREATE OBJECT subclass TYPE (sublcass_abs_name)
-        EXPORTING i_parent       = i_parent
-                  i_applogparent = i_applog.
-      rv_falv ?= subclass.
-      rv_falv->subclass_type = i_subclass.
-
-    ELSE.
-      rv_falv = NEW #( i_parent       = i_parent
-                       i_applogparent = i_applog ).
-
-    ENDIF.
+  METHOD crate_main_splitter.
+    r_split_container = NEW cl_gui_splitter_container( parent  = i_main_split_container->get_container( row    = 1
+                                                                                                        column = 1 )
+                                                       rows    = 2
+                                                       columns = 1 ).
   ENDMETHOD.
 
 
@@ -1254,6 +1133,100 @@ CLASS ZCL_FALV IMPLEMENTATION.
                                                                                  THEN 2
                                                                                  ELSE 1 )
                                                             columns    = 1 ).
+  ENDMETHOD.
+
+
+  METHOD create_by_copy.
+    create_containters( EXPORTING i_parent               = i_parent
+                                  i_applogparent         = i_applogparent
+                                  i_popup                = i_popup
+                                  i_applog_embedded      = application_log_embedded
+                        IMPORTING
+*                                  e_built_in_screen      = data(built_in_screen)
+                                  e_parent               = DATA(parent)
+                                  e_applog               = DATA(applog)
+                                  e_top_of_page_parent   = DATA(top_of_page_parent)
+                                  e_custom_container     = DATA(custom_container)
+                                  e_main_split_container = DATA(main_split_container)
+                                  e_split_container      = DATA(split_container) ).
+
+    rv_falv = create_falv_object( i_subclass = subclass_type
+                                  i_parent   = parent
+                                  i_applog   = applog ).
+
+    copy_attributes( rv_falv ).
+    set_handlers( rv_falv ).
+
+    rv_falv->screen = SWITCH #( i_popup
+                                WHEN abap_true  THEN c_screen_popup
+                                WHEN abap_false THEN c_screen_full ).
+    link_containers( iv_falv                = rv_falv
+                     i_top_of_page_parent   = top_of_page_parent
+                     i_custom_container     = custom_container
+                     i_main_split_container = main_split_container
+                     i_split_container      = split_container ).
+
+    IF rv_falv->built_in_screen = abap_true.
+      CALL FUNCTION 'Z_FALV_ADD_FALV_TO_STACK'
+        EXPORTING io_falv = rv_falv.
+    ENDIF.
+    rv_falv->grid = CAST #( rv_falv ).
+  ENDMETHOD.
+
+
+  METHOD set_handlers.
+    SET HANDLER iv_falv->evf_after_refresh FOR iv_falv.
+    SET HANDLER iv_falv->evf_after_user_command FOR iv_falv.
+    SET HANDLER iv_falv->evf_before_ucommand_internal FOR iv_falv.
+    SET HANDLER iv_falv->evf_before_user_command FOR iv_falv.
+    SET HANDLER iv_falv->evf_btn_click FOR iv_falv.
+    SET HANDLER iv_falv->evf_data_changed FOR iv_falv.
+    SET HANDLER iv_falv->evf_data_changed_internal FOR iv_falv.
+    SET HANDLER iv_falv->evf_data_changed_finished FOR iv_falv.
+    SET HANDLER iv_falv->evf_double_click FOR iv_falv.
+    SET HANDLER iv_falv->evf_hotspot_click FOR iv_falv.
+    SET HANDLER iv_falv->evf_menu_button FOR iv_falv.
+    SET HANDLER iv_falv->evf_onf1 FOR iv_falv.
+    SET HANDLER iv_falv->evf_onf4_internal FOR iv_falv.
+    SET HANDLER iv_falv->evf_onf4 FOR iv_falv.
+    SET HANDLER iv_falv->evf_subtotal_text FOR iv_falv.
+    SET HANDLER iv_falv->evf_toolbar_internal FOR iv_falv.
+    SET HANDLER iv_falv->evf_toolbar FOR iv_falv.
+    SET HANDLER iv_falv->evf_user_command FOR iv_falv.
+    SET HANDLER iv_falv->evf_at_set_pf_status FOR iv_falv.
+    SET HANDLER iv_falv->evf_at_set_title FOR iv_falv.
+    SET HANDLER iv_falv->evf_top_of_page FOR iv_falv.
+    SET HANDLER iv_falv->evf_delayed_callback FOR iv_falv.
+    SET HANDLER iv_falv->evf_delayed_changed_sel_call FOR iv_falv.
+    SET HANDLER iv_falv->evf_ondrag FOR iv_falv.
+    SET HANDLER iv_falv->evf_ondrop FOR iv_falv.
+    SET HANDLER iv_falv->evf_ondropcomplete FOR iv_falv.
+    SET HANDLER iv_falv->evf_ondropgetflavor FOR iv_falv.
+    SET HANDLER iv_falv->evf_drop_external_file FOR iv_falv.
+    SET HANDLER iv_falv->evf_toolbar_menubutton_click FOR iv_falv.
+    SET HANDLER iv_falv->evf_click_col_header FOR iv_falv.
+    SET HANDLER iv_falv->evf_delayed_move_current_cell FOR iv_falv.
+    SET HANDLER iv_falv->evf_f1 FOR iv_falv.
+    SET HANDLER iv_falv->evf_dblclick_row_col FOR iv_falv.
+    SET HANDLER iv_falv->evf_click_row_col FOR iv_falv.
+    SET HANDLER iv_falv->evf_toolbar_button_click FOR iv_falv.
+    SET HANDLER iv_falv->evf_double_click_col_separator FOR iv_falv.
+    SET HANDLER iv_falv->evf_delayed_change_selection FOR iv_falv.
+    SET HANDLER iv_falv->evf_context_menu FOR iv_falv.
+    SET HANDLER iv_falv->evf_total_click_row_col FOR iv_falv.
+    SET HANDLER iv_falv->evf_context_menu_selected FOR iv_falv.
+    SET HANDLER iv_falv->evf_context_menu_request FOR iv_falv.
+    SET HANDLER iv_falv->evf_toolbar_menu_selected FOR iv_falv.
+    SET HANDLER iv_falv->evf_request_data FOR iv_falv.
+    SET HANDLER iv_falv->evf_before_first_display FOR iv_falv.
+
+    iv_falv->set_delay_change_selection( EXPORTING  time   = iv_falv->delay_change_selection
+                                         EXCEPTIONS error  = 0
+                                                    OTHERS = 0 ).
+
+    iv_falv->set_delay_move_current_cell( EXPORTING  time   = iv_falv->delay_move_current_cell
+                                          EXCEPTIONS error  = 0
+                                                     OTHERS = 0 ).
   ENDMETHOD.
 
 
@@ -1374,6 +1347,14 @@ CLASS ZCL_FALV IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD raise_before_first_display.
+    RAISE EVENT before_first_display.
+    IF call_redraw_after_merging = abap_true.
+      redraw_after_merging_change( ).
+    ENDIF.
+  ENDMETHOD.
+
+
   METHOD enable_button.
     TRY.
         toolbar_added[ function = iv_function ]-disabled = abap_false.
@@ -1408,7 +1389,12 @@ CLASS ZCL_FALV IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD evf_before_first_display ##NEEDED.
+  METHOD set_dummy_function_code.
+    CALL FUNCTION 'SAPGUI_SET_FUNCTIONCODE'
+      EXPORTING  functioncode           = 'DUMMY'
+      EXCEPTIONS function_not_supported = 0
+                 OTHERS                 = 0.
+    r_falv = me.
   ENDMETHOD.
 
 
@@ -1470,11 +1456,11 @@ CLASS ZCL_FALV IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD evf_context_menu_request ##NEEDED.
+  METHOD evf_context_menu_selected ##NEEDED.
   ENDMETHOD.
 
 
-  METHOD evf_context_menu_selected ##NEEDED.
+  METHOD evf_context_menu_request ##NEEDED.
   ENDMETHOD.
 
 
@@ -1579,16 +1565,6 @@ CLASS ZCL_FALV IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD evf_onf4_internal.
-    onf4_internal->handle_onf4( fieldname  = e_fieldname
-                                fieldvalue = e_fieldvalue
-                                row_no     = es_row_no
-                                event_data = er_event_data
-                                bad_cells  = et_bad_cells
-                                display    = e_display ).
-  ENDMETHOD.
-
-
   METHOD evf_request_data ##NEEDED.
   ENDMETHOD.
 
@@ -1659,6 +1635,50 @@ CLASS ZCL_FALV IMPLEMENTATION.
       INSERT iv_ucomm INTO TABLE exclude_functions.
     ENDIF.
     r_falv = me.
+  ENDMETHOD.
+
+
+  METHOD create_ex_result_falv.
+    DATA lt_lvc_row TYPE lvc_t_row.
+
+    get_selected_rows( IMPORTING et_index_rows = lt_lvc_row ).
+
+    DATA lt_sel_cols  TYPE lvc_t_col.
+    DATA lt_sel_cells TYPE lvc_t_cell.
+
+    get_selected_columns( IMPORTING et_index_columns = lt_sel_cols ).
+
+    get_selected_cells( IMPORTING et_cell = lt_sel_cells ).
+
+    DATA ls_lvc_col  TYPE lvc_s_col.
+    DATA ls_lvc_row  TYPE lvc_s_row.
+    DATA ls_cur_cell TYPE lvc_s_cell.
+
+    CLEAR:
+      ls_lvc_row,
+      ls_lvc_col.
+    get_current_cell( IMPORTING es_row_id = ls_lvc_row
+                                es_col_id = ls_lvc_col ).
+    ls_cur_cell-col_id-fieldname = ls_lvc_col-fieldname.
+    ls_cur_cell-row_id-index = ls_lvc_row-index.
+
+    er_result_table = cl_salv_ex_util=>factory_result_data_table(
+                          t_selected_rows    = lt_lvc_row
+                          t_selected_columns = lt_sel_cols
+                          t_selected_cells   = lt_sel_cells
+                          r_data             = grid->mt_outtab
+                          s_layout           = grid->m_cl_variant->ms_layout
+                          t_fieldcatalog     = grid->m_cl_variant->mt_fieldcatalog
+                          t_sort             = grid->m_cl_variant->mt_sort
+                          t_filter           = grid->m_cl_variant->mt_filter
+                          t_hyperlinks       = grid->mt_hyperlinks
+                          s_current_cell     = ls_cur_cell
+*                          hyperlink_entry_column = ls_hyper_entry
+*                          dropdown_entry_column = ls_dropdown_entry
+*                          r_top_of_list      = lr_top_of_list
+*                          r_end_of_list      = lr_end_of_list
+*                          t_dropdown_values  = lt_drdn
+    ).
   ENDMETHOD.
 
 
@@ -1741,11 +1761,6 @@ CLASS ZCL_FALV IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD get_columns.
-    rt_columns = columns.
-  ENDMETHOD.
-
-
   METHOD get_file_from_mime.
     cl_mime_repository_api=>get_api( )->get( EXPORTING  i_url       = iv_path
                                              IMPORTING  e_content   = ev_xstring
@@ -1766,11 +1781,6 @@ CLASS ZCL_FALV IMPLEMENTATION.
                                                   EXCEPTIONS not_found      = 0
                                                              internal_error = 0
                                                              OTHERS         = 0 ).
-  ENDMETHOD.
-
-
-  METHOD get_registered_f4_for_fields.
-    f4 = grid->mt_f4.
   ENDMETHOD.
 
 
@@ -1814,40 +1824,6 @@ CLASS ZCL_FALV IMPLEMENTATION.
       ENDIF.
     ENDIF.
     r_falv = me.
-  ENDMETHOD.
-
-
-  METHOD init_cell_styles.
-    " https://tricktresor.de/blog/zellen-verbinden/
-    FIELD-SYMBOLS <data> TYPE lvc_s_data.
-
-    " Nur Spalte setze komplette Spalte
-    LOOP AT mt_data ASSIGNING <data>.
-      <data>-style = 0.
-    ENDLOOP.
-    call_redraw_after_merging = abap_true.
-  ENDMETHOD.
-
-
-  METHOD link_containers.
-    iv_falv->main_container        ?= i_custom_container.
-    iv_falv->split_container        = i_split_container.
-    iv_falv->main_split_container   = i_main_split_container.
-    iv_falv->top_of_page_container  = i_top_of_page_parent.
-    IF i_main_split_container IS NOT INITIAL.
-      i_main_split_container->set_row_mode( EXPORTING  mode              = i_split_container->mode_absolute
-                                            EXCEPTIONS cntl_error        = 0
-                                                       cntl_system_error = 0
-                                                       OTHERS            = 0 ).
-      iv_falv->hide_applog( ).
-    ENDIF.
-    IF i_split_container IS NOT INITIAL.
-      i_split_container->set_row_mode( EXPORTING  mode              = i_split_container->mode_absolute
-                                       EXCEPTIONS cntl_error        = 0
-                                                  cntl_system_error = 0
-                                                  OTHERS            = 0 ).
-      iv_falv->hide_top_of_page( ).
-    ENDIF.
   ENDMETHOD.
 
 
@@ -1906,14 +1882,6 @@ CLASS ZCL_FALV IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD raise_before_first_display.
-    RAISE EVENT before_first_display.
-    IF call_redraw_after_merging = abap_true.
-      redraw_after_merging_change( ).
-    ENDIF.
-  ENDMETHOD.
-
-
   METHOD raise_top_of_page.
     IF    top_of_page_visible_at_start  = abap_false
        OR top_of_page_container        IS INITIAL.
@@ -1938,13 +1906,6 @@ CLASS ZCL_FALV IMPLEMENTATION.
                                        EXCEPTIONS html_display_error = 0
                                                   OTHERS             = 0 ).
     show_top_of_page( ).
-  ENDMETHOD.
-
-
-  METHOD redraw_after_merging_change.
-    " https://tricktresor.de/blog/zellen-verbinden/
-    set_data_table( CHANGING data_table = mt_data[] ).
-    set_auto_redraw( enable = 1 ).
   ENDMETHOD.
 
 
@@ -2275,66 +2236,6 @@ CLASS ZCL_FALV IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD set_cell_style.
-    " https://tricktresor.de/blog/zellen-verbinden/
-    FIELD-SYMBOLS <data> TYPE lvc_s_data.
-
-    IF row IS INITIAL.
-      IF col IS INITIAL.
-        " Beides leer -> nichts zu tun.
-        EXIT.
-      ELSE.
-        " Nur Spalte setze komplette Spalte
-        LOOP AT mt_data ASSIGNING <data>
-             WHERE col_pos = col.
-*          <data>-style  += style.
-*          <data>-style2 += style2.
-          ADD style TO <data>-style.
-          ADD style2 TO <data>-style2.
-        ENDLOOP.
-        IF sy-subrc = 0.
-          call_redraw_after_merging = abap_true.
-        ENDIF.
-      ENDIF.
-    ELSE.
-      IF col IS INITIAL.
-        " Nur Zeile eingegeben -> komplette Zeile setzen
-        LOOP AT mt_data ASSIGNING <data>
-             WHERE row_pos = row.
-*          <data>-style  += style.
-*          <data>-style2 += style2.
-          ADD style TO <data>-style.
-          ADD style2 TO <data>-style2.
-        ENDLOOP.
-        IF sy-subrc = 0.
-          call_redraw_after_merging = abap_true.
-        ENDIF.
-      ELSE.
-        ASSIGN mt_data[ row_pos = row
-                        col_pos = col ] TO <data>.
-        IF sy-subrc = 0.
-*          <data>-style  += style.
-*          <data>-style2 += style2.
-          ADD style TO <data>-style.
-          ADD style2 TO <data>-style2.
-          call_redraw_after_merging = abap_true.
-        ELSE.
-          EXIT.
-        ENDIF.
-      ENDIF.
-    ENDIF.
-  ENDMETHOD.
-
-
-  METHOD set_dummy_function_code.
-    CALL FUNCTION 'SAPGUI_SET_FUNCTIONCODE'
-      EXPORTING  functioncode           = 'DUMMY'
-      EXCEPTIONS function_not_supported = 0
-                 OTHERS                 = 0.
-    r_falv = me.
-  ENDMETHOD.
-
-
   METHOD set_editable.
     r_falv = me.
     IF cl_gui_alv_grid=>offline( ) IS NOT INITIAL.
@@ -2353,14 +2254,6 @@ CLASS ZCL_FALV IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD set_fixed_col_row.
-    " https://tricktresor.de/blog/zellen-verbinden/
-    set_fixed_cols( col ).
-    set_fixed_rows( row ).
-    call_redraw_after_merging = abap_true.
-  ENDMETHOD.
-
-
   METHOD set_frontend_fieldcatalog.
     fcat = it_fieldcatalog.
     super->set_frontend_fieldcatalog( fcat ).
@@ -2370,62 +2263,6 @@ CLASS ZCL_FALV IMPLEMENTATION.
   METHOD set_frontend_layout.
     lvc_layout = is_layout.
     super->set_frontend_layout( is_layout ).
-  ENDMETHOD.
-
-
-  METHOD set_handlers.
-    SET HANDLER iv_falv->evf_after_refresh FOR iv_falv.
-    SET HANDLER iv_falv->evf_after_user_command FOR iv_falv.
-    SET HANDLER iv_falv->evf_before_ucommand_internal FOR iv_falv.
-    SET HANDLER iv_falv->evf_before_user_command FOR iv_falv.
-    SET HANDLER iv_falv->evf_btn_click FOR iv_falv.
-    SET HANDLER iv_falv->evf_data_changed FOR iv_falv.
-    SET HANDLER iv_falv->evf_data_changed_internal FOR iv_falv.
-    SET HANDLER iv_falv->evf_data_changed_finished FOR iv_falv.
-    SET HANDLER iv_falv->evf_double_click FOR iv_falv.
-    SET HANDLER iv_falv->evf_hotspot_click FOR iv_falv.
-    SET HANDLER iv_falv->evf_menu_button FOR iv_falv.
-    SET HANDLER iv_falv->evf_onf1 FOR iv_falv.
-    SET HANDLER iv_falv->evf_onf4_internal FOR iv_falv.
-    SET HANDLER iv_falv->evf_onf4 FOR iv_falv.
-    SET HANDLER iv_falv->evf_subtotal_text FOR iv_falv.
-    SET HANDLER iv_falv->evf_toolbar_internal FOR iv_falv.
-    SET HANDLER iv_falv->evf_toolbar FOR iv_falv.
-    SET HANDLER iv_falv->evf_user_command FOR iv_falv.
-    SET HANDLER iv_falv->evf_at_set_pf_status FOR iv_falv.
-    SET HANDLER iv_falv->evf_at_set_title FOR iv_falv.
-    SET HANDLER iv_falv->evf_top_of_page FOR iv_falv.
-    SET HANDLER iv_falv->evf_delayed_callback FOR iv_falv.
-    SET HANDLER iv_falv->evf_delayed_changed_sel_call FOR iv_falv.
-    SET HANDLER iv_falv->evf_ondrag FOR iv_falv.
-    SET HANDLER iv_falv->evf_ondrop FOR iv_falv.
-    SET HANDLER iv_falv->evf_ondropcomplete FOR iv_falv.
-    SET HANDLER iv_falv->evf_ondropgetflavor FOR iv_falv.
-    SET HANDLER iv_falv->evf_drop_external_file FOR iv_falv.
-    SET HANDLER iv_falv->evf_toolbar_menubutton_click FOR iv_falv.
-    SET HANDLER iv_falv->evf_click_col_header FOR iv_falv.
-    SET HANDLER iv_falv->evf_delayed_move_current_cell FOR iv_falv.
-    SET HANDLER iv_falv->evf_f1 FOR iv_falv.
-    SET HANDLER iv_falv->evf_dblclick_row_col FOR iv_falv.
-    SET HANDLER iv_falv->evf_click_row_col FOR iv_falv.
-    SET HANDLER iv_falv->evf_toolbar_button_click FOR iv_falv.
-    SET HANDLER iv_falv->evf_double_click_col_separator FOR iv_falv.
-    SET HANDLER iv_falv->evf_delayed_change_selection FOR iv_falv.
-    SET HANDLER iv_falv->evf_context_menu FOR iv_falv.
-    SET HANDLER iv_falv->evf_total_click_row_col FOR iv_falv.
-    SET HANDLER iv_falv->evf_context_menu_selected FOR iv_falv.
-    SET HANDLER iv_falv->evf_context_menu_request FOR iv_falv.
-    SET HANDLER iv_falv->evf_toolbar_menu_selected FOR iv_falv.
-    SET HANDLER iv_falv->evf_request_data FOR iv_falv.
-    SET HANDLER iv_falv->evf_before_first_display FOR iv_falv.
-
-    iv_falv->set_delay_change_selection( EXPORTING  time   = iv_falv->delay_change_selection
-                                         EXCEPTIONS error  = 0
-                                                    OTHERS = 0 ).
-
-    iv_falv->set_delay_move_current_cell( EXPORTING  time   = iv_falv->delay_move_current_cell
-                                          EXCEPTIONS error  = 0
-                                                     OTHERS = 0 ).
   ENDMETHOD.
 
 
@@ -2443,86 +2280,6 @@ CLASS ZCL_FALV IMPLEMENTATION.
       ENDIF.
       column( iv_fieldname )->set_checkbox( abap_true ).
     ENDIF.
-  ENDMETHOD.
-
-
-  METHOD set_merge_horizontally.
-    " https://tricktresor.de/blog/zellen-verbinden/
-    " ROW - Zeile deren Spalten zusammengeführt werden sollen
-    " tab_col_merge - Spalten, die zusammengeführt werden sollen
-    FIELD-SYMBOLS <data> TYPE lvc_s_data.
-    DATA outputlen TYPE i.
-
-    DATA(cols) = tab_col_merge.
-
-    SORT cols.
-
-    " Die Spalten, die zusammengeführt werden sollen
-    LOOP AT cols INTO DATA(col) WHERE col_id > 0.
-      " ein paar Prüfungen
-      IF col-outputlen <= col-col_id.
-        CONTINUE.
-      ENDIF.
-      outputlen = col-outputlen - col-col_id.
-      LOOP AT mt_data ASSIGNING <data>
-           WHERE       row_pos       = row
-                 AND ( col_pos BETWEEN col-col_id
-                                   AND col-outputlen ).
-        " Setze wie weit soll gemerged werden Von Spalte in Länge
-        " und zwar wird bei der 1 Spalte angefangen
-        IF <data>-col_pos = col-col_id.
-          <data>-mergehoriz = outputlen.
-          " bei allen anderen, die zusammangehören
-          " muss der Wert raus, da er aus der 1. Spalte kommt
-          " und das mergekennzeichen muss auch weg !
-        ELSE.
-          CLEAR <data>-mergehoriz.
-          CLEAR <data>-value.
-        ENDIF.
-      ENDLOOP.
-
-    ENDLOOP.
-    call_redraw_after_merging = abap_true.
-  ENDMETHOD.
-
-
-  METHOD set_merge_vertically.
-    " https://tricktresor.de/blog/zellen-verbinden/
-
-    " ROW - Zeile deren Spalten zusammengeführt werden sollen
-    " tab_col_merge - Spalten, die zusammengeführt werden sollen
-    FIELD-SYMBOLS <data> TYPE lvc_s_data.
-    DATA outputlen TYPE i.
-
-    DATA(rows) = tab_row_merge.
-    SORT rows.
-
-    " Die Spalten, die zusammengeführt werden sollen
-    LOOP AT rows INTO DATA(row) WHERE row_id > 0.
-      " ein paar Prüfungen
-      IF row-outputlen <= row-row_id.
-        CONTINUE.
-      ENDIF.
-      outputlen = row-outputlen - row-row_id.
-      LOOP AT mt_data ASSIGNING <data>
-           WHERE       col_pos       = col
-                 AND ( row_pos BETWEEN row-row_id
-                                   AND row-outputlen ).
-        " Setze wie weit soll gemerged werden Von Spalte in Länge
-        " und zwar wird bei der 1 Spalte angefangen
-        IF <data>-row_pos = row-row_id.
-          <data>-mergevert = outputlen.
-          " bei allen anderen, die zusammangehören
-          " muss der Wert raus, da er aus der 1. Spalte kommt
-          " und das mergekennzeichen muss auch weg !
-        ELSE.
-          CLEAR <data>-mergevert.
-          CLEAR <data>-value.
-        ENDIF.
-      ENDLOOP.
-
-      call_redraw_after_merging = abap_true.
-    ENDLOOP.
   ENDMETHOD.
 
 
@@ -2654,5 +2411,248 @@ CLASS ZCL_FALV IMPLEMENTATION.
                            EXCEPTIONS finished       = 0
                                       OTHERS         = 0 ).
     r_falv = me.
+  ENDMETHOD.
+
+
+  METHOD copy_attributes.
+    FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
+
+    ASSIGN me->outtab->* TO <outtab>.
+    i_falv->set_output_table( CHANGING ct_table = <outtab> ).
+    i_falv->fcat   = i_falv->lvc_fcat_from_itab( it_table = <outtab> ).
+    i_falv->sort   = sort.
+    i_falv->filter = filter.
+    i_falv->set_frontend_fieldcatalog( it_fieldcatalog = fcat ).
+    i_falv->application_log_embedded = application_log_embedded.
+    i_falv->built_in_screen          = built_in_screen.
+    i_falv->build_columns( ).
+    i_falv->layout                        = NEW zcl_falv_layout( io_falv = i_falv ).
+    i_falv->gui_status                   ?= gui_status->if_os_clone~clone( ). " clone object
+    i_falv->lvc_layout                    = lvc_layout.
+    i_falv->variant                       = variant.
+    i_falv->top_of_page_height            = top_of_page_height.
+    i_falv->top_of_page_visible_at_start  = top_of_page_visible_at_start.
+    i_falv->title_v1                      = title_v1.
+    i_falv->title_v2                      = title_v2.
+    i_falv->title_v3                      = title_v3.
+    i_falv->title_v4                      = title_v4.
+    i_falv->exclude_functions             = exclude_functions.
+    i_falv->toolbar_added                 = toolbar_added.
+    i_falv->toolbar_deleted               = toolbar_deleted.
+    i_falv->toolbar_disabled              = toolbar_disabled.
+    i_falv->m_batch_mode                  = m_batch_mode.
+    i_falv->layout->delete_all_buttons = layout->delete_all_buttons.
+    i_falv->layout->mark_field         = layout->mark_field.
+    i_falv->register_f4_for_fields( it_f4 = grid->mt_f4 ).
+  ENDMETHOD.
+
+
+  METHOD get_columns.
+    rt_columns = columns.
+  ENDMETHOD.
+
+
+  METHOD create_by_type.
+    DATA lr_output TYPE REF TO data.
+
+    FIELD-SYMBOLS <table> TYPE ANY TABLE.
+
+    DATA(lv_type_name) = i_type->absolute_name.
+
+    IF i_type->kind <> cl_abap_typedescr=>kind_table.
+      FREE rv_falv.
+      RETURN.
+    ENDIF.
+
+    CREATE DATA lr_output TYPE (lv_type_name).
+    ASSIGN lr_output->* TO <table>.
+
+    IF i_subclass IS INITIAL.
+      i_subclass ?= check_if_called_from_subclass( ).
+    ENDIF.
+
+    rv_falv = zcl_falv=>create( EXPORTING i_parent          = i_parent
+                                          i_applogparent    = i_applogparent
+                                          i_popup           = i_popup
+                                          i_applog_embedded = i_applog_embedded
+                                          i_subclass        = i_subclass
+                                CHANGING  ct_table          = <table> ).
+  ENDMETHOD.
+
+
+  METHOD init_cell_styles.
+    " https://tricktresor.de/blog/zellen-verbinden/
+    FIELD-SYMBOLS <data> TYPE lvc_s_data.
+
+    " Nur Spalte setze komplette Spalte
+    LOOP AT mt_data ASSIGNING <data>.
+      <data>-style = 0.
+    ENDLOOP.
+    call_redraw_after_merging = abap_true.
+  ENDMETHOD.
+
+
+  METHOD set_cell_style.
+    " https://tricktresor.de/blog/zellen-verbinden/
+    FIELD-SYMBOLS <data> TYPE lvc_s_data.
+
+    IF row IS INITIAL.
+      IF col IS INITIAL.
+        " Beides leer -> nichts zu tun.
+        EXIT.
+      ELSE.
+        " Nur Spalte setze komplette Spalte
+        LOOP AT mt_data ASSIGNING <data>
+             WHERE col_pos = col.
+*          <data>-style  += style.
+*          <data>-style2 += style2.
+          ADD style TO <data>-style.
+          ADD style2 TO <data>-style2.
+        ENDLOOP.
+        IF sy-subrc = 0.
+          call_redraw_after_merging = abap_true.
+        ENDIF.
+      ENDIF.
+    ELSE.
+      IF col IS INITIAL.
+        " Nur Zeile eingegeben -> komplette Zeile setzen
+        LOOP AT mt_data ASSIGNING <data>
+             WHERE row_pos = row.
+*          <data>-style  += style.
+*          <data>-style2 += style2.
+          ADD style TO <data>-style.
+          ADD style2 TO <data>-style2.
+        ENDLOOP.
+        IF sy-subrc = 0.
+          call_redraw_after_merging = abap_true.
+        ENDIF.
+      ELSE.
+        ASSIGN mt_data[ row_pos = row
+                        col_pos = col ] TO <data>.
+        IF sy-subrc = 0.
+*          <data>-style  += style.
+*          <data>-style2 += style2.
+          ADD style TO <data>-style.
+          ADD style2 TO <data>-style2.
+          call_redraw_after_merging = abap_true.
+        ELSE.
+          EXIT.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD set_fixed_col_row.
+    " https://tricktresor.de/blog/zellen-verbinden/
+    set_fixed_cols( col ).
+    set_fixed_rows( row ).
+    call_redraw_after_merging = abap_true.
+  ENDMETHOD.
+
+
+  METHOD set_merge_horizontally.
+    " https://tricktresor.de/blog/zellen-verbinden/
+    " ROW - Zeile deren Spalten zusammengeführt werden sollen
+    " tab_col_merge - Spalten, die zusammengeführt werden sollen
+    FIELD-SYMBOLS <data> TYPE lvc_s_data.
+    DATA outputlen TYPE i.
+
+    DATA(cols) = tab_col_merge.
+
+    SORT cols.
+
+    " Die Spalten, die zusammengeführt werden sollen
+    LOOP AT cols INTO DATA(col) WHERE col_id > 0.
+      " ein paar Prüfungen
+      IF col-outputlen <= col-col_id.
+        CONTINUE.
+      ENDIF.
+      outputlen = col-outputlen - col-col_id.
+      LOOP AT mt_data ASSIGNING <data>
+           WHERE       row_pos       = row
+                 AND ( col_pos BETWEEN col-col_id
+                                   AND col-outputlen ).
+        " Setze wie weit soll gemerged werden Von Spalte in Länge
+        " und zwar wird bei der 1 Spalte angefangen
+        IF <data>-col_pos = col-col_id.
+          <data>-mergehoriz = outputlen.
+          " bei allen anderen, die zusammangehören
+          " muss der Wert raus, da er aus der 1. Spalte kommt
+          " und das mergekennzeichen muss auch weg !
+        ELSE.
+          CLEAR <data>-mergehoriz.
+          CLEAR <data>-value.
+        ENDIF.
+      ENDLOOP.
+
+    ENDLOOP.
+    call_redraw_after_merging = abap_true.
+  ENDMETHOD.
+
+
+  METHOD set_merge_vertically.
+    " https://tricktresor.de/blog/zellen-verbinden/
+
+    " ROW - Zeile deren Spalten zusammengeführt werden sollen
+    " tab_col_merge - Spalten, die zusammengeführt werden sollen
+    FIELD-SYMBOLS <data> TYPE lvc_s_data.
+    DATA outputlen TYPE i.
+
+    DATA(rows) = tab_row_merge.
+    SORT rows.
+
+    " Die Spalten, die zusammengeführt werden sollen
+    LOOP AT rows INTO DATA(row) WHERE row_id > 0.
+      " ein paar Prüfungen
+      IF row-outputlen <= row-row_id.
+        CONTINUE.
+      ENDIF.
+      outputlen = row-outputlen - row-row_id.
+      LOOP AT mt_data ASSIGNING <data>
+           WHERE       col_pos       = col
+                 AND ( row_pos BETWEEN row-row_id
+                                   AND row-outputlen ).
+        " Setze wie weit soll gemerged werden Von Spalte in Länge
+        " und zwar wird bei der 1 Spalte angefangen
+        IF <data>-row_pos = row-row_id.
+          <data>-mergevert = outputlen.
+          " bei allen anderen, die zusammangehören
+          " muss der Wert raus, da er aus der 1. Spalte kommt
+          " und das mergekennzeichen muss auch weg !
+        ELSE.
+          CLEAR <data>-mergevert.
+          CLEAR <data>-value.
+        ENDIF.
+      ENDLOOP.
+
+      call_redraw_after_merging = abap_true.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD evf_before_first_display ##NEEDED.
+  ENDMETHOD.
+
+
+  METHOD redraw_after_merging_change.
+    " https://tricktresor.de/blog/zellen-verbinden/
+    set_data_table( CHANGING data_table = mt_data[] ).
+    set_auto_redraw( enable = 1 ).
+  ENDMETHOD.
+
+
+  METHOD evf_onf4_internal.
+    onf4_internal->handle_onf4( fieldname  = e_fieldname
+                                fieldvalue = e_fieldvalue
+                                row_no     = es_row_no
+                                event_data = er_event_data
+                                bad_cells  = et_bad_cells
+                                display    = e_display ).
+  ENDMETHOD.
+
+
+  METHOD get_registered_f4_for_fields.
+    f4 = grid->mt_f4.
   ENDMETHOD.
 ENDCLASS.
